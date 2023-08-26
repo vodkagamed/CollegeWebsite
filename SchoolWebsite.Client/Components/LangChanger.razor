@@ -1,0 +1,23 @@
+﻿@using AKSoftware.Localization.MultiLanguages;
+@inject ILanguageContainerService langService
+
+<button class="btn btn-primary mb-3" @onclick ="ChangeLangAsync">@LangName</button>
+
+
+@code {
+    public string LangName = "en-us";
+    [Parameter]
+    public EventCallback LangChanged { get; set; }
+    public async Task ChangeLangAsync()
+    {
+        if (LangName == "en-us")
+            LangName = "ar-eg";
+        else
+            LangName = "en-us";
+
+        langService.SetLanguage(System.Globalization.CultureInfo.GetCultureInfo(LangName));
+        await InvokeAsync(StateHasChanged);
+        LangChanged.InvokeAsync();
+
+    }
+}

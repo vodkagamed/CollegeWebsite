@@ -1,0 +1,33 @@
+﻿@inject ILanguageContainerService langService
+@page "/AddStudent"
+@using AKSoftware.Localization.MultiLanguages;
+@using SchoolWebsite.Client.Components
+
+    <EditForm Model="Student" OnValidSubmit="OnFormValidAsync">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+        <div class="container d-flex flex-column align-items-center gap-4">
+            <div class="col-6">
+                <label for="StudentName" class="h4">@langService.Keys["StudentName"]:</label>
+                <InputText id="StudentName" @bind-Value="Student.Name" class="form-control form-control-lg"></InputText>
+            </div>
+
+            <div class="col-6">
+                <label for="StudentAge" class="h4">@langService.Keys["StudentAge"]:</label>
+                <InputText id="StudentName" @bind-Value="Student.Age" class="form-control form-control-lg"></InputText>
+            </div>
+
+            <div class="col-6">
+                <label for="StudentPhone" class="h4">@langService.Keys["StudentPhone"]:</label>
+                <InputText id="StudentName" @bind-Value="Student.Phone" class="form-control form-control-lg"></InputText>
+            </div>
+
+            <div class="col-6">
+                <button 
+                    class="btn btn-primary btn-lg btn-block">
+                @langService.Keys["Submit"]
+                </button>
+            </div>
+        </div>
+    </EditForm>
+<ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>

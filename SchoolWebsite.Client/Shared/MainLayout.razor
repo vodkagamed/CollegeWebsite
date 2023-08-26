@@ -1,0 +1,30 @@
+﻿@using SchoolWebsite.Client.Components
+@inherits LayoutComponentBase
+
+<PageTitle>SchoolWebsite.Client</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <LangChanger LangChanged="changed">
+
+            </LangChanger >
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+@code
+{
+    void changed()
+    {
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,30 @@
+﻿@page "/"
+@using AKSoftware.Localization.MultiLanguages;
+@using SchoolWebsite.Client.Components
+@inject ILanguageContainerService langService
+<h3 class="text-center mb-3">@langService.Keys["StudentInfo"]</h3> 
+
+<table class="table">
+  <thead class="table-dark">
+    <tr>
+      <th scope="col">@langService.Keys["StudentID"]</th>
+      <th scope="col">@langService.Keys["StudentName"]</th>
+    </tr>
+  </thead>
+  <tbody id="studentTableBody">
+        @foreach (var student in students)
+        {
+          <tr onclick="window.location.href='@($"/StudentData/{student.Id}")'" style="cursor: pointer;">
+            <td>@student.Id</td>
+            <td>@student.Name</td>
+          </tr>
+        }
+  </tbody>
+</table>
+
+<ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>
+<style>
+    tr:hover{
+        background-color: rgb(236, 236, 236);
+    }
+</style>
