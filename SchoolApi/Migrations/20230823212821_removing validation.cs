@@ -5,7 +5,7 @@
 namespace SchoolApi.Migrations
 {
     /// <inheritdoc />
-    public partial class removingvalidation : Migration
+    public partial class Removingvalidation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

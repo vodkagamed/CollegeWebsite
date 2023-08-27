@@ -15,14 +15,23 @@
 
 
 <div class="d-flex row justify-content-center mt-4">
-    @if (logs.Any())
+    @if (logFiles.Any())
     {
 
         <div class="card">
             <div class="card-body">
 
                 <h5 class="card-title mb-4 text-center">Log @(currentIndex + 1)</h5>
-                <pre class="card-text text-center large-text">@logs[currentIndex]</pre>
+
+                @foreach (var logs in logFiles)
+                {
+                    @foreach (var log in logs)
+                    {
+                        <p>@log.Date</p>
+                        <p>@log.Data</p>
+                        <span>-------------------</span>
+                    }
+                }
 
                 <div class="d-flex btn-group justify-content-center" role="group">
                     <button class="btn btn-danger btn-sm col-1" @onclick="() =>
@@ -32,7 +41,7 @@
                             }">
                         Previous
                     </button>
-                    @for (int i = 0; i < logs.Count; i++)
+                    @for (int i = 0; i < logFiles.Count; i++)
                     {
                         int pageNumber = i; // Capture the value of i
                         <button class="btn btn-outline-dark btn-sm @(currentIndex == pageNumber ? "active" : "")"
@@ -43,7 +52,7 @@
 
                     <button class="btn btn-danger btn-sm col-1" @onclick="() =>
                             {
-                                if (currentIndex < logs.Count - 1)
+                                if (currentIndex < logFiles.Count - 1)
                                   NavigateToLog(currentIndex + 1);
                             }">
                         Next
