@@ -12,7 +12,7 @@ namespace SchoolApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20230823212821_removing validation")]
-    partial class removingvalidation
+    partial class removingvalidation:Migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,11 @@ namespace SchoolApi.Migrations
                     b.ToTable("Students");
                 });
 #pragma warning restore 612, 618
+        }
+
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            throw new NotImplementedException();
         }
     }
 }

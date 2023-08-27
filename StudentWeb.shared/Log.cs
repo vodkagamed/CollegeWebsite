@@ -1,4 +1,8 @@
-﻿namespace SchoolWebsite.shared
+﻿using Microsoft.VisualBasic;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+
+namespace SchoolWebsite.shared
 {
     public static class Log
     {
@@ -6,24 +10,28 @@
         public static async Task Debug(string data) => await WriteLog(LogType.Debug, data);
         public static async Task Error(string data) => await WriteLog(LogType.Error, data);
         public static async Task Critical(string data) => await WriteLog(LogType.Critical, data);
-        public static async Task<List<string>> GetAllLogsAsync(LogType logType)
+        public static async Task <List<List<LogContent>>> GetAllLogsAsync(LogType logType)
         {
             string allocationPath = $"App_Data\\Loggers\\{logType}";
-            List<string> logContents = new();
+            List<List<LogContent>> logFile = new();
 
             if (!Directory.Exists(allocationPath))
-                return logContents;
+                return logFile;
 
-            string searchPattern = $"{logType}log_*.txt";
+            List<LogContent> contents = new();
+            string searchPattern = $"{logType}log_*.json";
             string[] matchingFiles = Directory.GetFiles(allocationPath, searchPattern);
-            foreach (string filePath in matchingFiles)
+            foreach (string file in matchingFiles)
             {
-                string content = await File.ReadAllTextAsync(filePath);
-                logContents.Add(content);
+                foreach (string line in await File.ReadAllLinesAsync(file))
+                {
+                    LogContent content = JsonSerializer.Deserialize<LogContent>(line);
+                    contents.Add(content);
+                }
+                logFile.Add(contents);
             }
-            return logContents;
+            return logFile;
         }
-        private static string lineSeparator = "=================================================";
         private static async Task WriteLog(LogType logType, string data)
         {
             string allocationPath = $"App_Data\\Loggers\\{logType}";
@@ -32,7 +40,7 @@
                 Directory.CreateDirectory(allocationPath);
 
             string logPath = Path.Combine(allocationPath,
-                $"{logType}log_{getFileCounter(logType)}.txt");
+                $"{logType}log_{getFileCounter(logType)}.json");
 
             if (File.Exists(logPath))
             {
@@ -41,8 +49,9 @@
                    UpdateFileCounter(logType);
             }
 
-            string content = $"Log date: {DateTime.Now}\nLog:{data}\n{lineSeparator}\n\n";
-            await File.AppendAllTextAsync(logPath, content);
+            LogContent content = new LogContent { Data = data, Date = DateTime.Now, Type = logType };
+            string jsonContent = JsonSerializer.Serialize(content);
+            await File.AppendAllTextAsync(logPath, jsonContent + Environment.NewLine);
         }
 
         private static int[] counters = { 0, 0, 0, 0 };
