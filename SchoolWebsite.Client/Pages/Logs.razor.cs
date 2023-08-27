@@ -1,32 +1,31 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.VisualBasic;
-using SchoolWebsite.shared;
-using System.Security.Cryptography.X509Certificates;
 
 namespace SchoolWebsite.Client.Pages
 {
     public partial class Logs
     {
         private List<List<LogContent>> logFiles = new();
-        private List<LogContent> logs = new();
+        private List<List<LogContent>> customlogFiles = new();
         private List<DateTime> dates = new();
-        private bool loadingLogs = false;
-
+        private bool loadingLogFiles = false;
+        private DateTime selectedDate;
         private LogType selectedLogType = LogType.Information;
         protected override async Task OnInitializedAsync()
         {
-            await LoadLogs(null);
+            await LoadLogFiles(null);
             dates = LoadDates();
+            selectedDate = dates[0];
         }
 
-        private async Task LoadLogs(ChangeEventArgs e)
+        private async Task LoadLogFiles(ChangeEventArgs e)
         {
             if (e != null && Enum.TryParse<LogType>(e.Value?.ToString(), out var logType))
                 selectedLogType = logType;
 
-            loadingLogs = true;
+            loadingLogFiles = true;
             logFiles = await Log.GetAllLogsAsync(selectedLogType);
-            loadingLogs = false;
+            customlogFiles = logFiles;
+            loadingLogFiles = false;
         }
 
         private int currentIndex = 0;
@@ -42,11 +41,26 @@ namespace SchoolWebsite.Client.Pages
             var allDates = logFiles
                 .SelectMany(logFile => logFile.Select(logContent => logContent.Date.Date))
                 .Distinct()
-                .OrderBy(date => date)
+                .OrderByDescending(date=>date)
                 .ToList();
 
             return allDates;
         }
+
+        private void GetLogsByDate(ChangeEventArgs e)
+        {
+            if (e.Value.ToString() == "All")
+                customlogFiles = logFiles;
+            else
+            {
+                DateTime.TryParse(e.Value.ToString(), out DateTime date);
+                selectedDate = date;
+                customlogFiles = logFiles
+                    .Select(logFile => logFile.Where(log => log.Date.Date == selectedDate.Date).ToList())
+                    .ToList();
+            }
+        }
+
 
     }
 }

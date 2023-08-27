@@ -4,7 +4,8 @@
 <h3 class="text-center mt-4">Logs</h3>
 
 <div class="d-flex justify-content-center mt-4">
-    <select class="form-select form-select-lg form-control-lg custom-select" style="max-width: 300px;" @onchange="LoadLogs" value="@selectedLogType">
+    <select class="form-select form-select-lg form-control-lg custom-select"
+    style="max-width: 300px;" @onchange="LoadLogFiles" value="@selectedLogType">
         <option value="" selected disabled>Select a log type</option>
         @foreach (LogType logType in Enum.GetValues(typeof(LogType)))
         {
@@ -15,15 +16,26 @@
 
 
 <div class="d-flex row justify-content-center mt-4">
-    @if (logFiles.Any())
+    @if (customlogFiles.Any())
     {
+        <div class="d-flex mt-4">
+            <select class="form-select form-select-sm form-control-sm custom-select"
+            style="max-width: 150px;" @onchange="GetLogsByDate" value="All">
+                <option value="" selected disabled>Select a day</option>
+                @foreach (DateTime date in dates)
+                {
+                    <option value="@date">@date.ToString("yyyy-MMM-dd")</option>
+                }
+                <option value="All">Show all logs</option>
+            </select>
+        </div>
 
         <div class="card">
             <div class="card-body">
 
                 <h5 class="card-title mb-4 text-center">Log @(currentIndex + 1)</h5>
 
-                @foreach (var logs in logFiles)
+                @foreach (var logs in customlogFiles)
                 {
                     @foreach (var log in logs)
                     {
@@ -41,7 +53,7 @@
                             }">
                         Previous
                     </button>
-                    @for (int i = 0; i < logFiles.Count; i++)
+                    @for (int i = 0; i < customlogFiles.Count; i++)
                     {
                         int pageNumber = i; // Capture the value of i
                         <button class="btn btn-outline-dark btn-sm @(currentIndex == pageNumber ? "active" : "")"
@@ -52,7 +64,7 @@
 
                     <button class="btn btn-danger btn-sm col-1" @onclick="() =>
                             {
-                                if (currentIndex < logFiles.Count - 1)
+                                if (currentIndex < customlogFiles.Count - 1)
                                   NavigateToLog(currentIndex + 1);
                             }">
                         Next
@@ -63,7 +75,7 @@
         </div>
     }
 
-    else if (loadingLogs)
+    else if (loadingLogFiles)
     {
         <div class="d-flex justify-content-center mt-4">
             <div class="spinner-border" role="status"></div>

@@ -49,7 +49,7 @@ namespace SchoolWebsite.shared
                    UpdateFileCounter(logType);
             }
 
-            LogContent content = new LogContent { Data = data, Date = DateTime.Now, Type = logType };
+            LogContent content = new LogContent { Data = data, Date = DateTime.Now.AddDays(2), Type = logType };
             string jsonContent = JsonSerializer.Serialize(content);
             await File.AppendAllTextAsync(logPath, jsonContent + Environment.NewLine);
         }
