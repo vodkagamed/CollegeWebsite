@@ -3,24 +3,25 @@
 
 <h3 class="text-center mt-4">Logs</h3>
 
-<div class="d-flex justify-content-center mt-4">
+<div class="d-flex flex-column align-items-center mt-4">
     <select class="form-select form-select-lg form-control-lg custom-select"
-    style="max-width: 300px;" @onchange="LoadLogFiles" value="@selectedLogType">
+            style="max-width: 300px;" @onchange="GetLogsByType" value="@selectedLogType">
         <option value="" selected disabled>Select a log type</option>
         @foreach (LogType logType in Enum.GetValues(typeof(LogType)))
         {
             <option value="@logType">@logType</option>
         }
     </select>
-</div>
 
-
-<div class="d-flex row justify-content-center mt-4">
-    @if (customlogFiles.Any())
+    @if (loadingLogFiles)
     {
-        <div class="d-flex mt-4">
+        <div class="spinner-border mt-4" role="status"></div>
+    }
+    else if (customlogFiles.Any())
+    {
+        <div class="d-flex flex-column mt-4">
             <select class="form-select form-select-sm form-control-sm custom-select"
-            style="max-width: 150px;" @onchange="GetLogsByDate" value="All">
+                    style="max-width: 150px;" @onchange="GetLogsByDate" value="All">
                 <option value="" selected disabled>Select a day</option>
                 @foreach (DateTime date in dates)
                 {
@@ -30,55 +31,50 @@
             </select>
         </div>
 
-        <div class="card">
-            <div class="card-body">
+        <div class="d-flex flex-column bg-dark text-white justify-content-evenly p-3 rounded mt-4 ">
+            <h5 class="text-center mb-4">Log @(currentIndex + 1)</h5>
 
-                <h5 class="card-title mb-4 text-center">Log @(currentIndex + 1)</h5>
-
+            <div class="d-flex flex-wrap justify-content-evenly text-center">
                 @foreach (var logs in customlogFiles)
                 {
-                    @foreach (var log in logs)
-                    {
-                        <p>@log.Date</p>
-                        <p>@log.Data</p>
-                        <span>-------------------</span>
-                    }
+                    <div class="row">
+                        @foreach (var log in logs)
+                        {
+                            <div class="col-5 alert alert-@alertType m-2">
+                                <p>@log.Date</p>
+                                <p>@log.Data</p>
+                                <span>-------------------</span>
+                            </div>
+                        }
+                    </div>
                 }
+            </div>
 
-                <div class="d-flex btn-group justify-content-center" role="group">
-                    <button class="btn btn-danger btn-sm col-1" @onclick="() =>
+            <div class="btn-group justify-content-center mt-4" role="group">
+                <button class="btn btn-danger btn-sm col-1" @onclick="() =>
                             {
                                 if (currentIndex > 0)
                                   NavigateToLog(currentIndex - 1);
                             }">
-                        Previous
+                    Previous
+                </button>
+                @for (int i = 0; i < customlogFiles.Count; i++)
+                {
+                    int pageNumber = i; // Capture the value of i
+                    <button class="btn btn-outline-dark btn-sm col-1 @(currentIndex == pageNumber ? "active" : "")"
+                    @onclick="() => currentIndex = pageNumber">
+                        Page @(i + 1)
                     </button>
-                    @for (int i = 0; i < customlogFiles.Count; i++)
-                    {
-                        int pageNumber = i; // Capture the value of i
-                        <button class="btn btn-outline-dark btn-sm @(currentIndex == pageNumber ? "active" : "")"
-                        @onclick="() => currentIndex = pageNumber">
-                            Page @(i + 1)
-                        </button>
-                    }
+                }
 
-                    <button class="btn btn-danger btn-sm col-1" @onclick="() =>
+                <button class="btn btn-danger btn-sm col-1" @onclick="() =>
                             {
                                 if (currentIndex < customlogFiles.Count - 1)
                                   NavigateToLog(currentIndex + 1);
                             }">
-                        Next
-                    </button>
-                </div>
+                    Next
+                </button>
             </div>
-
-        </div>
-    }
-
-    else if (loadingLogFiles)
-    {
-        <div class="d-flex justify-content-center mt-4">
-            <div class="spinner-border" role="status"></div>
         </div>
     }
     else
@@ -90,7 +86,5 @@
 <style>
     .card-text {
         max-height: 300px;
-        word-wrap:break-word;
-        overflow:auto;
     }
 </style>
