@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.DataProtection;
 using SchoolApi.Controllers;
+using SchoolApi.Repos;
 using SchoolApi.Data;
 using SchoolWebsite.shared;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<AppDbContext>();
+builder.Services.AddScoped<CollegesRepo>();
+builder.Services.AddScoped<TeachersRepo>();
+builder.Services.AddScoped<SubjectsRepo>();
 builder.Services.AddScoped<StudentsRepo>();
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("D:\\projects\\C#\\InnoTasks\\SchoolWebProject\\SchoolApi"))

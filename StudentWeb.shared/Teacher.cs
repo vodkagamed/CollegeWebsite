@@ -8,9 +8,8 @@ namespace SchoolWebsite.shared
 {
     public class Teacher
     {       
-            public int TeacherId { get; set; }
+            public string Id { get; set; }
             public string Name { get; set; }
-            public List<Subject> SubjectsTaught { get; set; } = new List<Subject>();
-        
+            public List<Subject> Subjects { get; set; } = new List<Subject>();
     }
 }

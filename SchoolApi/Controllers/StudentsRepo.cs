@@ -41,13 +41,13 @@ namespace SchoolApi.Controllers
 
         public async Task<Student> DeleteStudent(int studentId)
         {
-            var movieToDelete = await GetStudent(studentId);
+            var studentToDelete = await GetStudent(studentId);
 
-            if (movieToDelete != null)
+            if (studentToDelete != null)
             {
-                context.Students.Remove(movieToDelete);
+                context.Students.Remove(studentToDelete);
                 await context.SaveChangesAsync();
-                return movieToDelete;
+                return studentToDelete;
             }
 
             return null;
