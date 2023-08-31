@@ -18,6 +18,7 @@ public class Student
     //[Required(ErrorMessage = "Age is required.")]
     //[Range(13, 150, ErrorMessage = "Age must be between 13 and 150.")]
     public string Age { get; set; }
-
-    public List<Subject> EnrolledSubjects { get; set; } = new List<Subject>();
+    public int CollegeId { get; set; }
+    public College? College { get; set; }
+    public List<Subject>? Subjects { get; set; }
 }

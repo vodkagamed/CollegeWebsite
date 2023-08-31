@@ -23,10 +23,10 @@ namespace SchoolApi.Controllers
         {
             try
             {
-                List<Subject> Ensubjects = (await subjectsRepo.GetSubjects()).ToList();
+                IEnumerable<Subject> Ensubjects = (await subjectsRepo.GetSubjects());
                 if (Ensubjects.Any())
                 {
-                    IEnumerable<Subject> DecryptedSubjects = (IEnumerable<Subject>)_protector.ListDecrypt(Ensubjects).ToList();
+                   var DecryptedSubjects = _protector.Decrypt(Ensubjects);
                     return Ok(DecryptedSubjects);
                 }
                 else
@@ -40,7 +40,7 @@ namespace SchoolApi.Controllers
 
         // GET: api/Subject/5
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Subject>> Get(string id)
+        public async Task<ActionResult<Subject>> Get(int id)
         {
             Subject enSubject = await subjectsRepo.GetSubject(id);
             if (enSubject == null)
@@ -65,7 +65,7 @@ namespace SchoolApi.Controllers
 
         // PUT: api/Subject/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(string id, [FromBody] Subject subject)
+        public async Task<ActionResult> Put(int id, [FromBody] Subject subject)
         {
             var encryptExistSubject = (Subject)_protector.Encrypt(subject);
 
@@ -77,9 +77,9 @@ namespace SchoolApi.Controllers
 
         // DELETE: api/Subject/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(int id)
         {
-            Subject endeletedSubject = (Subject)await subjectsRepo.DeleteSubject(id);
+            Subject endeletedSubject = await subjectsRepo.DeleteSubject(id);
 
             if (endeletedSubject != null)
                 return Ok(_protector.Decrypt(endeletedSubject));

@@ -14,7 +14,7 @@ namespace SchoolApi.Repos
         }
         public async Task<IEnumerable<Subject>> GetSubjects()
             => await context.Subjects.ToListAsync();
-        public async Task<Subject> GetSubject(string id)
+        public async Task<Subject> GetSubject(int id)
         {
             var subject = await context.Subjects.SingleOrDefaultAsync(s => s.Id == id);
             return subject;
@@ -25,18 +25,18 @@ namespace SchoolApi.Repos
             await context.SaveChangesAsync();
             return addedSubject.Entity;
         }
-        public async Task<Subject> UpdateSubject(Subject subject, string id)
+        public async Task<Subject> UpdateSubject(Subject editedSubject, int id)
         {
             var existingSubject = await context.Subjects.SingleOrDefaultAsync(s => s.Id == id);
             if (existingSubject == null)
                 return null;
 
-            existingSubject.Name = subject.Name;
-            context.SaveChanges();
+            context.Entry(existingSubject).CurrentValues.SetValues(editedSubject);
+            await context.SaveChangesAsync();
             return existingSubject;
         }
 
-        public async Task<Subject> DeleteSubject(string subjectId)
+        public async Task<Subject> DeleteSubject(int subjectId)
         {
             var movieToDelete = await GetSubject(subjectId);
 

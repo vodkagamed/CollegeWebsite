@@ -13,8 +13,8 @@ namespace SchoolApi.Repos
             this.context = context;
         }
         public async Task<IEnumerable<Teacher>> GetTeachers()
-            => await context.Teachers.ToListAsync();
-        public async Task<Teacher> GetTeacher(string id)
+            => await context.Teachers.Include(x => x.Subject).ToListAsync();
+        public async Task<Teacher> GetTeacher(int id)
         {
             var Teacher = await context.Teachers.SingleOrDefaultAsync(s => s.Id == id);
             return Teacher;
@@ -25,19 +25,18 @@ namespace SchoolApi.Repos
             await context.SaveChangesAsync();
             return addedTeacher.Entity;
         }
-        public async Task<Teacher> UpdateTeacher(Teacher teacher, string id)
+        public async Task<Teacher> UpdateTeacher(Teacher editedTeacher, int id)
         {
             var existingTeacher = await context.Teachers.SingleOrDefaultAsync(t => t.Id == id);
             if (existingTeacher == null)
                 return null;
 
-            existingTeacher.Name = teacher.Name;
-            existingTeacher.Subjects = teacher.Subjects;
+           context.Entry(existingTeacher).CurrentValues.SetValues(editedTeacher);
             context.SaveChanges();
             return existingTeacher;
         }
 
-        public async Task<Teacher> DeleteTeacher(string teacherId)
+        public async Task<Teacher> DeleteTeacher(int teacherId)
         {
             var teacherToDelete = await GetTeacher(teacherId);
 

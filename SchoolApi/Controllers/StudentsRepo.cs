@@ -14,7 +14,7 @@ namespace SchoolApi.Controllers
             this.context = context;
         }
         public async Task<IEnumerable<Student>> GetStudents()
-            => await context.Students.ToListAsync();
+            => await context.Students.Include(S=>S.Subjects).ToListAsync();
         public async Task<Student> GetStudent(int id)
         {
             var student = await context.Students.SingleOrDefaultAsync(s => s.Id == id);
@@ -26,15 +26,13 @@ namespace SchoolApi.Controllers
             await context.SaveChangesAsync();
             return addedStudent.Entity;
         }
-        public async Task<Student> UpdateStudent(Student student,int id)
+        public async Task<Student> UpdateStudent(Student editedStudent, int id)
         {
             var existingStudent = await context.Students.SingleOrDefaultAsync(s => s.Id == id);
             if (existingStudent == null)
                 return null;
 
-            existingStudent.Name = student.Name;
-            existingStudent.Age = student.Age;
-            existingStudent.Phone = student.Phone;
+            context.Entry(existingStudent).CurrentValues.SetValues(editedStudent);
             context.SaveChanges();
             return existingStudent;
         }

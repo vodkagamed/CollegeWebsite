@@ -25,7 +25,7 @@ namespace SchoolApi.Controllers
                 List<Student> Enstudents = (await studentsRepo.GetStudents()).ToList();
                 if (Enstudents.Any())
                 {
-                    List<Student> DecryptedStudents = _protector.Decrypt(Enstudents).ToList();
+                    var DecryptedStudents = _protector.Decrypt(Enstudents).ToList();
                     return Ok(DecryptedStudents);
                 }
                 else
@@ -45,7 +45,7 @@ namespace SchoolApi.Controllers
             if (enStudent == null)
                 return NotFound();
 
-            Student DeStudents = _protector.Decrypt(enStudent);
+            object DeStudents = _protector.Decrypt(enStudent);
             return Ok(DeStudents);
         }
 
@@ -56,7 +56,7 @@ namespace SchoolApi.Controllers
             if (student == null)
                 return BadRequest();
 
-            Student encryptedStudent = _protector.Encrypt(student);
+            Student encryptedStudent =(Student) _protector.Encrypt(student);
             await studentsRepo.AddStudent(encryptedStudent);
 
             return CreatedAtAction(nameof(Get), student.Id, encryptedStudent);
@@ -66,7 +66,7 @@ namespace SchoolApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] Student student)
         {
-            var encryptExistStudent = _protector.Encrypt(student);
+            var encryptExistStudent =(Student) _protector.Encrypt(student);
 
             var updatedStudent = await studentsRepo.UpdateStudent(encryptExistStudent, id);
             if (updatedStudent != null)

@@ -26,7 +26,7 @@ namespace SchoolApi.Controllers
                 List<College> Encolleges = (await collegesRepo.GetColleges()).ToList();
                 if (Encolleges.Any())
                 {
-                    IEnumerable<College> DecryptedColleges = (IEnumerable<College>)_protector.ListDecrypt(Encolleges).ToList();
+                    var DecryptedColleges =_protector.Decrypt(Encolleges).ToList();
                     return Ok(DecryptedColleges);
                 }
                 else
@@ -40,7 +40,7 @@ namespace SchoolApi.Controllers
 
         // GET: api/College/5
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<College>> Get(string id)
+        public async Task<ActionResult<College>> Get(int id)
         {
             College enCollege = await collegesRepo.GetCollege(id);
             if (enCollege == null)
@@ -65,7 +65,7 @@ namespace SchoolApi.Controllers
 
         // PUT: api/College/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(string id, [FromBody] College college)
+        public async Task<ActionResult> Put(int id, [FromBody] College college)
         {
             var encryptExistCollege = (College) _protector.Encrypt(college);
 
@@ -77,7 +77,7 @@ namespace SchoolApi.Controllers
 
         // DELETE: api/College/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(int id)
         {
             College endeletedCollege = (College) await collegesRepo.DeleteCollege(id);
 

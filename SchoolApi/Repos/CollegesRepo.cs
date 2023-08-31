@@ -14,7 +14,7 @@ namespace SchoolApi.Repos
         }
         public async Task<IEnumerable<College>> GetColleges()
             => await context.Colleges.ToListAsync();
-        public async Task<College> GetCollege(string id)
+        public async Task<College> GetCollege(int id)
         {
             var college = await context.Colleges.SingleOrDefaultAsync(c => c.Id == id);
             return college;
@@ -25,18 +25,18 @@ namespace SchoolApi.Repos
             await context.SaveChangesAsync();
             return addedCollege.Entity;
         }
-        public async Task<College> UpdateCollege(College college, string id)
+        public async Task<College> UpdateCollege(College editedCollege, int id)
         {
             var existingCollege = await context.Colleges.SingleOrDefaultAsync(s => s.Id == id);
             if (existingCollege == null)
                 return null;
 
-            existingCollege.Name = college.Name;
+            context.Entry(existingCollege).CurrentValues.SetValues(editedCollege);
             await context.SaveChangesAsync();
             return existingCollege;
         }
 
-        public async Task<College> DeleteCollege(string collegeId)
+        public async Task<College> DeleteCollege(int collegeId)
         {
             var collegeToDelete = await GetCollege(collegeId);
 
