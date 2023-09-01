@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SchoolApi.Data;
 using SchoolWebsite.shared;
 
-namespace SchoolApi.Controllers
+namespace SchoolApi.Repos
 {
     public class StudentsRepo
     {
@@ -14,17 +14,25 @@ namespace SchoolApi.Controllers
             this.context = context;
         }
         public async Task<IEnumerable<Student>> GetStudents()
-            => await context.Students.Include(S=>S.Subjects).ToListAsync();
+            => await context.Students.Include(S => S.Courses).Include(S=>S.College).ToListAsync();
         public async Task<Student> GetStudent(int id)
         {
             var student = await context.Students.SingleOrDefaultAsync(s => s.Id == id);
             return student;
         }
-        public async Task<Student> AddStudent(Student student)
+        public async Task<Student> AddStudent(int collegeId,Student student)
         {
-            var addedStudent = await context.AddAsync(student);
-            await context.SaveChangesAsync();
-            return addedStudent.Entity;
+
+            College availableCollege = await context.Colleges.FindAsync(collegeId);
+            if (availableCollege is not null)
+            {
+                var addedStudent = (await context.AddAsync(student)).Entity;
+                addedStudent.CollegeId = collegeId;
+                addedStudent.College = availableCollege;
+                await context.SaveChangesAsync();
+                return addedStudent;
+            }
+            return null;
         }
         public async Task<Student> UpdateStudent(Student editedStudent, int id)
         {
@@ -48,6 +56,19 @@ namespace SchoolApi.Controllers
                 return studentToDelete;
             }
 
+            return null;
+        }
+        
+        public async Task<Student> EnrollCourse(int studentId,int courseId)
+        {
+            var student = await context.Students.FindAsync(studentId);
+            var course = await context.Courses.FindAsync(courseId);
+            if (student!=null&&course!=null)
+            {
+                student.Courses.Add(course);
+                await context.SaveChangesAsync();
+                return student;
+            }
             return null;
         }
     }

@@ -11,7 +11,7 @@ namespace SchoolApi.Configurations
         {
             builder.HasKey(s => s.Id);
 
-            builder.HasMany(S => S.Subjects)
+            builder.HasMany(S => S.Courses)
                 .WithMany(J => J.Students);
         }
     }

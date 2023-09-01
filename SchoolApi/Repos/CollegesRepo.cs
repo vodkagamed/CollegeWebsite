@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 using SchoolApi.Data;
 using SchoolWebsite.shared;
 
@@ -7,13 +8,18 @@ namespace SchoolApi.Repos
     public class CollegesRepo
     {
         private readonly AppDbContext context;
-
-        public CollegesRepo(AppDbContext context)
+        //private readonly DataProtector protector;   
+        public CollegesRepo(AppDbContext context, DataProtector protector)
         {
             this.context = context;
+            //this.protector = protector;
         }
         public async Task<IEnumerable<College>> GetColleges()
-            => await context.Colleges.ToListAsync();
+            => await context.Colleges
+            .Include(c=>c.Teachers)
+            .Include(c=>c.Subjects)
+            .Include(c=>c.Students)
+            .ToListAsync();
         public async Task<College> GetCollege(int id)
         {
             var college = await context.Colleges.SingleOrDefaultAsync(c => c.Id == id);

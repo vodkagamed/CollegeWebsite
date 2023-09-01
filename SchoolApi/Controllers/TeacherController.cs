@@ -8,12 +8,12 @@ namespace SchoolApi.Controllers
     [Route("api/[controller]")]
     public class TeacherController : ControllerBase
     {
-        private readonly DataProtector _protector;
+        //private readonly DataProtector _protector;
         private readonly TeachersRepo teachersRepo;
 
         public TeacherController(DataProtector protector, TeachersRepo teachersRepo)
         {
-            _protector = protector;
+           // _protector = protector;
             this.teachersRepo = teachersRepo;
         }
 
@@ -26,8 +26,8 @@ namespace SchoolApi.Controllers
                 List<Teacher> Enteachers = (await teachersRepo.GetTeachers()).ToList();
                 if (Enteachers.Any())
                 {
-                    IEnumerable<Teacher> DecryptedTeachers = (IEnumerable<Teacher>)_protector.Decrypt(Enteachers);
-                    return Ok(DecryptedTeachers);
+                    //IEnumerable<Teacher> DecryptedTeachers = (IEnumerable<Teacher>)_protector.Decrypt(Enteachers);
+                    return Ok(Enteachers);
                 }
                 else
                     return NotFound();
@@ -46,32 +46,33 @@ namespace SchoolApi.Controllers
             if (enTeacher == null)
                 return NotFound();
 
-            Teacher DeTeachers = (Teacher)_protector.Decrypt(enTeacher);
-            return Ok(DeTeachers);
+            //Teacher DeTeacher = (Teacher)_protector.Decrypt(enTeacher);
+            return Ok(enTeacher);
         }
 
         // POST: api/Teacher
-        [HttpPost]
-        public async Task<ActionResult<Teacher>> Post([FromBody] Teacher teacher)
+        [HttpPost("{collegeId:int}")]
+        public async Task<ActionResult<Teacher>> Post(int collegeId,[FromBody] Teacher teacher)
         {
             if (teacher == null)
                 return BadRequest();
 
-            Teacher encryptedTeacher = (Teacher)_protector.Encrypt(teacher);
-            await teachersRepo.AddTeacher(encryptedTeacher);
+            //Teacher encryptedTeacher = (Teacher)_protector.Encrypt(teacher);
+            await teachersRepo.AddTeacher(collegeId,teacher);
 
-            return CreatedAtAction(nameof(Get), teacher.Id, encryptedTeacher);
+            return CreatedAtAction(nameof(Get), teacher.Id, teacher);
         }
 
         // PUT: api/Teacher/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] Teacher teacher)
         {
-            var encryptExistTeacher = (Teacher)_protector.Encrypt(teacher);
+            //var encryptExistTeacher = (Teacher)_protector.Encrypt(teacher);
 
-            var updatedTeacher = await teachersRepo.UpdateTeacher(encryptExistTeacher, id);
+            var updatedTeacher = await teachersRepo.UpdateTeacher(teacher, id);
             if (updatedTeacher != null)
-                return Ok(_protector.Decrypt(updatedTeacher));
+                return Ok(updatedTeacher);
+                //return Ok(_protector.Decrypt(updatedTeacher));
             return NotFound();
         }
 
@@ -82,7 +83,7 @@ namespace SchoolApi.Controllers
             Teacher endeletedTeacher = (Teacher)await teachersRepo.DeleteTeacher(id);
 
             if (endeletedTeacher != null)
-                return Ok(_protector.Decrypt(endeletedTeacher));
+                return Ok(endeletedTeacher);
 
             return NotFound();
         }

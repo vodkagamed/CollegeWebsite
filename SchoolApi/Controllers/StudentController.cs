@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SchoolApi.Repos;
 using SchoolWebsite.shared;
 
 namespace SchoolApi.Controllers
@@ -7,12 +8,12 @@ namespace SchoolApi.Controllers
     [Route("api/[controller]")]
     public class StudentController : ControllerBase
     {
-        private readonly DataProtector _protector;
+        //private readonly DataProtector _protector;
         private readonly StudentsRepo studentsRepo;
 
         public StudentController(DataProtector protector, StudentsRepo studentsRepo)
         {
-            _protector = protector;
+            //_protector = protector;
             this.studentsRepo = studentsRepo;
         }
 
@@ -25,8 +26,8 @@ namespace SchoolApi.Controllers
                 List<Student> Enstudents = (await studentsRepo.GetStudents()).ToList();
                 if (Enstudents.Any())
                 {
-                    var DecryptedStudents = _protector.Decrypt(Enstudents).ToList();
-                    return Ok(DecryptedStudents);
+                    //var DecryptedStudents = _protector.Decrypt(Enstudents).ToList();
+                    return Ok(Enstudents);
                 }
                 else
                     return NotFound();
@@ -45,32 +46,43 @@ namespace SchoolApi.Controllers
             if (enStudent == null)
                 return NotFound();
 
-            object DeStudents = _protector.Decrypt(enStudent);
-            return Ok(DeStudents);
+            //object DeStudents = _protector.Decrypt(enStudent);
+            return Ok(enStudent);
         }
 
         // POST: api/Student
-        [HttpPost]
-        public async Task<ActionResult<Student>> Post([FromBody] Student student)
+        [HttpPost("{collegeId:int}")]
+        public async Task<ActionResult<Student>> Post(int collegeId,[FromBody] Student student)
         {
             if (student == null)
                 return BadRequest();
 
-            Student encryptedStudent =(Student) _protector.Encrypt(student);
-            await studentsRepo.AddStudent(encryptedStudent);
+            //Student encryptedStudent =(Student) _protector.Encrypt(student);
+            await studentsRepo.AddStudent(collegeId, student);
 
-            return CreatedAtAction(nameof(Get), student.Id, encryptedStudent);
+            return CreatedAtAction(nameof(Get), student.Id, student);
         }
+
+        [HttpPost]
+        [Route("{studentId}/enroll")]
+        public async Task<ActionResult<Student>> Enroll(int studentId,int courseId)
+        {
+            Student EnrolledStudent = await studentsRepo.EnrollCourse(studentId, courseId);
+            if (EnrolledStudent is not null)
+                return Ok(EnrolledStudent);
+            return BadRequest();
+        }
+
 
         // PUT: api/Student/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] Student student)
         {
-            var encryptExistStudent =(Student) _protector.Encrypt(student);
+            //var encryptExistStudent =(Student) _protector.Encrypt(student);
 
-            var updatedStudent = await studentsRepo.UpdateStudent(encryptExistStudent, id);
+            var updatedStudent = await studentsRepo.UpdateStudent(student, id);
             if (updatedStudent != null)
-                return Ok(_protector.Decrypt(updatedStudent));
+                return Ok(updatedStudent);
             return NotFound();
         }
 
@@ -81,7 +93,7 @@ namespace SchoolApi.Controllers
             Student endeletedStudent = await studentsRepo.DeleteStudent(id);
 
             if (endeletedStudent != null)
-                return Ok(_protector.Decrypt(endeletedStudent));
+                return Ok(endeletedStudent);
             
             return NotFound();
         }

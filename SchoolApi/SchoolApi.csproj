@@ -23,4 +23,9 @@
     <ProjectReference Include="..\StudentWeb.shared\SchoolWebsite.shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\DTOs\Encoming\" />
+    <Folder Include="Controllers\DTOs\Outcoming\" />
+  </ItemGroup>
+
 </Project>

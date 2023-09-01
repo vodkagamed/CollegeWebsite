@@ -8,12 +8,12 @@ namespace SchoolApi.Controllers
     [Route("api/[controller]")]
     public class CollegeController : ControllerBase
     {
-        private readonly DataProtector _protector;
+        //private readonly DataProtector _protector;
         private readonly CollegesRepo collegesRepo;
 
         public CollegeController(DataProtector protector, CollegesRepo collegesRepo)
         {
-            _protector = protector;
+            //_protector = protector;
             this.collegesRepo = collegesRepo;
         }
 
@@ -26,14 +26,15 @@ namespace SchoolApi.Controllers
                 List<College> Encolleges = (await collegesRepo.GetColleges()).ToList();
                 if (Encolleges.Any())
                 {
-                    var DecryptedColleges =_protector.Decrypt(Encolleges).ToList();
-                    return Ok(DecryptedColleges);
+                    //var DecryptedColleges = _protector.Decrypt(Encolleges);
+                    return Ok(Encolleges);
                 }
                 else
                     return NotFound();
             }
             catch (Exception)
             {
+                throw;
                 return BadRequest();
             }
         }
@@ -46,8 +47,8 @@ namespace SchoolApi.Controllers
             if (enCollege == null)
                 return NotFound();
 
-            College DeColleges =(College) _protector.Decrypt(enCollege);
-            return Ok(DeColleges);
+            //College DeColleges = (College)_protector.Decrypt(enCollege);
+            return Ok(enCollege);
         }
 
         // POST: api/College
@@ -57,21 +58,21 @@ namespace SchoolApi.Controllers
             if (college == null)
                 return BadRequest();
 
-             College encryptedCollege =(College) _protector.Encrypt(college);
-            await collegesRepo.AddCollege(encryptedCollege);
+            //College encryptedCollege = (College)_protector.Encrypt(college);
+            await collegesRepo.AddCollege(college);
 
-            return CreatedAtAction(nameof(Get), college.Id, encryptedCollege);
+            return CreatedAtAction(nameof(Get), college.Id, college);
         }
 
         // PUT: api/College/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] College college)
         {
-            var encryptExistCollege = (College) _protector.Encrypt(college);
+            //var encryptExistCollege = (College)_protector.Encrypt(college);
 
-            var updatedCollege = await collegesRepo.UpdateCollege(encryptExistCollege, id);
+            var updatedCollege = await collegesRepo.UpdateCollege(college, id);
             if (updatedCollege != null)
-                return Ok(_protector.Decrypt(updatedCollege));
+                return Ok(updatedCollege);
             return NotFound();
         }
 
@@ -79,10 +80,10 @@ namespace SchoolApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            College endeletedCollege = (College) await collegesRepo.DeleteCollege(id);
+            College endeletedCollege = (College)await collegesRepo.DeleteCollege(id);
 
             if (endeletedCollege != null)
-                return Ok(_protector.Decrypt(endeletedCollege));
+                return Ok(endeletedCollege);
 
             return NotFound();
         }

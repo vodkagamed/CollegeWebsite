@@ -12,6 +12,6 @@ namespace SchoolWebsite.shared
         public int StudentId { get; set; }
         public int SubjectId { get; set; }
         public Student Student { get; set; }
-        public Subject Subject { get; set; }
+        public Course Subject { get; set; }
     }
 }

@@ -19,11 +19,18 @@ namespace SchoolApi.Repos
             var Teacher = await context.Teachers.SingleOrDefaultAsync(s => s.Id == id);
             return Teacher;
         }
-        public async Task<Teacher> AddTeacher(Teacher teacher)
+        public async Task<Teacher> AddTeacher(int collegeId, Teacher teacher)
         {
-            var addedTeacher = await context.AddAsync(teacher);
-            await context.SaveChangesAsync();
-            return addedTeacher.Entity;
+            College availableCollege = await context.Colleges.FindAsync(collegeId);
+            if (availableCollege is not null)
+            {
+                var addedTeacher = (await context.AddAsync(teacher)).Entity;
+                addedTeacher.College = availableCollege;
+                addedTeacher.CollegeId = collegeId;
+                await context.SaveChangesAsync();
+                return addedTeacher;
+            }
+            return null;
         }
         public async Task<Teacher> UpdateTeacher(Teacher editedTeacher, int id)
         {

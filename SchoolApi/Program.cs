@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.DataProtection;
-using SchoolApi.Controllers;
 using SchoolApi.Repos;
 using SchoolApi.Data;
 using SchoolWebsite.shared;
-
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddScoped<CollegesRepo>();
 builder.Services.AddScoped<TeachersRepo>();
-builder.Services.AddScoped<SubjectsRepo>();
+builder.Services.AddScoped<CoursesRepo>();
 builder.Services.AddScoped<StudentsRepo>();
 
 builder.Services.AddDataProtection()
@@ -24,6 +23,9 @@ builder.Services.AddDataProtection()
     .SetDefaultKeyLifetime(TimeSpan.FromDays(15));
 builder.Services.AddSingleton<DataProtector>();
 builder.Services.AddCors(x => x.AddPolicy("MyPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyMethod()));
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 

@@ -20,5 +20,5 @@ public class Student
     public string Age { get; set; }
     public int CollegeId { get; set; }
     public College? College { get; set; }
-    public List<Subject>? Subjects { get; set; }
+    public List<Course>? Courses { get; set; } = new();
 }
