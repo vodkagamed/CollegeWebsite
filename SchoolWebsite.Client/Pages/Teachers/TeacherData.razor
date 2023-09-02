@@ -1,0 +1,40 @@
+﻿@page "/TeacherData/{id}"
+@using AKSoftware.Localization.MultiLanguages;
+@using SchoolWebsite.Client.Components
+@inject ILanguageContainerService langService
+<h3>@langService.Keys["StudendtData"]</h3>
+
+@if (valid)
+{
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Teacher ID</th>
+                <th scope="col">Teacher Name</th>
+                <th scope="col">Options</th>
+            </tr>
+        </thead>
+        <tbody id="teacherTableBody">
+            <tr>
+                <th scope="row">@teacher.Id</th>
+                <td>@teacher.Name</td>
+                <td>
+                <td>
+                    <button class="btn btn-outline-danger"
+                        @onclick="() => DeleteTeacher(teacher.Id)">
+                            @langService.Keys["Delete"]
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-outline-dark mb-1"
+                        @onclick="() => EditTeacher(teacher.Id)">
+                            @langService.Keys["Edit"]
+                    </button>
+                </td>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+}
+<ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SchoolApi.Configurations;
 using SchoolWebsite.shared;
 
 namespace SchoolApi.Data
@@ -21,9 +22,11 @@ namespace SchoolApi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new TeacherConfig());
+            modelBuilder.ApplyConfiguration(new CourseConfig());
+            modelBuilder.ApplyConfiguration(new StudentConfig());
+            modelBuilder.ApplyConfiguration(new CollegeConfig());
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly
-                (typeof(AppDbContext).Assembly);
         }
     }
 }

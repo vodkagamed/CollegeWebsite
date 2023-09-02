@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 namespace SchoolWebsite.Client.Pages.Students;
-public partial class ManageStudent
+public partial class AddStudent
 {
     [Inject]
     public StudentService studentService { get; set; }
@@ -20,7 +20,7 @@ public partial class ManageStudent
         }
         else
         {
-            response = await studentService.CreateStudent(Student);
+            response = await studentService.CreateStudent(Student,Student.CollegeId);
             bool isCreated = await validation.PerformHttpRequest(HttpMethod.Post, response, Student.Name);
             if (isCreated)
                 Student = new();

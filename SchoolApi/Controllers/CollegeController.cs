@@ -39,9 +39,9 @@ namespace SchoolApi.Controllers
                 else
                     return NotFound();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest() ;
             }
         }
 

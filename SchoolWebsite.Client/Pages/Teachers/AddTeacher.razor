@@ -1,0 +1,32 @@
+﻿@using SchoolWebsite.Client.Components
+
+@page "/AddTeacher"
+
+    <EditForm Model="Teacher" OnValidSubmit="OnFormValidAsync">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+        <div class="container d-flex flex-column align-items-center gap-4">
+            <div class="col-6">
+                <label for="TeacherName" class="h4">Teacher Name:</label>
+                <InputText id="TeacherName" @bind-Value="Teacher.Name" class="form-control form-control-lg"></InputText>
+            </div>
+
+        <div class="col-6">
+            <label for="TeacherCollege" class="h4">College Id:</label>
+            <InputNumber id="TeacherCollege" @bind-Value="Teacher.CollegeId" class="form-control form-control-lg"></InputNumber>
+        </div>
+
+        <div class="col-6">
+            <label for="TeacherCourse" class="h4">Course Id:</label>
+            <InputNumber id="TeacherCollege" @bind-Value="Teacher.CourseId" class="form-control form-control-lg"></InputNumber>
+        </div>
+
+            <div class="col-6">
+                <button 
+                    class="btn btn-primary btn-lg btn-block">
+                Submit
+                </button>
+            </div>
+        </div>
+    </EditForm>
+<ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>

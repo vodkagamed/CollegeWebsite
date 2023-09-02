@@ -13,7 +13,7 @@ namespace SchoolApi.Repos
             this.context = context;
         }
         public async Task<IEnumerable<Teacher>> GetTeachers()
-            => await context.Teachers.Include(x => x.Subject).ToListAsync();
+            => await context.Teachers.Include(x => x.Course).ToListAsync();
         public async Task<Teacher> GetTeacher(int id)
         {
             var Teacher = await context.Teachers.SingleOrDefaultAsync(s => s.Id == id);

@@ -54,8 +54,8 @@ namespace SchoolApi.Controllers
         [HttpPost("{collegeId:int}")]
         public async Task<ActionResult<Teacher>> Post(int collegeId,[FromBody] Teacher teacher)
         {
-            if (teacher == null)
-                return BadRequest();
+            if (teacher == null||collegeId<=0)
+                return BadRequest("please add valid data");
 
             //Teacher encryptedTeacher = (Teacher)_protector.Encrypt(teacher);
             await teachersRepo.AddTeacher(collegeId,teacher);

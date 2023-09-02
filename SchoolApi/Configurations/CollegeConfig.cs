@@ -10,23 +10,22 @@ namespace SchoolApi.Configurations
         {
             builder.HasKey(c => c.Id);
 
+            // Remove cascade delete for Students, Courses, and Teachers
             builder.HasMany(c => c.Students)
                 .WithOne(s => s.College)
                 .HasForeignKey(s => s.CollegeId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
 
             builder.HasMany(c => c.Courses)
                 .WithOne(sub => sub.College)
                 .HasForeignKey(sub => sub.CollegeId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
 
             builder.HasMany(c => c.Teachers)
                 .WithOne(t => t.College)
                 .HasForeignKey(t => t.CollegeId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
         }
     }
+
 }

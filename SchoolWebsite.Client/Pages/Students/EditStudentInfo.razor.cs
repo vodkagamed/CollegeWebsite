@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Reflection.Metadata;
 
-namespace SchoolWebsite.Client.Pages
+namespace SchoolWebsite.Client.Pages.Students
 {
     public partial class EditStudentInfo
     {

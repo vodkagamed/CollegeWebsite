@@ -89,9 +89,12 @@ namespace SchoolApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -112,18 +115,18 @@ namespace SchoolApi.Migrations
                     b.Property<int>("CollegeId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CollegeId");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("CourseId");
 
                     b.ToTable("Teachers");
                 });
@@ -146,9 +149,8 @@ namespace SchoolApi.Migrations
             modelBuilder.Entity("SchoolWebsite.shared.Course", b =>
                 {
                     b.HasOne("SchoolWebsite.shared.College", "College")
-                        .WithMany("Subjects")
-                        .HasForeignKey("CollegeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("Courses")
+                        .HasForeignKey("CollegeId");
 
                     b.Navigation("College");
                 });
@@ -157,8 +159,7 @@ namespace SchoolApi.Migrations
                 {
                     b.HasOne("SchoolWebsite.shared.College", "College")
                         .WithMany("Students")
-                        .HasForeignKey("CollegeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CollegeId");
 
                     b.Navigation("College");
                 });
@@ -167,25 +168,24 @@ namespace SchoolApi.Migrations
                 {
                     b.HasOne("SchoolWebsite.shared.College", "College")
                         .WithMany("Teachers")
-                        .HasForeignKey("CollegeId")
+                        .HasForeignKey("CollegeId");
+
+                    b.HasOne("SchoolWebsite.shared.Course", "Course")
+                        .WithMany("Teachers")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolWebsite.shared.Course", "Subject")
-                        .WithMany("Teachers")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.Navigation("College");
 
-                    b.Navigation("Subject");
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("SchoolWebsite.shared.College", b =>
                 {
-                    b.Navigation("Students");
+                    b.Navigation("Courses");
 
-                    b.Navigation("Subjects");
+                    b.Navigation("Students");
 
                     b.Navigation("Teachers");
                 });

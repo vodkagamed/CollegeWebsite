@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using SchoolWebsite.shared;
 
 namespace SchoolApi.Configurations
@@ -12,7 +11,7 @@ namespace SchoolApi.Configurations
             builder.HasKey(s => s.Id);
 
             builder.HasMany(S => S.Courses)
-                .WithMany(J => J.Students);
+                .WithMany(Course => Course.Students);
         }
     }
 }

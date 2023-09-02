@@ -1,21 +1,8 @@
-﻿@for (int i = 0; i < rowNum; i++)
+﻿<div class="mt-2 mb-2">
+@if (!string.IsNullOrEmpty(message))
 {
-    <tr @attributes="Additional">
-        @foreach (var content in TableContents)
-        {
-            <td>content</td>
-        }
-    </tr>
+    <div class="alert @alertClass" role="alert">
+    @message
+    </div>
 }
-@code
-{
-    [Parameter]
-    public int colNum { get; set; }
-    [Parameter]
-    public int rowNum { get; set; }
-    [Parameter]
-    public List<string> TableContents { get; set; }
-    [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string, object> Additional { get; set; }
-
-}
+</div>

@@ -7,9 +7,9 @@
         {
             _httpClient = httpClient;
         }
-        public async Task<HttpResponseMessage> CreateStudent(Student createdStudent)
+        public async Task<HttpResponseMessage> CreateStudent(Student createdStudent,int collegeId)
         {
-            return await _httpClient.PostAsJsonAsync("/api/Student", createdStudent);
+            return await _httpClient.PostAsJsonAsync($"/api/Student/{collegeId}", createdStudent);
         }
         public async Task<HttpResponseMessage> GetStudents()
         {

@@ -1,0 +1,6 @@
+﻿@page "/EditTeacherInfo/{id}"
+@using AKSoftware.Localization.MultiLanguages;
+@using SchoolWebsite.Client.Pages.Teachers
+@inject ILanguageContainerService langService
+<h3>@langService.Keys["EditTeacher"]</h3>
+<AddTeacher Teacher="@editedTeacher"></AddTeacher>

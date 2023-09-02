@@ -22,6 +22,11 @@
                 <InputText id="StudentName" @bind-Value="Student.Phone" class="form-control form-control-lg"></InputText>
             </div>
 
+        <div class="col-6">
+            <label for="StudentPhone" class="h4">@langService.Keys["StudentCollege"]:</label>
+            <InputNumber id="StudentName" @bind-Value="Student.CollegeId" class="form-control form-control-lg"></InputNumber>
+        </div>
+
             <div class="col-6">
                 <button 
                     class="btn btn-primary btn-lg btn-block">

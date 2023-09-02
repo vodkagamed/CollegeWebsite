@@ -66,7 +66,7 @@ namespace SchoolWebsite.Client.Pages
                 .Distinct()
                 .OrderByDescending(date => date)
                 .ToList();
-
+            currentIndex = 0;
             dates = allDates;
             InvokeAsync(StateHasChanged);
         }

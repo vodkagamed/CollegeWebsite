@@ -8,21 +8,31 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<SchoolWebsite.Client.Pages.StudentService>();
+builder.Services.AddScoped<StudentService>();
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("D:\\projects\\C#\\InnoTasks\\SchoolWebProject\\SchoolApi"))
     .SetDefaultKeyLifetime(TimeSpan.FromDays(15));
 builder.Services.AddLanguageContainerForBlazorServer<EmbeddedResourceKeysProvider>(Assembly.GetExecutingAssembly(), "Resources");
+
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7104") });
 builder.Services.AddScoped(client =>
 {
     var httpClient = client.GetRequiredService<HttpClient>();
-    return new SchoolWebsite.Client.Pages.StudentService(httpClient);
+    return new StudentService(httpClient);
 });
 builder.Services.AddScoped(client=> {
     var httpClient = client.GetRequiredService<HttpClient>();
     return new CollegeService(httpClient);
     });
+builder.Services.AddScoped(client => {
+    var httpClient = client.GetRequiredService<HttpClient>();
+    return new TeacherService(httpClient);
+});
+builder.Services.AddScoped(client =>
+{
+    var httpClient = client.GetRequiredService<HttpClient>();
+    return new CourseService(httpClient);
+});
 
 builder.Services.AddScoped<DataProtector>();
 builder.Services.AddTransient<ValidationMessages>();

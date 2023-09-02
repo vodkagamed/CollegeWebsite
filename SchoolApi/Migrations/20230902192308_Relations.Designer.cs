@@ -11,8 +11,8 @@ using SchoolApi.Data;
 namespace SchoolApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230831080306_Adding Relations")]
-    partial class AddingRelations
+    [Migration("20230902192308_Relations")]
+    partial class Relations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace SchoolApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CourseStudent", b =>
+                {
+                    b.Property<int>("CoursesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CoursesId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("CourseStudent");
+                });
+
             modelBuilder.Entity("SchoolWebsite.shared.College", b =>
                 {
                     b.Property<int>("Id")
@@ -33,12 +48,32 @@ namespace SchoolApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Colleges");
+                });
+
+            modelBuilder.Entity("SchoolWebsite.shared.Course", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CollegeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollegeId");
+
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("SchoolWebsite.shared.Student", b =>
@@ -57,9 +92,12 @@ namespace SchoolApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -69,28 +107,6 @@ namespace SchoolApi.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("SchoolWebsite.shared.Subject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CollegeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CollegeId");
-
-                    b.ToTable("Subjects");
-                });
-
             modelBuilder.Entity("SchoolWebsite.shared.Teacher", b =>
                 {
                     b.Property<int>("Id")
@@ -102,53 +118,51 @@ namespace SchoolApi.Migrations
                     b.Property<int>("CollegeId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CollegeId");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("CourseId");
 
                     b.ToTable("Teachers");
                 });
 
-            modelBuilder.Entity("StudentSubject", b =>
+            modelBuilder.Entity("CourseStudent", b =>
                 {
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("int");
+                    b.HasOne("SchoolWebsite.shared.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("SubjectsId")
-                        .HasColumnType("int");
+                    b.HasOne("SchoolWebsite.shared.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.HasKey("StudentsId", "SubjectsId");
+            modelBuilder.Entity("SchoolWebsite.shared.Course", b =>
+                {
+                    b.HasOne("SchoolWebsite.shared.College", "College")
+                        .WithMany("Courses")
+                        .HasForeignKey("CollegeId");
 
-                    b.HasIndex("SubjectsId");
-
-                    b.ToTable("StudentSubject");
+                    b.Navigation("College");
                 });
 
             modelBuilder.Entity("SchoolWebsite.shared.Student", b =>
                 {
                     b.HasOne("SchoolWebsite.shared.College", "College")
                         .WithMany("Students")
-                        .HasForeignKey("CollegeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("College");
-                });
-
-            modelBuilder.Entity("SchoolWebsite.shared.Subject", b =>
-                {
-                    b.HasOne("SchoolWebsite.shared.College", "College")
-                        .WithMany("Subjects")
-                        .HasForeignKey("CollegeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CollegeId");
 
                     b.Navigation("College");
                 });
@@ -157,45 +171,29 @@ namespace SchoolApi.Migrations
                 {
                     b.HasOne("SchoolWebsite.shared.College", "College")
                         .WithMany("Teachers")
-                        .HasForeignKey("CollegeId")
+                        .HasForeignKey("CollegeId");
+
+                    b.HasOne("SchoolWebsite.shared.Course", "Course")
+                        .WithMany("Teachers")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("SchoolWebsite.shared.Subject", "Subject")
-                        .WithMany("Teachers")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("College");
 
-                    b.Navigation("Subject");
-                });
-
-            modelBuilder.Entity("StudentSubject", b =>
-                {
-                    b.HasOne("SchoolWebsite.shared.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolWebsite.shared.Subject", null)
-                        .WithMany()
-                        .HasForeignKey("SubjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("SchoolWebsite.shared.College", b =>
                 {
-                    b.Navigation("Students");
+                    b.Navigation("Courses");
 
-                    b.Navigation("Subjects");
+                    b.Navigation("Students");
 
                     b.Navigation("Teachers");
                 });
 
-            modelBuilder.Entity("SchoolWebsite.shared.Subject", b =>
+            modelBuilder.Entity("SchoolWebsite.shared.Course", b =>
                 {
                     b.Navigation("Teachers");
                 });
