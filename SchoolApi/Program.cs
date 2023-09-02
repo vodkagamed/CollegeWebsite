@@ -17,7 +17,7 @@ builder.Services.AddScoped<CollegesRepo>();
 builder.Services.AddScoped<TeachersRepo>();
 builder.Services.AddScoped<CoursesRepo>();
 builder.Services.AddScoped<StudentsRepo>();
-
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("D:\\projects\\C#\\InnoTasks\\SchoolWebProject\\SchoolApi"))
     .SetDefaultKeyLifetime(TimeSpan.FromDays(15));

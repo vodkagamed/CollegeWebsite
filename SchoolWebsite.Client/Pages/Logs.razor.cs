@@ -14,7 +14,7 @@ namespace SchoolWebsite.Client.Pages
         protected override async Task OnInitializedAsync()
         {
             await GetLogsByType(null);
-            dates = LoadDates();
+            LoadDates();
             selectedDate = dates[0];
         }
 
@@ -31,8 +31,8 @@ namespace SchoolWebsite.Client.Pages
             if (selectedLogType == LogType.Error) alertType = "warning";
             else if (selectedLogType == LogType.Critical) alertType = "danger";
             else alertType = "info";
-            
-            
+            LoadDates();
+            InvokeAsync(StateHasChanged);
         }
         private void GetLogsByDate(ChangeEventArgs e)
         {
@@ -43,9 +43,12 @@ namespace SchoolWebsite.Client.Pages
                 DateTime.TryParse(e.Value.ToString(), out DateTime date);
                 selectedDate = date;
                 customlogFiles = logFiles
-                    .Select(logFile => logFile.Where(log => log.Date.Date == selectedDate.Date).ToList())
+                    .Select(logFile => logFile
+                    .Where(log => log.Date.Date == selectedDate.Date)
+                    .ToList())
                     .ToList();
             }
+            InvokeAsync(StateHasChanged);
         }
 
         private int currentIndex = 0;
@@ -56,17 +59,18 @@ namespace SchoolWebsite.Client.Pages
                 currentIndex = newIndex;
         }
 
-        private List<DateTime> LoadDates()
+        private void LoadDates()
         {
-            var allDates = logFiles
+            var allDates = customlogFiles
                 .SelectMany(logFile => logFile.Select(logContent => logContent.Date.Date))
                 .Distinct()
-                .OrderByDescending(date=>date)
+                .OrderByDescending(date => date)
                 .ToList();
 
-            return allDates;
+            dates = allDates;
+            InvokeAsync(StateHasChanged);
         }
-        
+
 
 
     }

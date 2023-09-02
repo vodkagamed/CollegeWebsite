@@ -16,7 +16,7 @@ namespace SchoolApi.Configurations
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
 
-            builder.HasMany(c => c.Subjects)
+            builder.HasMany(c => c.Courses)
                 .WithOne(sub => sub.College)
                 .HasForeignKey(sub => sub.CollegeId)
                 .OnDelete(DeleteBehavior.Cascade)

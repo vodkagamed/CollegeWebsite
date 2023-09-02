@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-namespace SchoolWebsite.Client.Pages;
+namespace SchoolWebsite.Client.Pages.Students;
 
 public partial class Students
 {

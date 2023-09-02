@@ -24,4 +24,9 @@
     <EmbeddedResource Include="Resources\en-US.yml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Cources\" />
+    <Folder Include="Pages\Teachers\" />
+  </ItemGroup>
+
 </Project>

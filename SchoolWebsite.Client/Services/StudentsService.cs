@@ -1,9 +1,9 @@
 ﻿namespace SchoolWebsite.Client.Services
 {
-    public class StudentsService
+    public class StudentService
     {
         private readonly HttpClient _httpClient;
-        public StudentsService(HttpClient httpClient)
+        public StudentService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }

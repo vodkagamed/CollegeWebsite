@@ -10,7 +10,7 @@ namespace SchoolWebsite.shared
         public static async Task Debug(string data) => await WriteLog(LogType.Debug, data);
         public static async Task Error(string data) => await WriteLog(LogType.Error, data);
         public static async Task Critical(string data) => await WriteLog(LogType.Critical, data);
-        public static async Task <List<List<LogContent>>> GetAllLogsAsync(LogType logType)
+        public static async Task<List<List<LogContent>>> GetAllLogsAsync(LogType logType)
         {
             string allocationPath = $"App_Data\\Loggers\\{logType}";
             List<List<LogContent>> logFile = new();
@@ -18,11 +18,11 @@ namespace SchoolWebsite.shared
             if (!Directory.Exists(allocationPath))
                 return logFile;
 
-            List<LogContent> contents = new();
             string searchPattern = $"{logType}log_*.json";
             string[] matchingFiles = Directory.GetFiles(allocationPath, searchPattern);
             foreach (string file in matchingFiles)
             {
+                List<LogContent> contents = new List<LogContent>();
                 foreach (string line in await File.ReadAllLinesAsync(file))
                 {
                     LogContent content = JsonSerializer.Deserialize<LogContent>(line);
@@ -45,11 +45,11 @@ namespace SchoolWebsite.shared
             if (File.Exists(logPath))
             {
                 FileInfo fileInfo = new FileInfo(logPath);
-                if (fileInfo.Length > 4 * 1024)
-                   UpdateFileCounter(logType);
+                if (fileInfo.Length > 2 * 1024)
+                    UpdateFileCounter(logType);
             }
 
-            LogContent content = new LogContent { Data = data, Date = DateTime.Now.AddDays(2), Type = logType };
+            LogContent content = new LogContent { Data = data, Date = DateTime.Now, Type = logType };
             string jsonContent = JsonSerializer.Serialize(content);
             await File.AppendAllTextAsync(logPath, jsonContent + Environment.NewLine);
         }

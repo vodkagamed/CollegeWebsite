@@ -17,7 +17,7 @@ namespace SchoolApi.Repos
         public async Task<IEnumerable<College>> GetColleges()
             => await context.Colleges
             .Include(c=>c.Teachers)
-            .Include(c=>c.Subjects)
+            .Include(c=>c.Courses)
             .Include(c=>c.Students)
             .ToListAsync();
         public async Task<College> GetCollege(int id)

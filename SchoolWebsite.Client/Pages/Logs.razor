@@ -31,23 +31,20 @@
             </select>
         </div>
 
-        <div class="d-flex flex-column bg-dark text-white justify-content-evenly p-3 rounded mt-4 ">
+        <div class="d-flex flex-column justify-content-evenly p-3 rounded mt-4 ">
             <h5 class="text-center mb-4">Log @(currentIndex + 1)</h5>
 
             <div class="d-flex flex-wrap justify-content-evenly text-center">
-                @foreach (var logs in customlogFiles)
-                {
-                    <div class="row">
-                        @foreach (var log in logs)
-                        {
-                            <div class="col-5 alert alert-@alertType m-2">
-                                <p>@log.Date</p>
-                                <p>@log.Data</p>
-                                <span>-------------------</span>
-                            </div>
-                        }
-                    </div>
-                }
+                <div class="row">
+                    @foreach (var log in customlogFiles[currentIndex])
+                    {
+                        <div class="col-5 alert alert-@alertType m-2">
+                            <p>@log.Date</p>
+                            <p>@log.Data</p>
+                            <span>-------------------</span>
+                        </div>
+                    }
+                </div>
             </div>
 
             <div class="btn-group justify-content-center mt-4" role="group">
@@ -61,7 +58,8 @@
                 @for (int i = 0; i < customlogFiles.Count; i++)
                 {
                     int pageNumber = i; // Capture the value of i
-                    <button class="btn btn-outline-dark btn-sm col-1 @(currentIndex == pageNumber ? "active" : "")"
+                    <button class="btn btn-outline-dark btn-sm col-1
+                    @(currentIndex == pageNumber ? "active" : "")"
                     @onclick="() => currentIndex = pageNumber">
                         Page @(i + 1)
                     </button>
