@@ -28,5 +28,9 @@
         {
             return await _httpClient.DeleteAsync($"/api/Student/{studentId}");
         }
+        public async Task<HttpResponseMessage> EnrollCourse(int studentId,int courseId)
+        {
+            return await _httpClient.PostAsJsonAsync($"/api/Student/{studentId}/Enroll",courseId);
+        }
     }
 }

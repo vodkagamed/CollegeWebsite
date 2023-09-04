@@ -13,8 +13,13 @@
         </div>
 
         <div class="col-6">
-            <label for="CollegeId" class="h4">@langService.Keys["CourseCollege"]:</label>
-            <InputNumber id="CollegeId" @bind-Value="Course.CollegeId" class="form-control form-control-lg"></InputNumber>
+            <label for="CollegeId" class="h4">@langService.Keys["College Name"]:</label>
+            <InputSelect id="CollegeId" @bind-Value="@selectedCollegeId" class="form-select form-select-Lg">
+                @foreach (var college in Colleges)
+                {
+                    <option value="@college.Id">@college.Name</option>
+                }
+            </InputSelect>
         </div>
 
         <div class="col-6">

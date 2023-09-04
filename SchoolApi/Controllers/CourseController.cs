@@ -9,24 +9,23 @@ namespace SchoolApi.Controllers
     public class CourseController : ControllerBase
     {
         //private readonly DataProtector _protector;
-        private readonly CoursesRepo subjectsRepo;
+        private readonly CoursesRepo CourRepo;
 
         public CourseController(DataProtector protector, CoursesRepo subjectsRepo)
         {
             //_protector = protector;
-            this.subjectsRepo = subjectsRepo;
+            this.CourRepo = subjectsRepo;
         }
 
-        // GET: api/Subject
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Course>>> Get()
+        [HttpGet("{collId:int}")]
+        public async Task<ActionResult<IEnumerable<Course>>> GetCourses(int collId)
         {
             try
             {
-                IEnumerable<Course> Ensubjects = (await subjectsRepo.GetCourses());
+                IEnumerable<Course> Ensubjects = await CourRepo.GetCourses(collId);
                 if (Ensubjects.Any())
                 {
-                   //var DecryptedSubjects = _protector.Decrypt(Ensubjects);
+                    //var DecryptedSubjects = _protector.Decrypt(Ensubjects);
                     return Ok(Ensubjects);
                 }
                 else
@@ -38,11 +37,11 @@ namespace SchoolApi.Controllers
             }
         }
 
-        // GET: api/Subject/5
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Course>> Get(int id)
+
+        [HttpGet("byId/{id:int}")]
+        public async Task<ActionResult<Course>> GetCourseById(int id)
         {
-            Course enSubject = await subjectsRepo.GetCourse(id);
+            Course enSubject = await CourRepo.GetCourse(id);
             if (enSubject == null)
                 return NotFound();
 
@@ -50,6 +49,7 @@ namespace SchoolApi.Controllers
             return Ok(enSubject);
         }
 
+        // GET: api/Course/College/5
         // POST: api/Subject
         [HttpPost("{collegeId:int}")]
         public async Task<ActionResult<Course>> Post(int collegeId,[FromBody] Course course)
@@ -58,9 +58,9 @@ namespace SchoolApi.Controllers
                 return BadRequest();
 
             //byte[] encryptedSubject = _protector.Encrypt(subject);
-            await subjectsRepo.AddCourse(collegeId, course);
+            await CourRepo.AddCourse(collegeId, course);
 
-            return CreatedAtAction(nameof(Get), course.Id, course);
+            return CreatedAtAction(nameof(Post),new {id= course.Id } , course);
         }
 
         // PUT: api/Subject/5
@@ -69,7 +69,7 @@ namespace SchoolApi.Controllers
         {
             //var encryptExistSubject = (Course)_protector.Encrypt(subject);
 
-            var updatedSubject = await subjectsRepo.UpdateCourse(subject, id);
+            var updatedSubject = await CourRepo.UpdateCourse(subject, id);
             if (updatedSubject != null)
                 return Ok(updatedSubject);
             return NotFound();
@@ -79,7 +79,7 @@ namespace SchoolApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            Course endeletedSubject = await subjectsRepo.DeleteCourse(id);
+            Course endeletedSubject = await CourRepo.DeleteCourse(id);
 
             if (endeletedSubject != null)
                 return Ok(endeletedSubject);

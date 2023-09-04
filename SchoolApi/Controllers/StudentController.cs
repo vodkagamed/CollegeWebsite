@@ -64,8 +64,8 @@ namespace SchoolApi.Controllers
         }
 
         [HttpPost]
-        [Route("{studentId}/enroll")]
-        public async Task<ActionResult<Student>> Enroll(int studentId,int courseId)
+        [Route("{studentId}/Enroll")]
+        public async Task<ActionResult<Student>> Enroll(int studentId, [FromBody] int courseId)
         {
             Student EnrolledStudent = await studentsRepo.EnrollCourse(studentId, courseId);
             if (EnrolledStudent is not null)

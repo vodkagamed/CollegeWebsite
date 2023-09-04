@@ -13,3 +13,14 @@
 {"Data":"Error: NotFound","Date":"2023-09-02T22:23:49.4865822+03:00","Type":2}
 {"Data":"Error: InternalServerError","Date":"2023-09-02T23:32:23.6814104+03:00","Type":2}
 {"Data":"Error: InternalServerError","Date":"2023-09-02T23:33:43.2958669+03:00","Type":2}
+{"Data":"Error: BadRequest","Date":"2023-09-03T17:15:30.4601465+03:00","Type":2}
+{"Data":"Error: BadRequest","Date":"2023-09-03T19:46:49.4182027+03:00","Type":2}
+{"Data":"Error: BadRequest","Date":"2023-09-03T19:59:32.7820416+03:00","Type":2}
+{"Data":"Error: BadRequest","Date":"2023-09-03T20:05:20.097918+03:00","Type":2}
+{"Data":"Error: InternalServerError","Date":"2023-09-03T20:12:26.8393223+03:00","Type":2}
+{"Data":"Error: InternalServerError","Date":"2023-09-03T20:12:35.236848+03:00","Type":2}
+{"Data":"Error: InternalServerError","Date":"2023-09-03T20:12:36.4188914+03:00","Type":2}
+{"Data":"Error: InternalServerError","Date":"2023-09-03T20:12:36.5725258+03:00","Type":2}
+{"Data":"Error: InternalServerError","Date":"2023-09-03T20:12:40.5881719+03:00","Type":2}
+{"Data":"Error: InternalServerError","Date":"2023-09-03T20:12:44.7915992+03:00","Type":2}
+{"Data":"Error: InternalServerError","Date":"2023-09-03T20:12:48.3031839+03:00","Type":2}

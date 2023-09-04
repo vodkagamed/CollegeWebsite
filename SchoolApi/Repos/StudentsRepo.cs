@@ -14,10 +14,15 @@ namespace SchoolApi.Repos
             this.context = context;
         }
         public async Task<IEnumerable<Student>> GetStudents()
-            => await context.Students.Include(S => S.Courses).Include(S=>S.College).ToListAsync();
+            => await context.Students
+            .Include(S => S.Courses)
+            .Include(S=>S.College).ToListAsync();
         public async Task<Student> GetStudent(int id)
         {
-            var student = await context.Students.SingleOrDefaultAsync(s => s.Id == id);
+            var student = await context.Students
+                .Include(S => S.Courses)
+                .Include(S => S.College)
+                .SingleOrDefaultAsync(s => s.Id == id);
             return student;
         }
         public async Task<Student> AddStudent(int collegeId,Student student)

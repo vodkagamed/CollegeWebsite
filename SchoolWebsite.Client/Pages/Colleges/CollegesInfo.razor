@@ -15,21 +15,30 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            @foreach (var teacher in college.Teachers)
+                            @if (college.Teachers.Any())
                             {
-                                <tr>
-                                    <td class="hover-column"
-                                        onclick="window.location.href='@($"/TeacherData/{teacher.Id}")'"
-                                        style="cursor: pointer;">
-                                        @teacher.Name
-                                    </td>
+                                @foreach (var teacher in college.Teachers)
+                                {
+                                    <tr>
+                                        <td class="hover-column"
+                                            onclick="window.location.href='@($"/TeacherData/{teacher.Id}")'"
+                                            style="cursor: pointer;">
+                                            @teacher.Name
+                                        </td>
+                                    </tr>
+                                }
+                                
+                            }
+                            else
+                            {
+                                <tr class="alert alert-warning">
+                                    <td>No teachers yet !</td>
                                 </tr>
                             }
                             <tr onclick="window.location.href='/AddTeacher'">
                                 <td>
                                     <button class="btn btn-outline-success col-12">
-                                        Add Teacher <i class="oi oi-arrow-circle-right"></i>
+                                        Add teacher <b>+</b>
                                     </button>
                                 </td>
                             </tr>
@@ -44,20 +53,35 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            @foreach (var student in college.Students)
+                            @if (college.Students.Any())
                             {
-                                <tr>
-                                    <td class="hover-column" onclick="window.location.href='@($"/StudentData/{student.Id}")'" style="cursor: pointer;">@student.Name</td>
+                                @foreach (var student in college.Students)
+                                {
+                                    <tr>
+                                        <td class="hover-column"
+                                            onclick="window.location.href='@($"/StudentData/{student.Id}")'"
+                                            style="cursor: pointer;">
+                                            @student.Name
+                                        </td>
+                                    </tr>
+                                }
+                                
+                            }
+                            else
+                            { 
+                                <tr class="alert alert-warning">
+                                    <td>No students yet !</td>
                                 </tr>
                             }
+
                             <tr onclick="window.location.href='/AddStudent'">
                                 <td>
                                     <button class="btn btn-outline-success col-12">
-                                        Add Student <i class="oi oi-arrow-circle-right"></i>
+                                        Add Student <b>+</b>
                                     </button>
                                 </td>
-                            </tr>
+                            </tr>   
+
 
                         </tbody>
                     </table>
@@ -70,17 +94,26 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            @foreach (var course in college.Courses)
+                            @if (college.Courses.Any())
                             {
-                                <tr>
-                                    <td class="hover-column" onclick="window.location.href='@($"/CourseData/{course.Id}")'" style="cursor: pointer;">@course.Name</td>
+                                @foreach (var course in college.Courses)
+                                {
+                                    <tr>
+                                        <td class="hover-column" onclick="window.location.href='@($"/CourseData/{course.Id}")'" style="cursor: pointer;">@course.Name</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr class="alert alert-warning">
+                                    <td>No courses yet !</td>
                                 </tr>
                             }
+
                             <tr onclick="window.location.href='/AddCourse'">
                                 <td>
                                     <button class="btn btn-outline-success col-12">
-                                        Add Course <i class="oi oi-arrow-circle-right"></i>
+                                        Add Course <b>+</b>
                                     </button>
                                 </td>
                             </tr>

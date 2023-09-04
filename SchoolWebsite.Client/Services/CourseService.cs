@@ -7,17 +7,17 @@
         {
             _httpClient = httpClient;
         }
-        public async Task<HttpResponseMessage> CreateCourse(Course createdCourse,int collegeId)
+        public async Task<HttpResponseMessage> CreateCourse(int collegeId,Course createdCourse)
         {
             return await _httpClient.PostAsJsonAsync($"/api/Course/{collegeId}", createdCourse);
         }
-        public async Task<HttpResponseMessage> GetCourses()
+        public async Task<HttpResponseMessage> GetCourses(int collId)
         {
-            return await _httpClient.GetAsync("/api/Course");
+            return await _httpClient.GetAsync($"/api/Course/{collId}");
         }
         public async Task<HttpResponseMessage> GetCourseById(int courseId)
         {
-            return await _httpClient.GetAsync($"/api/Course/{courseId}");
+            return await _httpClient.GetAsync($"/api/Course/byId/{courseId}");
         }
         public async Task<HttpResponseMessage> EditCourse(int courseId, Course editedCourse)
         {

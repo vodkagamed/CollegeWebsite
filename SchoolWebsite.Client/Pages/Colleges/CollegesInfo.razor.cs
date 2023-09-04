@@ -12,17 +12,18 @@ namespace SchoolWebsite.Client.Pages.Colleges
         public List<College> Colleges { get; set; } = new();
         protected override async Task OnInitializedAsync()
         {
-            await GetColleges();
+            Colleges = await GetColleges();
         }
-        public async Task GetColleges()
+        public async Task<List<College>> GetColleges()
         {
             var response = await CollegeService.GetColleges();
 
             bool areAny = await validation.PerformHttpRequest(HttpMethod.Get, response, null);
             if (areAny)
             {
-                Colleges = await response.Content.ReadFromJsonAsync<List<College>>();
+               return Colleges = await response.Content.ReadFromJsonAsync<List<College>>();
             }
+            return new List<College>();
         }
 
     }

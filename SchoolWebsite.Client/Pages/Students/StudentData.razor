@@ -7,32 +7,68 @@
 @if (valid)
 {
     <table class="table">
-      <thead class="table-dark">
-        <tr>
-          <th scope="col">@langService.Keys["StudentID"]</th>
-          <th scope="col">@langService.Keys["StudentName"]</th>
-          <th scope="col">@langService.Keys["StudentAge"]</th>
-          <th scope="col">@langService.Keys["StudentPhone"]</th>
-          <th scope="col">@langService.Keys["Options"]</th>
-        </tr>
-      </thead>
-      <tbody id="studentTableBody">      
-        <tr>
-         <th scope="row">@student.Id</th>
-         <td>@student.Name</td>
-         <td>@student.Age</td>
-         <td>@student.Phone</td>
-         <td>
-           <td>
-                 <button class="btn btn-outline-danger" @onclick="() => DeleteStudent(student.Id)">@langService.Keys["Delete"]</button>
-           </td>
-           <td>
-                 <button class="btn btn-outline-dark mb-1" @onclick="() => EditStudent(student.Id)">@langService.Keys["Edit"]</button>
-           </td>
-         </td>
-         
-        </tr>         
-      </tbody>
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">@langService.Keys["StudentID"]</th>
+                <th scope="col">@langService.Keys["StudentName"]</th>
+                <th scope="col">@langService.Keys["StudentAge"]</th>
+                <th scope="col">@langService.Keys["StudentPhone"]</th>
+                <th scope="col">@langService.Keys["Options"]</th>
+            </tr>
+        </thead>
+        <tbody id="studentTableBody">
+            <tr>
+                <th scope="row">@student.Id</th>
+                <td>@student.Name</td>
+                <td>@student.Age</td>
+                <td>@student.Phone</td>  
+
+                <td>
+                <td>
+                    <button class="btn btn-outline-danger" @onclick="() => DeleteStudent(student.Id)">@langService.Keys["Delete"]</button>
+                </td>
+                <td>
+                    <button class="btn btn-outline-dark mb-1" @onclick="() => EditStudent(student.Id)">@langService.Keys["Edit"]</button>
+                </td>
+                </td>
+
+            </tr>
+        </tbody>
     </table>
+
+    @if (student.Courses.Any())
+    {
+        <ul>
+            @foreach (var course in student.Courses)
+            {
+                <li>@course.Name</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No courses enrolled yet.</p>
+    }
+
+    <!-- Display available courses -->
+    <h5>Available Courses:</h5>
+    @if (AvailableCourses.Any())
+    {
+        <ul>
+            @foreach (var course in AvailableCourses)
+            {
+                <li>
+                    @course.Name
+                    <button class="btn btn-primary"
+                    @onclick="() => EnrollCourse(student.Id, course.Id)">Enroll</button>
+                </li>
+            }
+
+        </ul>
+    }
+    else
+    {
+        <p>No courses Available yet.</p>
+    }
 }
 <ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>

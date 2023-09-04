@@ -12,11 +12,15 @@ namespace SchoolApi.Repos
         {
             this.context = context;
         }
-        public async Task<IEnumerable<Course>> GetCourses()
-            => await context.Courses.ToListAsync();
-        public async Task<Course> GetCourse (int id)
+        public async Task<IEnumerable<Course>> GetCourses(int colId)
         {
-            var course = await context.Courses.SingleOrDefaultAsync(s => s.Id == id);
+            return await context.Courses
+                .Where(c => c.CollegeId == colId)
+                .ToListAsync();
+        }
+        public async Task<Course> GetCourse (int courseId)
+        {
+            var course = await context.Courses.SingleOrDefaultAsync(s => s.Id == courseId);
             return course;
         }
         public async Task<Course> AddCourse (int collegeId,Course course)
