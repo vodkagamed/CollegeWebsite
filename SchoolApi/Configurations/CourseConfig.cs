@@ -12,6 +12,7 @@ namespace SchoolApi.Configurations
                 .WithOne(T => T.Course)
                 .HasForeignKey(t => t.CourseId)
                 .IsRequired();
+            builder.HasIndex(c => new { c.CollegeId, c.Name }).IsUnique();
         }
     }
 }

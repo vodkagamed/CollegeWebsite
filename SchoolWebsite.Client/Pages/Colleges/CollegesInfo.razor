@@ -4,123 +4,20 @@
 <div class="container mt-4">
     @foreach (var college in Colleges)
     {
-        <h3 class="text-center mt-3">@college.Name University</h3>
-        <div class="border-2 border-bottom border-dark">
-            <div class="row">
-                <div class="col">
-                    <table class="table table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col">Teachers</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (college.Teachers.Any())
-                            {
-                                @foreach (var teacher in college.Teachers)
-                                {
-                                    <tr>
-                                        <td class="hover-column"
-                                            onclick="window.location.href='@($"/TeacherData/{teacher.Id}")'"
-                                            style="cursor: pointer;">
-                                            @teacher.Name
-                                        </td>
-                                    </tr>
-                                }
-                                
-                            }
-                            else
-                            {
-                                <tr class="alert alert-warning">
-                                    <td>No teachers yet !</td>
-                                </tr>
-                            }
-                            <tr onclick="window.location.href='/AddTeacher'">
-                                <td>
-                                    <button class="btn btn-outline-success col-12">
-                                        Add teacher <b>+</b>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col">
-                    <table class="table table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col">Students</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (college.Students.Any())
-                            {
-                                @foreach (var student in college.Students)
-                                {
-                                    <tr>
-                                        <td class="hover-column"
-                                            onclick="window.location.href='@($"/StudentData/{student.Id}")'"
-                                            style="cursor: pointer;">
-                                            @student.Name
-                                        </td>
-                                    </tr>
-                                }
-                                
-                            }
-                            else
-                            { 
-                                <tr class="alert alert-warning">
-                                    <td>No students yet !</td>
-                                </tr>
-                            }
+        <div class="bg-black p-lg-4 p-sm-5 row">
+            <h3 class="ps-lg-5 text-white text-center">
+                @college.Name University
 
-                            <tr onclick="window.location.href='/AddStudent'">
-                                <td>
-                                    <button class="btn btn-outline-success col-12">
-                                        Add Student <b>+</b>
-                                    </button>
-                                </td>
-                            </tr>   
-
-
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col d-lg-table-cell">
-                    <table class="table table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col">Courses</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (college.Courses.Any())
-                            {
-                                @foreach (var course in college.Courses)
-                                {
-                                    <tr>
-                                        <td class="hover-column" onclick="window.location.href='@($"/CourseData/{course.Id}")'" style="cursor: pointer;">@course.Name</td>
-                                    </tr>
-                                }
-                            }
-                            else
-                            {
-                                <tr class="alert alert-warning">
-                                    <td>No courses yet !</td>
-                                </tr>
-                            }
-
-                            <tr onclick="window.location.href='/AddCourse'">
-                                <td>
-                                    <button class="btn btn-outline-success col-12">
-                                        Add Course <b>+</b>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                <button class="btn col-sm-12 btn-success float-end col-lg-1"
+                        onclick="window.location.href='/AddCollege'">
+                    <b>+</b>
+                </button>
+            </h3>
+        </div>
+        <div class="border border-2 border-dark mb-4 p-3 row">
+            <CustomTable Header="Teachers" Items="@(college.Teachers.Cast<Teacher>().ToList())" ItemType="Teacher"></CustomTable>
+            <CustomTable Header="Students" Items="@(college.Students.Cast<Student>().ToList())" ItemType="Student"></CustomTable>
+            <CustomTable Header="Courses" Items="@(college.Courses.Cast<Course>().ToList())" ItemType="Course"></CustomTable>
         </div>
     }
     <ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>

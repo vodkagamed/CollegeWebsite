@@ -25,6 +25,7 @@ namespace SchoolApi.Configurations
                 .WithOne(t => t.College)
                 .HasForeignKey(t => t.CollegeId)
                 .IsRequired(false);
+            builder.HasIndex(C =>C.Name).IsUnique();
         }
     }
 

@@ -1,1 +1,46 @@
-﻿
+﻿@using System.Reflection;
+@inherits ComponentBase
+
+    <div class="col-lg-4 col-sm-12">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">
+                        <span class="h4">@Header</span>
+                        <button class="btn col-sm-2 btn-success float-end col-lg-2"
+                                onclick="window.location.href='@($"/Add{ItemType}")'" style="cursor: pointer;">
+                            <b>+</b>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Items.Any())
+                {
+                    @foreach (var item in Items)
+                    {
+                        var itemId = item.GetType().GetProperty("Id").GetValue(item);
+                        var itemName = item.GetType().GetProperty("Name").GetValue(item);
+
+                        <tr>
+                            <td class="hover-column" onclick="window.location.href='@($"/{ItemType}Data/{itemId}")'" style="cursor: pointer;">
+                                @itemName
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr class="alert alert-warning">
+                        <td>No @ItemType yet!</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+@code {
+    [Parameter] public string Header { get; set; }
+    [Parameter] public string ItemType { get; set; }
+    [Parameter] public IEnumerable<object> Items { get; set; }
+}

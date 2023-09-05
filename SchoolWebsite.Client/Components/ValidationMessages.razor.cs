@@ -6,7 +6,7 @@ public partial class ValidationMessages
     public string message { get; set; } = string.Empty;
     [Parameter]
     public string alertClass { get; set; } = string.Empty;
-    public async Task<bool> PerformHttpRequest(HttpMethod httpMethod, HttpResponseMessage response,string studentName)
+    public async Task<bool> PerformHttpRequest(HttpMethod httpMethod, HttpResponseMessage response,string Content)
     {
         try
         {
@@ -14,20 +14,18 @@ public partial class ValidationMessages
             {
                 alertClass = "alert-success";
                 bool success = true;
-                if (string.IsNullOrWhiteSpace(studentName))
-                    studentName = "Student";
                 switch (httpMethod.Method)
                 {
                     case "GET":
                         break; // No need to set the message for GET
                     case "DELETE":
-                        message = $"{studentName} deleted successfully.";
+                        message = $"{Content} deleted successfully.";
                         break;
                     case "PUT":
-                        message = $"{studentName} modified successfully.";
+                        message = $"{Content} modified successfully.";
                         break;
                     case "POST":
-                        message = $"{studentName} created successfully.";
+                        message = $"{Content} created successfully.";
                         break;
                     default:
                         message = "Unsupported HTTP method.";

@@ -6,6 +6,6 @@ public class TeacherConfig : IEntityTypeConfiguration<Teacher>
 {
     public void Configure(EntityTypeBuilder<Teacher> builder)
     {
-        builder.HasKey(c => c.Id);
+        builder.HasKey(T => T.Id);
     }
 }
