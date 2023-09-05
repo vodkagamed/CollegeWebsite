@@ -1,45 +1,57 @@
 ﻿@using System.Reflection;
 @inherits ComponentBase
 
-    <div class="col-lg-4 col-sm-12">
-        <table class="table table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">
-                        <span class="h4">@Header</span>
+<div class="col-lg-4 col-sm-12">
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">
+                    <span class="h4">@Header</span>
+                    @if (ShowAdd)
+                    {
                         <button class="btn col-sm-2 btn-success float-end col-lg-2"
                                 onclick="window.location.href='@($"/Add{ItemType}")'" style="cursor: pointer;">
                             <b>+</b>
                         </button>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Items.Any())
-                {
-                    @foreach (var item in Items)
-                    {
-                        var itemId = item.GetType().GetProperty("Id").GetValue(item);
-                        var itemName = item.GetType().GetProperty("Name").GetValue(item);
 
-                        <tr>
-                            <td class="hover-column" onclick="window.location.href='@($"/{ItemType}Data/{itemId}")'" style="cursor: pointer;">
-                                @itemName
-                            </td>
-                        </tr>
                     }
-                }
-                else
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Items.Any())
+            {
+                @foreach (var item in Items)
                 {
-                    <tr class="alert alert-warning">
-                        <td>No @ItemType yet!</td>
+                    var itemId = item.GetType().GetProperty("Id").GetValue(item);
+                    var itemName = item.GetType().GetProperty("Name").GetValue(item);
+
+                    <tr>
+                        <td class="hover-column" onclick="window.location.href='@($"/{ItemType}Data/{itemId}")'">
+                            @itemName
+                        </td>
                     </tr>
                 }
-            </tbody>
-        </table>
-    </div>
+            }
+            else
+            {
+                <tr class="alert alert-warning">
+                    <td>No @ItemType yet!</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .hover-column:hover {
+        background-color: rgb(236, 236, 236);
+        cursor: pointer;
+    }
+</style>
 
 @code {
+    [Parameter] public bool ShowAdd { get; set; } = true;
     [Parameter] public string Header { get; set; }
     [Parameter] public string ItemType { get; set; }
     [Parameter] public IEnumerable<object> Items { get; set; }

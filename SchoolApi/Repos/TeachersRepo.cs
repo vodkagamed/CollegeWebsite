@@ -16,7 +16,10 @@ namespace SchoolApi.Repos
             => await context.Teachers.Include(x => x.Course).ToListAsync();
         public async Task<Teacher> GetTeacher(int id)
         {
-            var Teacher = await context.Teachers.SingleOrDefaultAsync(s => s.Id == id);
+            var Teacher = await context.Teachers
+                .Include(T=>T.College)
+                .Include(T=>T.Course)
+                .SingleOrDefaultAsync(s => s.Id == id);
             return Teacher;
         }
         public async Task<Teacher> AddTeacher(int collegeId, Teacher teacher)

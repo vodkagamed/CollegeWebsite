@@ -16,11 +16,17 @@ namespace SchoolApi.Repos
         {
             return await context.Courses
                 .Where(c => c.CollegeId == colId)
+                .Include(c=>c.College)
+                .Include(c=>c.Students)
                 .ToListAsync();
         }
         public async Task<Course> GetCourse (int courseId)
         {
-            var course = await context.Courses.SingleOrDefaultAsync(s => s.Id == courseId);
+            var course = await context.Courses
+                .Include(c => c.College)
+                .Include(c => c.Students)
+                .Include(c=>c.Teachers)
+                .SingleOrDefaultAsync(s => s.Id == courseId);
             return course;
         }
         public async Task<Course> AddCourse (int collegeId,Course course)

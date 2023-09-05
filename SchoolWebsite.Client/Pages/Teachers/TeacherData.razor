@@ -11,6 +11,8 @@
             <tr>
                 <th scope="col">Teacher ID</th>
                 <th scope="col">Teacher Name</th>
+                <th scope="col">Teached Course</th>
+                <th scope="col">Teacher College</th>
                 <th scope="col">Options</th>
             </tr>
         </thead>
@@ -18,6 +20,8 @@
             <tr>
                 <th scope="row">@teacher.Id</th>
                 <td>@teacher.Name</td>
+                <td>@teacher.Course.Name</td>
+                <td>@teacher.College.Name</td>
                 <td>
                 <td>
                     <button class="btn btn-outline-danger"

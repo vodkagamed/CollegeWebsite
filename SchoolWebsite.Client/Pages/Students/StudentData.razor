@@ -13,6 +13,7 @@
                 <th scope="col">@langService.Keys["StudentName"]</th>
                 <th scope="col">@langService.Keys["StudentAge"]</th>
                 <th scope="col">@langService.Keys["StudentPhone"]</th>
+                <th scope="col">@langService.Keys["Student College"]</th>
                 <th scope="col">@langService.Keys["Options"]</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                 <td>@student.Name</td>
                 <td>@student.Age</td>
                 <td>@student.Phone</td>  
+                <td>@student.College.Name</td>  
 
                 <td>
                 <td>
@@ -36,19 +38,12 @@
         </tbody>
     </table>
 
-    @if (student.Courses.Any())
-    {
-        <ul>
-            @foreach (var course in student.Courses)
-            {
-                <li>@course.Name</li>
-            }
-        </ul>
-    }
-    else
-    {
-        <p>No courses enrolled yet.</p>
-    }
+    <CustomTable
+        Header="Enrolled courses"
+        Items="student.Courses"
+        ItemType="Course"
+        ShowAdd=false
+        ></CustomTable>
 
     <!-- Display available courses -->
     <h5>Available Courses:</h5>

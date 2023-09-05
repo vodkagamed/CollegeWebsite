@@ -10,7 +10,6 @@
                 <th scope="col">Course ID</th>
                 <th scope="col">Course Name</th>
                 <th scope="col">Course College</th>
-                <th scope="col">Course Students</th>
                 <th scope="col">Options</th>
             </tr>
         </thead>
@@ -18,8 +17,7 @@
             <tr>
                 <th scope="row">@course.Id</th>
                 <td>@course.Name</td>
-                <td>@course.College</td>
-                <td>@course.Students</td>
+                <td>@course.College.Name</td>
                 <td>
                 <td>
                     <button class="btn btn-outline-danger" @onclick="() => DeleteCourse(course.Id)">Delete</button>

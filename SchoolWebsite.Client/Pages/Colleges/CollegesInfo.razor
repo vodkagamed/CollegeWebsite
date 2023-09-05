@@ -4,11 +4,11 @@
 <div class="container mt-4">
     @foreach (var college in Colleges)
     {
-        <div class="bg-black p-lg-4 p-sm-5 row">
+        <div class="bg-black p-lg-3 p-sm-3 row">
             <h3 class="ps-lg-5 text-white text-center">
                 @college.Name University
 
-                <button class="btn col-sm-12 btn-success float-end col-lg-1"
+                <button class="btn col-sm-12 mt-sm-2 btn-success float-end col-lg-1"
                         onclick="window.location.href='/AddCollege'">
                     <b>+</b>
                 </button>
@@ -22,10 +22,3 @@
     }
     <ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>
 </div>
-
-<style>
-    .hover-column:hover {
-        background-color: rgb(236, 236, 236);
-        cursor: pointer;
-    }
-</style>
