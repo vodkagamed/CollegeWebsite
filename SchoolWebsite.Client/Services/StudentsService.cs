@@ -30,7 +30,11 @@
         }
         public async Task<HttpResponseMessage> EnrollCourse(int studentId,int courseId)
         {
-            return await _httpClient.PostAsJsonAsync($"/api/Student/{studentId}/Enroll",courseId);
+            return await _httpClient.PostAsJsonAsync($"/api/Student/{studentId}/Course/Enroll",courseId);
+        }
+        public async Task<HttpResponseMessage> CancelCourse(int studentId, int courseId)
+        {
+            return await _httpClient.PostAsJsonAsync($"/api/Student/{studentId}/Course/Cancel", courseId);
         }
     }
 }

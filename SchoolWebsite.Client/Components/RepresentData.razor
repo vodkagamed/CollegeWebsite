@@ -1,0 +1,42 @@
+﻿<div class="table">
+    <table class="table">
+        <tbody>
+            @foreach (var Record in Records)
+            {
+                <tr>
+                    <th>@Record.Key</th>
+                    <td>@Record.Value</td>
+                </tr>
+            }
+            <tr>
+                <th>Options</th>
+                <td>
+                <td>
+                    <button class="btn btn-outline-danger"
+                        @onclick="()=>onDelete.InvokeAsync(ItemId)">
+                        Delete
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-outline-dark mb-1"
+                        @onclick="()=>onEdit.InvokeAsync(ItemId)">
+                        Edit
+                    </button>
+                </td>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public Dictionary<string, string> Records { get; set; }
+    [Parameter]
+    public EventCallback<int> onEdit { get; set; }
+    [Parameter]
+    public EventCallback<int> onDelete { get; set; }
+    private int ItemId;
+    protected override void OnInitialized() => ItemId = int.Parse(Records["Id"]);
+}

@@ -7,15 +7,19 @@
             <tr>
                 <th scope="col">
                     <span class="h4">@Header</span>
-                    @if (ShowAdd)
+                    @if (ShowButtons)
                     {
                         <button class="btn col-sm-2 btn-success float-end col-lg-2"
                                 onclick="window.location.href='@($"/Add{ItemType}")'" style="cursor: pointer;">
                             <b>+</b>
                         </button>
-
                     }
                 </th>
+                @if (!ShowButtons)
+                {
+                    <th scope="col"></th>
+                }
+
             </tr>
         </thead>
         <tbody>
@@ -25,12 +29,22 @@
                 {
                     var itemId = item.GetType().GetProperty("Id").GetValue(item);
                     var itemName = item.GetType().GetProperty("Name").GetValue(item);
-
                     <tr>
                         <td class="hover-column" onclick="window.location.href='@($"/{ItemType}Data/{itemId}")'">
                             @itemName
                         </td>
+                        @if (!ShowButtons)
+                        {
+                            <td class="col">
+
+                                <button class="btn btn-danger col-12" @onclick="()=>OnRemoveItem.InvokeAsync(item)">
+                                    <b>-</b>
+                                </button>
+                            </td>
+
+                        }
                     </tr>
+
                 }
             }
             else
@@ -51,8 +65,9 @@
 </style>
 
 @code {
-    [Parameter] public bool ShowAdd { get; set; } = true;
+    [Parameter] public bool ShowButtons { get; set; } = true;
     [Parameter] public string Header { get; set; }
     [Parameter] public string ItemType { get; set; }
     [Parameter] public IEnumerable<object> Items { get; set; }
+    [Parameter] public EventCallback<object> OnRemoveItem { get; set; }
 }

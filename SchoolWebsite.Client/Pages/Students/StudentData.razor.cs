@@ -13,9 +13,10 @@ public partial class StudentData
     [Parameter]
     public string? Id { get; set; }
     private Student student = new();
-    private List<Course> AvailableCourses = new();
     bool valid;
 
+    private List<Course> AvailableCourses = new();
+    private Dictionary<string, string> StudData = new();
     protected override async Task OnInitializedAsync()
     {
         var Studresponse = await studentService.GetStudentById(int.Parse(Id));
@@ -27,6 +28,23 @@ public partial class StudentData
 
             // Ensure student data is loaded before getting available courses
             AvailableCourses = await GetAvailableCourses();
+        }
+        try
+        {
+            StudData = new Dictionary<string, string>
+            {
+                { "Id", student.Id.ToString() },
+                { "Name", student.Name },
+                { "Age", student.Age },
+                { "Phone", student.Phone},
+                { "College", student.College.Name}
+            };
+
+        }
+        catch (NullReferenceException)
+        {
+
+            StudData = new();
         }
     }
     public async Task DeleteStudent(int studentId)
@@ -41,15 +59,30 @@ public partial class StudentData
     public void EditStudent(int studentID) =>
         nav.NavigateTo($"/EditStudentInfo/{studentID}", forceLoad: true);
 
-    public async Task EnrollCourse(int studentId,int courseId)
+    public async Task EnrollCourse(object CourseCallBack)
     {
-        var response = await studentService.EnrollCourse(studentId,courseId);
-        Student EnrolledStudent = await response.Content.ReadFromJsonAsync<Student>();
+        Course course = (Course)CourseCallBack;
+        var response = await studentService.EnrollCourse(student.Id, course.Id);
+        Course EnrolledCourse = await response.Content.ReadFromJsonAsync<Course>();
         bool isEnrolled = await validation.PerformHttpRequest
-            (HttpMethod.Post, response, EnrolledStudent.Name);
+            (HttpMethod.Post, response, EnrolledCourse.Name);
         if (isEnrolled)
             AvailableCourses = await GetAvailableCourses();
     }
+    public async Task CancelCourse(object obj)
+    {
+        Course course = (Course)obj;
+        var response = await studentService.CancelCourse(student.Id, course.Id);
+        Course CanceledCourse = await response.Content.ReadFromJsonAsync<Course>();
+        bool isCanceled = await validation.PerformHttpRequest
+            (HttpMethod.Delete, response, CanceledCourse.Name);
+        if (isCanceled)
+        {
+            AvailableCourses = await GetAvailableCourses();
+            StateHasChanged();
+        }
+    }
+
     public async Task<List<Course>> GetAvailableCourses()
     {
         var allcourResponse = await courseService.GetCourses(student.CollegeId);
@@ -63,6 +96,8 @@ public partial class StudentData
 
         return availableCourses;
     }
+
+
 
 }
 

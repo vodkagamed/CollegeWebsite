@@ -64,12 +64,22 @@ namespace SchoolApi.Controllers
         }
 
         [HttpPost]
-        [Route("{studentId}/Enroll")]
-        public async Task<ActionResult<Student>> Enroll(int studentId, [FromBody] int courseId)
+        [Route("{studentId}/Course/Enroll")]
+        public async Task<ActionResult<Course>> Enroll(int studentId, [FromBody] int courseId)
         {
-            Student EnrolledStudent = await studentsRepo.EnrollCourse(studentId, courseId);
+            Course EnrolledStudent = await studentsRepo.EnrollCourse(studentId, courseId);
             if (EnrolledStudent is not null)
                 return Ok(EnrolledStudent);
+            return BadRequest();
+        }
+        [HttpPost]
+        [Route("{studentId}/Course/Cancel")]
+        public async Task<ActionResult<Course>> CancelCourse(int studentId,[FromBody] int courseId)
+        {
+
+            Course CanceledStudent = await studentsRepo.CancelCourse(studentId, courseId);
+            if (CanceledStudent is not null)
+                return Ok(CanceledStudent);
             return BadRequest();
         }
 

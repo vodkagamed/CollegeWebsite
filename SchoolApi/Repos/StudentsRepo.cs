@@ -16,7 +16,7 @@ namespace SchoolApi.Repos
         public async Task<IEnumerable<Student>> GetStudents()
             => await context.Students
             .Include(S => S.Courses)
-            .Include(S=>S.College).ToListAsync();
+            .Include(S => S.College).ToListAsync();
         public async Task<Student> GetStudent(int id)
         {
             var student = await context.Students
@@ -25,7 +25,7 @@ namespace SchoolApi.Repos
                 .SingleOrDefaultAsync(s => s.Id == id);
             return student;
         }
-        public async Task<Student> AddStudent(int collegeId,Student student)
+        public async Task<Student> AddStudent(int collegeId, Student student)
         {
 
             College availableCollege = await context.Colleges.FindAsync(collegeId);
@@ -63,18 +63,33 @@ namespace SchoolApi.Repos
 
             return null;
         }
-        
-        public async Task<Student> EnrollCourse(int studentId,int courseId)
+
+        public async Task<Course> EnrollCourse(int studentId, int courseId)
         {
             var student = await context.Students.FindAsync(studentId);
             var course = await context.Courses.FindAsync(courseId);
-            if (student!=null&&course!=null)
+            if (student != null && course != null)
             {
                 student.Courses.Add(course);
                 await context.SaveChangesAsync();
-                return student;
+                return course;
             }
             return null;
         }
+        public async Task<Course> CancelCourse(int studentId, int courseId)
+        {
+            var student = await context.Students
+                .Include(s => s.Courses)
+                .FirstOrDefaultAsync(s => s.Id == studentId);
+            var course = await context.Courses.FindAsync(courseId);
+            if (student != null && course != null)
+            {
+                student.Courses.Remove(course);
+                await context.SaveChangesAsync();
+                return course;
+            }
+            return null;
+        }
+
     }
 }

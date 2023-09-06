@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SchoolWebsite.shared;
 
 namespace SchoolWebsite.Client.Pages.Teachers;
 public partial class TeacherData
@@ -11,6 +12,7 @@ public partial class TeacherData
     [Parameter]
     public string? Id { get; set; }
     private Teacher teacher = new();
+    private Dictionary<string,string> TeacherRecords = new();
     bool valid;
 
     protected override async Task OnInitializedAsync()
@@ -21,6 +23,20 @@ public partial class TeacherData
         {
             teacher = await response.Content.ReadFromJsonAsync<Teacher>();
             valid = true;
+        }
+        try
+        {
+            TeacherRecords = new Dictionary<string, string>
+            {
+                { "Id", teacher.Id.ToString() },
+                { "Name", teacher.Name },
+                { "College", teacher.College.Name}
+            };
+
+        }
+        catch (NullReferenceException)
+        {
+            TeacherRecords = new();
         }
     }
     public async Task DeleteTeacher(int teacherId)

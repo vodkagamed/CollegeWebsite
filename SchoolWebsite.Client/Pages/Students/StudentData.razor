@@ -2,68 +2,30 @@
 @using AKSoftware.Localization.MultiLanguages;
 @using SchoolWebsite.Client.Components
 @inject ILanguageContainerService langService
-<h3>@langService.Keys["StudendtData"]</h3>
+<div class="container">
 
-@if (valid)
-{
-    <table class="table">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">@langService.Keys["StudentID"]</th>
-                <th scope="col">@langService.Keys["StudentName"]</th>
-                <th scope="col">@langService.Keys["StudentAge"]</th>
-                <th scope="col">@langService.Keys["StudentPhone"]</th>
-                <th scope="col">@langService.Keys["Student College"]</th>
-                <th scope="col">@langService.Keys["Options"]</th>
-            </tr>
-        </thead>
-        <tbody id="studentTableBody">
-            <tr>
-                <th scope="row">@student.Id</th>
-                <td>@student.Name</td>
-                <td>@student.Age</td>
-                <td>@student.Phone</td>  
-                <td>@student.College.Name</td>  
+    <Header HeaderName="Student information" />
 
-                <td>
-                <td>
-                    <button class="btn btn-outline-danger" @onclick="() => DeleteStudent(student.Id)">@langService.Keys["Delete"]</button>
-                </td>
-                <td>
-                    <button class="btn btn-outline-dark mb-1" @onclick="() => EditStudent(student.Id)">@langService.Keys["Edit"]</button>
-                </td>
-                </td>
+    <div class="row">
+        @if (valid)
+        {
 
-            </tr>
-        </tbody>
-    </table>
+            <RepresentData Records="StudData" onEdit="EditStudent" onDelete="DeleteStudent"></RepresentData>
 
-    <CustomTable
-        Header="Enrolled courses"
-        Items="student.Courses"
-        ItemType="Course"
-        ShowAdd=false
-        ></CustomTable>
+            <div class="border border-2 border-dark mb-4 p-3 row">
+                <CustomTable Header="Enrolled courses"
+                             Items="student.Courses"
+                             ItemType="Course"
+                             ShowButtons="false"
+                             OnRemoveItem="CancelCourse" />
 
-    <!-- Display available courses -->
-    <h5>Available Courses:</h5>
-    @if (AvailableCourses.Any())
-    {
-        <ul>
-            @foreach (var course in AvailableCourses)
-            {
-                <li>
-                    @course.Name
-                    <button class="btn btn-primary"
-                    @onclick="() => EnrollCourse(student.Id, course.Id)">Enroll</button>
-                </li>
-            }
-
-        </ul>
-    }
-    else
-    {
-        <p>No courses Available yet.</p>
-    }
-}
-<ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>
+                <CustomTable Header="Available Courses"
+                             Items="AvailableCourses"
+                             ItemType="Course"
+                             ShowButtons="false"
+                             OnRemoveItem="EnrollCourse" />
+            </div>
+        }
+            <ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>
+    </div>
+</div>

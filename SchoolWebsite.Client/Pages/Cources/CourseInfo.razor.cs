@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SchoolWebsite.shared;
 
 namespace SchoolWebsite.Client.Pages.Cources
 {
@@ -11,6 +12,8 @@ namespace SchoolWebsite.Client.Pages.Cources
         public ValidationMessages validation { get; set; }
         [Parameter]
         public string? Id { get; set; }
+        public Dictionary<string, string> CourseRecords { get; private set; }
+
         private Course course = new();
         bool valid;
 
@@ -22,6 +25,20 @@ namespace SchoolWebsite.Client.Pages.Cources
             {
                 course = await response.Content.ReadFromJsonAsync<Course>();
                 valid = true;
+                try
+                {
+                    CourseRecords = new Dictionary<string, string>
+                          {
+                            { "Id", course.Id.ToString() },
+                            { "Name", course.Name },
+                            { "College", course.College.Name}
+                          };
+
+                }
+                catch (NullReferenceException)
+                {
+                    CourseRecords = new();
+                }
             }
         }
         public async Task DeleteCourse(int courseId)

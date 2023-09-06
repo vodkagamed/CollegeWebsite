@@ -2,33 +2,13 @@
 @using AKSoftware.Localization.MultiLanguages;
 @using SchoolWebsite.Client.Components
 
+<Header HeaderName="Course Data"></Header>
 @if (valid)
 {
-    <table class="table">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">Course ID</th>
-                <th scope="col">Course Name</th>
-                <th scope="col">Course College</th>
-                <th scope="col">Options</th>
-            </tr>
-        </thead>
-        <tbody id="courseTableBody">
-            <tr>
-                <th scope="row">@course.Id</th>
-                <td>@course.Name</td>
-                <td>@course.College.Name</td>
-                <td>
-                <td>
-                    <button class="btn btn-outline-danger" @onclick="() => DeleteCourse(course.Id)">Delete</button>
-                </td>
-                <td>
-                    <button class="btn btn-outline-dark mb-1" @onclick="() => EditCourse(course.Id)">Edit</button>
-                </td>
-                </td>
-
-            </tr>
-        </tbody>
-    </table>
+<RepresentData
+     onDelete="DeleteCourse"
+      onEdit="EditCourse"
+      Records="CourseRecords"
+/>
 }
 <ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>
