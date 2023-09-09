@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolApi.Data;
-using SchoolWebsite.shared;
+using SchoolWebsite.shared.Models;
 
 namespace SchoolApi.Repos
 {
@@ -13,13 +13,16 @@ namespace SchoolApi.Repos
             this.context = context;
         }
         public async Task<IEnumerable<Teacher>> GetTeachers()
-            => await context.Teachers.Include(x => x.Course).ToListAsync();
+            => await context.Teachers
+                .Include(t => t.Course)
+                .Include(t => t.College)
+                .ToListAsync();
         public async Task<Teacher> GetTeacher(int id)
         {
             var Teacher = await context.Teachers
                 .Include(T=>T.College)
                 .Include(T=>T.Course)
-                .SingleOrDefaultAsync(s => s.Id == id);
+                .SingleOrDefaultAsync(t => t.Id == id);
             return Teacher;
         }
         public async Task<Teacher> AddTeacher(int collegeId, Teacher teacher)

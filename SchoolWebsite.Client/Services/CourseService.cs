@@ -1,4 +1,6 @@
-﻿namespace SchoolWebsite.Client.Services
+﻿using SchoolWebsite.shared.Models;
+
+namespace SchoolWebsite.Client.Services
 {
     public class CourseService
     {

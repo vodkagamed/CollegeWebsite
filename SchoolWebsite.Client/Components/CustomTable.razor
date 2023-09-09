@@ -37,8 +37,8 @@
                         {
                             <td class="col">
 
-                                <button class="btn btn-danger col-12" @onclick="()=>OnRemoveItem.InvokeAsync(item)">
-                                    <b>-</b>
+                                <button class="btn @BtnColour col-12" @onclick="()=>OnRemoveItem.InvokeAsync(item)">
+                                    <b>@Btn</b>
                                 </button>
                             </td>
 
@@ -50,7 +50,7 @@
             else
             {
                 <tr class="alert alert-warning">
-                    <td>No @ItemType yet!</td>
+                    <td>No @($"{ItemType}s") yet!</td>
                 </tr>
             }
         </tbody>
@@ -68,6 +68,8 @@
     [Parameter] public bool ShowButtons { get; set; } = true;
     [Parameter] public string Header { get; set; }
     [Parameter] public string ItemType { get; set; }
+    [Parameter] public string BtnColour { get; set; }
+    [Parameter] public string Btn { get; set; }
     [Parameter] public IEnumerable<object> Items { get; set; }
     [Parameter] public EventCallback<object> OnRemoveItem { get; set; }
 }

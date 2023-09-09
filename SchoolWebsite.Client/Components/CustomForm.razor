@@ -1,0 +1,39 @@
+﻿@typeparam TModel
+
+<EditForm Model="model" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @foreach (var property in typeof(TModel).GetProperties())
+    {
+        if (property.CanWrite)
+        {
+            var propertyValue = property.GetValue(model);
+            <div class="form-group">
+                <label for="@property.Name">@(Convert.ToString(property.Name))</label>
+                <input type="text" id="@property.Name" class="form-control" @bind="propertyValue" />
+                <ValidationMessage For="@(() => propertyValue)" />
+            </div>
+        }
+    }
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+@code {
+    [Parameter] public TModel Model { get; set; }
+    [Parameter] public EventCallback<object> OnValidSubmit { get; set; }
+
+    private TModel model;
+
+    protected override void OnParametersSet()
+    {
+        model = Model;
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await OnValidSubmit.InvokeAsync(model);
+    }
+}

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SchoolWebsite.shared.Models;
 using System.Reflection.Metadata;
 
 namespace SchoolWebsite.Client.Pages.Students

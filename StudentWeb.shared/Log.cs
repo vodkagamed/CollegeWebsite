@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -6,6 +7,7 @@ namespace SchoolWebsite.shared
 {
     public static class Log
     {
+        private static readonly ConcurrentQueue<(LogType LogType, string data)> logQueue = new();
         public static async Task Information(string data) => await WriteLog(LogType.Information, data);
         public static async Task Debug(string data) => await WriteLog(LogType.Debug, data);
         public static async Task Error(string data) => await WriteLog(LogType.Error, data);
@@ -55,7 +57,7 @@ namespace SchoolWebsite.shared
         }
 
         private static int[] counters = { 0, 0, 0, 0 };
-
+        
 
         private static string getFileCounter(LogType type)
         {

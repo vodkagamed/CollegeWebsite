@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using SchoolWebsite.shared;
+using SchoolWebsite.shared.Models;
 
 namespace SchoolWebsite.Client.Pages.Cources
 {
@@ -48,7 +48,7 @@ namespace SchoolWebsite.Client.Pages.Cources
             bool isDeleted = await validation.PerformHttpRequest
                 (HttpMethod.Delete, response, deletedCourse.Name);
             if (isDeleted)
-                InvokeAsync(StateHasChanged);
+             await InvokeAsync(StateHasChanged);
         }
         public void EditCourse(int courseID) =>
             nav.NavigateTo($"/EditCourseInfo/{courseID}", forceLoad: true);

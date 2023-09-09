@@ -3,3 +3,7 @@
 {"Data":"Error: NotFound","Date":"2023-09-06T21:28:33.6015635+03:00","Type":2}
 {"Data":"Error: NotFound","Date":"2023-09-06T21:28:34.0561595+03:00","Type":2}
 {"Data":"Error: InternalServerError","Date":"2023-09-06T21:34:41.8107053+03:00","Type":2}
+{"Data":"Error: InternalServerError","Date":"2023-09-09T18:46:52.3088512+03:00","Type":2}
+{"Data":"Error: BadRequest","Date":"2023-09-09T18:48:38.8127906+03:00","Type":2}
+{"Data":"Error: BadRequest","Date":"2023-09-09T18:53:03.8518085+03:00","Type":2}
+{"Data":"Error: BadRequest","Date":"2023-09-09T18:53:26.6287409+03:00","Type":2}

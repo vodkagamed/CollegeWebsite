@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SchoolApi.Repos;
 using SchoolWebsite.shared;
+using SchoolWebsite.shared.Models;
 
 namespace SchoolApi.Controllers
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using SchoolWebsite.shared;
+using SchoolWebsite.shared.Models;
 
 namespace SchoolWebsite.Client.Pages.Teachers;
 public partial class TeacherData
@@ -30,7 +30,8 @@ public partial class TeacherData
             {
                 { "Id", teacher.Id.ToString() },
                 { "Name", teacher.Name },
-                { "College", teacher.College.Name}
+                { "College", teacher.College.Name},
+                { "Course", teacher.Course.Name}
             };
 
         }

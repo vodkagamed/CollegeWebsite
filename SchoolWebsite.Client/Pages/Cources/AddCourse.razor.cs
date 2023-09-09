@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SchoolWebsite.Client.Pages.Colleges;
-using SchoolWebsite.shared;
+using SchoolWebsite.shared.Models;
 
 namespace SchoolWebsite.Client.Pages.Cources
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SchoolWebsite.shared;
+namespace SchoolWebsite.shared.Models;
 
 public class Student
 {

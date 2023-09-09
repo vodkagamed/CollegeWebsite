@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SchoolWebsite.shared;
+using SchoolWebsite.shared.Models;
 
 namespace SchoolApi.Configurations
 {

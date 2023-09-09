@@ -17,13 +17,17 @@
                              Items="student.Courses"
                              ItemType="Course"
                              ShowButtons="false"
-                             OnRemoveItem="CancelCourse" />
+                             OnRemoveItem="CancelCourse"
+                              Btn="-"
+                              BtnColour="btn-danger"/>
 
                 <CustomTable Header="Available Courses"
                              Items="AvailableCourses"
                              ItemType="Course"
                              ShowButtons="false"
-                             OnRemoveItem="EnrollCourse" />
+                             OnRemoveItem="EnrollCourse"
+                             Btn="+"
+                             BtnColour="btn-success" />
             </div>
         }
             <ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>

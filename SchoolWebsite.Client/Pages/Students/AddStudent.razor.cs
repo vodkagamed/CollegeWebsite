@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-
+using SchoolWebsite.shared.Models;
+using SchoolWebsite.shared.Models.Create;
 namespace SchoolWebsite.Client.Pages.Students;
 public partial class AddStudent
 {
@@ -10,7 +11,7 @@ public partial class AddStudent
     [Parameter]
     public Student Student { get; set; } = new();
     public HttpResponseMessage response = new();
-    public virtual async Task OnFormValidAsync()
+    public virtual async Task OnFormValidAsync(object createdStudent)
     {
         if (Student.Id > 0)
         {
@@ -20,7 +21,7 @@ public partial class AddStudent
         }
         else
         {
-            response = await studentService.CreateStudent(Student,Student.CollegeId);
+            response = await studentService.CreateStudent(Student, Student.CollegeId);
             bool isCreated = await validation.PerformHttpRequest(HttpMethod.Post, response, Student.Name);
             if (isCreated)
                 Student = new();

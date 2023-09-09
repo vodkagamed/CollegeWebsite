@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
-using SchoolWebsite.shared;
+using SchoolWebsite.shared.Models;
 
 namespace SchoolWebsite.Client.Pages.Students;
 public partial class StudentData
 {
-    [Inject] private NavigationManager? nav { get; set; }
-    [Inject] public StudentService? studentService { get; set; }
-    [Inject] public CourseService? courseService { get; set; }
+    [Inject] private NavigationManager nav { get; set; }
+    [Inject] public StudentService studentService { get; set; }
+    [Inject] public CourseService courseService { get; set; }
     public DataProtector protector { get; set; }
     [Inject]
     public ValidationMessages validation { get; set; }
@@ -46,15 +46,17 @@ public partial class StudentData
 
             StudData = new();
         }
+        StateHasChanged();
     }
     public async Task DeleteStudent(int studentId)
     {
+        Student deletedStudent = new();
         var response = await studentService.DeleteStudent(studentId);
-        Student deletedStudent = await response.Content.ReadFromJsonAsync<Student>();
-        bool isDeleted = await validation.PerformHttpRequest
-            (HttpMethod.Delete, response, deletedStudent.Name);
-        if (isDeleted)
-            InvokeAsync(StateHasChanged);
+        if (response.IsSuccessStatusCode)
+            deletedStudent = await response.Content.ReadFromJsonAsync<Student>();
+
+        await validation.PerformHttpRequest
+             (HttpMethod.Delete, response, deletedStudent.Name);
     }
     public void EditStudent(int studentID) =>
         nav.NavigateTo($"/EditStudentInfo/{studentID}", forceLoad: true);
@@ -85,9 +87,10 @@ public partial class StudentData
 
     public async Task<List<Course>> GetAvailableCourses()
     {
+        List<Course> allCourses = new();
         var allcourResponse = await courseService.GetCourses(student.CollegeId);
-        var allCourses =
-            await allcourResponse.Content.ReadFromJsonAsync<List<Course>>();
+        if (allcourResponse.IsSuccessStatusCode)
+            allCourses = await allcourResponse.Content.ReadFromJsonAsync<List<Course>>();
 
         var enrolledCourseIds = student.Courses.Select(c => c.Id).ToList();
 

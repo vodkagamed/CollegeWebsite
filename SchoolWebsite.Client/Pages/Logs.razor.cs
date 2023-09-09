@@ -32,7 +32,7 @@ namespace SchoolWebsite.Client.Pages
             else if (selectedLogType == LogType.Critical) alertType = "danger";
             else alertType = "info";
             LoadDates();
-            InvokeAsync(StateHasChanged);
+            await InvokeAsync(StateHasChanged);
         }
         private void GetLogsByDate(ChangeEventArgs e)
         {

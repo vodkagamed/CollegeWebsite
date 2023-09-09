@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SchoolWebsite.shared.Models;
+using System.Runtime.CompilerServices;
 
 namespace SchoolWebsite.Client.Pages.Teachers
 {
@@ -7,10 +9,13 @@ namespace SchoolWebsite.Client.Pages.Teachers
         [Inject]
         public TeacherService teacherService { get; set; }
         [Inject]
+        public CourseService CourseService { get; set; }
+        [Inject]
         public ValidationMessages validation { get; set; }
         [Parameter]
         public Teacher Teacher { get; set; } = new();
         public HttpResponseMessage response = new();
+        public List<Course> avilabeCourses = new();
         public virtual async Task OnFormValidAsync()
         {
             if (Teacher.Id > 0)
@@ -26,6 +31,12 @@ namespace SchoolWebsite.Client.Pages.Teachers
                 if (isCreated)
                     Teacher = new();
             }
+            //await GetCollegeCourses();
         }
+        //async Task GetCollegeCourses()
+        //{
+        //    var response = await CourseService.GetCourses(Teacher.CollegeId);
+        //    avilabeCourses = await response.Content.ReadFromJsonAsync<List<Course>>();
+        //}
     }
 }

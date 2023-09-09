@@ -4,6 +4,7 @@ using SchoolApi.Controllers.DTOs.Encoming;
 using SchoolApi.Controllers.DTOs.Outcoming;
 using SchoolApi.Repos;
 using SchoolWebsite.shared;
+using SchoolWebsite.shared.Models;
 
 namespace SchoolApi.Controllers
 {

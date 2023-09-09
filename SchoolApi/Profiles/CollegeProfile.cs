@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SchoolApi.Controllers.DTOs.Encoming;
 using SchoolApi.Controllers.DTOs.Outcoming;
-using SchoolWebsite.shared;
+using SchoolWebsite.shared.Models;
 
 namespace SchoolApi.Profiles
 {
