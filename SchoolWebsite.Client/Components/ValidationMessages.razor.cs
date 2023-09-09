@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SchoolWebsite.Shared;
+
 namespace SchoolWebsite.Client.Components;
 public partial class ValidationMessages
 {

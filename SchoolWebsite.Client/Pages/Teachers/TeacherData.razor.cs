@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SchoolWebsite.shared.Models;
+using SchoolWebsite.Shared;
 
 namespace SchoolWebsite.Client.Pages.Teachers;
 public partial class TeacherData
@@ -39,6 +40,16 @@ public partial class TeacherData
         {
             TeacherRecords = new();
         }
+
+        var tasks = new List<Task>();
+
+        Parallel.ForEach(Enumerable.Range(1, 10), i =>
+        {
+            tasks.Add(Task.Run(async () =>
+            {
+                await Log.Information($"Log entry from Thread {i}");
+            }));
+        });
     }
     public async Task DeleteTeacher(int teacherId)
     {

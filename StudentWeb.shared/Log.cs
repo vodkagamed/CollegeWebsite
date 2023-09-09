@@ -1,17 +1,37 @@
-﻿using Microsoft.VisualBasic;
+﻿using SchoolWebsite.shared;
+using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Text.Json;
-using System.Text.Json.Nodes;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace SchoolWebsite.shared
+namespace SchoolWebsite.Shared
 {
     public static class Log
     {
-        private static readonly ConcurrentQueue<(LogType LogType, string data)> logQueue = new();
+        private static readonly ConcurrentQueue<(LogType LogType, string Data)> logQueue = new();
+        static Log() => StartLoggingTask();
+
+        private static async Task WriteLog(LogType logType, string data)
+        {
+                logQueue.Enqueue((logType, data));
+                StartLoggingTask();
+        }
+        private static void StartLoggingTask()
+        {
+            Task.Run(async () =>
+            {
+                while (logQueue.TryDequeue(out var logData))
+                    await WriteLogToFile(logData.LogType, logData.Data);    
+            });
+        }
+
         public static async Task Information(string data) => await WriteLog(LogType.Information, data);
         public static async Task Debug(string data) => await WriteLog(LogType.Debug, data);
         public static async Task Error(string data) => await WriteLog(LogType.Error, data);
         public static async Task Critical(string data) => await WriteLog(LogType.Critical, data);
+
         public static async Task<List<List<LogContent>>> GetAllLogsAsync(LogType logType)
         {
             string allocationPath = $"App_Data\\Loggers\\{logType}";
@@ -34,7 +54,9 @@ namespace SchoolWebsite.shared
             }
             return logFile;
         }
-        private static async Task WriteLog(LogType logType, string data)
+
+
+        private static async Task WriteLogToFile(LogType logType, string data)
         {
             string allocationPath = $"App_Data\\Loggers\\{logType}";
 
@@ -57,7 +79,6 @@ namespace SchoolWebsite.shared
         }
 
         private static int[] counters = { 0, 0, 0, 0 };
-        
 
         private static string getFileCounter(LogType type)
         {
