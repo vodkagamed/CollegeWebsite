@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SchoolWebsite.Shared;
 
 namespace SchoolWebsite.Client.Pages
 {
