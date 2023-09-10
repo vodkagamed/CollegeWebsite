@@ -1,5 +1,7 @@
 using AKSoftware.Localization.MultiLanguages;
 using Microsoft.AspNetCore.DataProtection;
+using SchoolWebsite.Client.Services;
+using SchoolWebsite.shared.Models;
 using System.Net.Http;
 using System.Reflection;
 
@@ -33,6 +35,8 @@ builder.Services.AddScoped(client =>
     var httpClient = client.GetRequiredService<HttpClient>();
     return new CourseService(httpClient);
 });
+builder.Services.AddHttpClient();
+builder.Services.AddScoped(typeof(GenericService<>));
 
 builder.Services.AddScoped<DataProtector>();
 builder.Services.AddTransient<ValidationMessages>();

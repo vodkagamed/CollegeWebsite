@@ -14,13 +14,13 @@ namespace SchoolWebsite.Client.Pages.Students
         public ValidationMessages validation { get; set; }
         [Parameter]
         public string Id { get; set; }
-        private Student editedStudent = new();
+        private Student StudentToEdit = new();
         protected async override Task OnInitializedAsync()
         {
-            var response = await studentService.GetStudentById(int.Parse(Id));
-            editedStudent = await response.Content.ReadFromJsonAsync<Student>();
+            var response = await studentService.GetById(int.Parse(Id));
+            StudentToEdit = await response.Content.ReadFromJsonAsync<Student>();
 
-            await validation.PerformHttpRequest(HttpMethod.Get, response, editedStudent.Name);
+            await validation.PerformHttpRequest(HttpMethod.Get, response, StudentToEdit.Name);
         }
 
 

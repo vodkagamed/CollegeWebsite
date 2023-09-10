@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SchoolWebsite.shared.Models;
 
-namespace SchoolWebsite.Client.Pages.Cources
+namespace SchoolWebsite.Client.Components
 {
-    public partial class CourseInfo
+    public partial class CustomInfo
     {
         [Inject] private NavigationManager? nav { get; set; }
         [Inject] public CourseService? courseService { get; set; }
@@ -55,4 +55,5 @@ namespace SchoolWebsite.Client.Pages.Cources
 
 
     }
+
 }

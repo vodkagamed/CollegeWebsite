@@ -16,7 +16,7 @@ namespace SchoolWebsite.Client.Pages.Cources
         private Course editedCourse = new();
         protected async override Task OnInitializedAsync()
         {
-            var response = await courseService.GetCourseById(int.Parse(Id));
+            var response = await courseService.GetById(int.Parse(Id));
             editedCourse = await response.Content.ReadFromJsonAsync<Course>();
 
             await validation.PerformHttpRequest(HttpMethod.Get, response, editedCourse.Name);

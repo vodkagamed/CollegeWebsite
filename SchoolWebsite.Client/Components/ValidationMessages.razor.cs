@@ -36,7 +36,7 @@ public partial class ValidationMessages
                         break;
                 }
                 if (message == string.Empty)
-                    await Log.Information("Data retrieved successfully");
+                    await Log.Information($"{Content} retrieved successfully");
                 else
                     await Log.Information(message);
 

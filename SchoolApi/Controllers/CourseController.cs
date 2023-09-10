@@ -18,12 +18,12 @@ namespace SchoolApi.Controllers
             this.CourRepo = subjectsRepo;
         }
 
-        [HttpGet("{collId:int}")]
-        public async Task<ActionResult<IEnumerable<Course>>> GetCourses(int collId)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
             try
             {
-                IEnumerable<Course> Ensubjects = await CourRepo.GetCourses(collId);
+                IEnumerable<Course> Ensubjects = await CourRepo.GetCourses();
                 if (Ensubjects.Any())
                 {
                     //var DecryptedSubjects = _protector.Decrypt(Ensubjects);
@@ -39,7 +39,7 @@ namespace SchoolApi.Controllers
         }
 
 
-        [HttpGet("byId/{id:int}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Course>> GetCourseById(int id)
         {
             Course enSubject = await CourRepo.GetCourse(id);

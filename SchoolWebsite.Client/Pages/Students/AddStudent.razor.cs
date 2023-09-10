@@ -15,13 +15,13 @@ public partial class AddStudent
     {
         if (Student.Id > 0)
         {
-            response = await studentService.EditStudent(Student.Id, Student);
+            response = await studentService.Edit(Student.Id, Student);
             
             await validation.PerformHttpRequest(HttpMethod.Put, response,Student.Name);
         }
         else
         {
-            response = await studentService.CreateStudent(Student, Student.CollegeId);
+            response = await studentService.Create(Student.CollegeId,Student);
             bool isCreated = await validation.PerformHttpRequest(HttpMethod.Post, response, Student.Name);
             if (isCreated)
                 Student = new();

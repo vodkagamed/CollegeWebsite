@@ -16,13 +16,13 @@ namespace SchoolWebsite.Client.Pages.Colleges
         {
             if (College.Id > 0)
             {
-                response = await CollService.EditCollege(College.Id, College);
+                response = await CollService.Edit(College.Id, College);
 
                 await validation.PerformHttpRequest(HttpMethod.Put, response, College.Name);
             }
             else
             {
-                response = await CollService.CreateCollege(College);
+                response = await CollService.Create(College);
                 bool isCreated = await validation.PerformHttpRequest(HttpMethod.Post, response, College.Name);
                 if (isCreated)
                     College = new();

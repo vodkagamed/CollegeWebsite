@@ -12,10 +12,9 @@ namespace SchoolApi.Repos
         {
             this.context = context;
         }
-        public async Task<IEnumerable<Course>> GetCourses(int colId)
+        public async Task<IEnumerable<Course>> GetCourses()
         {
             return await context.Courses
-                .Where(c => c.CollegeId == colId)
                 .Include(c=>c.College)
                 .Include(c=>c.Students)
                 .ToListAsync();

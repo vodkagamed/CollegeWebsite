@@ -7,6 +7,7 @@ public partial class StudentData
     [Inject] private NavigationManager nav { get; set; }
     [Inject] public StudentService studentService { get; set; }
     [Inject] public CourseService courseService { get; set; }
+    [Inject] public GenericService<Course> courseService2 { get; set; }
     public DataProtector protector { get; set; }
     [Inject]
     public ValidationMessages validation { get; set; }
@@ -19,7 +20,8 @@ public partial class StudentData
     private Dictionary<string, string> StudData = new();
     protected override async Task OnInitializedAsync()
     {
-        var Studresponse = await studentService.GetStudentById(int.Parse(Id));
+        courseService2.Route = "Course";
+        var Studresponse = await studentService.GetById(int.Parse(Id));
         bool areAnySt = await validation.PerformHttpRequest(HttpMethod.Get, Studresponse, null);
         if (areAnySt)
         {
@@ -51,7 +53,7 @@ public partial class StudentData
     public async Task DeleteStudent(int studentId)
     {
         Student deletedStudent = new();
-        var response = await studentService.DeleteStudent(studentId);
+        var response = await studentService.Delete(studentId);
         if (response.IsSuccessStatusCode)
             deletedStudent = await response.Content.ReadFromJsonAsync<Student>();
 
@@ -60,6 +62,21 @@ public partial class StudentData
     }
     public void EditStudent(int studentID) =>
         nav.NavigateTo($"/EditStudentInfo/{studentID}", forceLoad: true);
+
+    public async Task<List<Course>> GetAvailableCourses()
+    {
+        List<Course> allCourses = new();
+        var allcourResponse = await courseService2.Get();
+        if (allcourResponse.IsSuccessStatusCode)
+            allCourses = await allcourResponse.Content.ReadFromJsonAsync<List<Course>>();
+        allCourses = allCourses.Where(c => c.CollegeId == student.CollegeId).ToList();
+        var enrolledCourseIds = student.Courses.Select(c => c.Id).ToList();
+
+        // Exclude the enrolled courses from the list of all courses
+        var availableCourses = allCourses.Where(c => !enrolledCourseIds.Contains(c.Id)).ToList();
+
+        return availableCourses;
+    }
 
     public async Task EnrollCourse(object CourseCallBack)
     {
@@ -83,21 +100,6 @@ public partial class StudentData
             AvailableCourses = await GetAvailableCourses();
             StateHasChanged();
         }
-    }
-
-    public async Task<List<Course>> GetAvailableCourses()
-    {
-        List<Course> allCourses = new();
-        var allcourResponse = await courseService.GetCourses(student.CollegeId);
-        if (allcourResponse.IsSuccessStatusCode)
-            allCourses = await allcourResponse.Content.ReadFromJsonAsync<List<Course>>();
-
-        var enrolledCourseIds = student.Courses.Select(c => c.Id).ToList();
-
-        // Exclude the enrolled courses from the list of all courses
-        var availableCourses = allCourses.Where(c => !enrolledCourseIds.Contains(c.Id)).ToList();
-
-        return availableCourses;
     }
 
 

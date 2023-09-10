@@ -7,6 +7,7 @@ namespace SchoolWebsite.Client.Pages.Colleges
     {
         [Inject]
         public CollegeService CollegeService { get; set; }
+
         [Inject]
         public ValidationMessages validation { get; set; }
         public List<College> Colleges { get; set; } = new();
@@ -16,9 +17,9 @@ namespace SchoolWebsite.Client.Pages.Colleges
         }
         public async Task<List<College>> GetColleges()
         {
-            var response = await CollegeService.GetColleges();
+            var response = await CollegeService.Get();
 
-            bool areAny = await validation.PerformHttpRequest(HttpMethod.Get, response, null);
+            bool areAny = await validation.PerformHttpRequest(HttpMethod.Get, response, "Colleges");
             if (areAny)
             {
                return Colleges = await response.Content.ReadFromJsonAsync<List<College>>();
