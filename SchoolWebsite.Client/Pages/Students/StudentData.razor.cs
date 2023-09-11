@@ -7,7 +7,6 @@ public partial class StudentData
     [Inject] private NavigationManager nav { get; set; }
     [Inject] public StudentService studentService { get; set; }
     [Inject] public CourseService courseService { get; set; }
-    [Inject] public GenericService<Course> courseService2 { get; set; }
     public DataProtector protector { get; set; }
     [Inject]
     public ValidationMessages validation { get; set; }
@@ -20,9 +19,8 @@ public partial class StudentData
     private Dictionary<string, string> StudData = new();
     protected override async Task OnInitializedAsync()
     {
-        courseService2.Route = "Course";
         var Studresponse = await studentService.GetById(int.Parse(Id));
-        bool areAnySt = await validation.PerformHttpRequest(HttpMethod.Get, Studresponse, null);
+        bool areAnySt = await validation.PerformHttpRequest(HttpMethod.Get, Studresponse, "Student Data");
         if (areAnySt)
         {
             student = await Studresponse.Content.ReadFromJsonAsync<Student>();
@@ -66,13 +64,12 @@ public partial class StudentData
     public async Task<List<Course>> GetAvailableCourses()
     {
         List<Course> allCourses = new();
-        var allcourResponse = await courseService2.Get();
+        var allcourResponse = await courseService.Get();
         if (allcourResponse.IsSuccessStatusCode)
             allCourses = await allcourResponse.Content.ReadFromJsonAsync<List<Course>>();
         allCourses = allCourses.Where(c => c.CollegeId == student.CollegeId).ToList();
         var enrolledCourseIds = student.Courses.Select(c => c.Id).ToList();
 
-        // Exclude the enrolled courses from the list of all courses
         var availableCourses = allCourses.Where(c => !enrolledCourseIds.Contains(c.Id)).ToList();
 
         return availableCourses;

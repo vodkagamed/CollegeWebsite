@@ -17,26 +17,12 @@ builder.Services.AddDataProtection()
 builder.Services.AddLanguageContainerForBlazorServer<EmbeddedResourceKeysProvider>(Assembly.GetExecutingAssembly(), "Resources");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7104") });
-builder.Services.AddScoped(client =>
-{
-    var httpClient = client.GetRequiredService<HttpClient>();
-    return new StudentService(httpClient);
-});
-builder.Services.AddScoped(client=> {
-    var httpClient = client.GetRequiredService<HttpClient>();
-    return new CollegeService(httpClient);
-    });
-builder.Services.AddScoped(client => {
-    var httpClient = client.GetRequiredService<HttpClient>();
-    return new TeacherService(httpClient);
-});
-builder.Services.AddScoped(client =>
-{
-    var httpClient = client.GetRequiredService<HttpClient>();
-    return new CourseService(httpClient);
-});
 builder.Services.AddHttpClient();
 builder.Services.AddScoped(typeof(GenericService<>));
+builder.Services.AddScoped(typeof(CollegeService));
+builder.Services.AddScoped(typeof(CourseService));
+builder.Services.AddScoped(typeof(StudentService));
+builder.Services.AddScoped(typeof(TeacherService));
 
 builder.Services.AddScoped<DataProtector>();
 builder.Services.AddTransient<ValidationMessages>();

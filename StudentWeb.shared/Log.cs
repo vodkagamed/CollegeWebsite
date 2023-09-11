@@ -64,23 +64,23 @@ namespace SchoolWebsite.Shared
                 Directory.CreateDirectory(allocationPath);
 
             string logPath = Path.Combine(allocationPath,
-                $"{logType}log_{getFileCounter(logType)}.json");
+                $"{logType}log_{GetFileCounter(logType)}.json");
 
             if (File.Exists(logPath))
             {
-                FileInfo fileInfo = new FileInfo(logPath);
+                FileInfo fileInfo = new(logPath);
                 if (fileInfo.Length > 2 * 1024)
                     UpdateFileCounter(logType);
             }
 
-            LogContent content = new LogContent { Data = data, Date = DateTime.Now, Type = logType };
+            LogContent content = new() { Data = data, Date = DateTime.Now, Type = logType };
             string jsonContent = JsonSerializer.Serialize(content);
             await File.AppendAllTextAsync(logPath, jsonContent + Environment.NewLine);
         }
 
         private static int[] counters = { 0, 0, 0, 0 };
 
-        private static string getFileCounter(LogType type)
+        private static string GetFileCounter(LogType type)
         {
             string counterFilePath = Path.Combine("App_Data", "Loggers", "counterFile.txt"); // Update the path as needed
 

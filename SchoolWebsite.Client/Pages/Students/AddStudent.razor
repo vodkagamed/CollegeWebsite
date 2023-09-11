@@ -27,8 +27,15 @@
             </div>
 
         <div class="col-6">
-            <label for="StudentPhone" class="h4">@langService.Keys["StudentCollege"]:</label>
-            <InputNumber id="StudentName" @bind-Value="Student.CollegeId" class="form-control form-control-lg"></InputNumber>
+            <label for="CollegeId" class="h4">College name:</label>
+            <InputSelect id="CollegeId" @bind-Value="@Student.CollegeId"
+                         class="form-select form-select-Lg">
+                <option value="0">Select College</option>
+                @foreach (var college in avilabeColleges)
+                {
+                    <option value="@college.Id">@college.Name</option>
+                }
+            </InputSelect>
         </div>
 
             <div class="col-6">

@@ -13,13 +13,27 @@
             </div>
 
         <div class="col-6">
-            <label for="TeacherCollege" class="h4">College Id:</label>
-            <InputNumber id="TeacherCollege" @bind-Value="Teacher.CollegeId" class="form-control form-control-lg"></InputNumber>
+            <label for="CollegeId" class="h4">College name:</label>
+            <InputSelect id="CollegeId" @bind-Value="@Teacher.CollegeId" @oninput="CatchCollegeId"
+                         class="form-select form-select-Lg">
+                <option value="0">Select College</option>
+                @foreach (var college in avilabeColleges)
+                {
+                    <option value="@college.Id">@college.Name</option>
+                }
+            </InputSelect>
         </div>
 
         <div class="col-6">
-            <label for="TeacherCourse" class="h4">Course Id:</label>
-            <InputNumber id="TeacherCollege" @bind-Value="Teacher.CourseId" class="form-control form-control-lg"></InputNumber>
+            <label for="CourseId" class="h4">Course name:</label>
+            <InputSelect id="CourseId" @bind-Value="@Teacher.CourseId"
+            class="form-select form-select-Lg">
+                <option value="0">Select Course</option>
+                @foreach (var course in avilabeCourses)
+                {
+                    <option value="@course.Id">@course.Name</option>
+                }
+            </InputSelect>
         </div>
 
             <div class="col-6">
