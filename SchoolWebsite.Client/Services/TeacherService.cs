@@ -6,7 +6,7 @@ namespace SchoolWebsite.Client.Services
     {
         public TeacherService(HttpClient httpClient) : base(httpClient)
         {
-            Route = "Teacher";
+            EndPoint = "Teacher";
         }
     }
 }

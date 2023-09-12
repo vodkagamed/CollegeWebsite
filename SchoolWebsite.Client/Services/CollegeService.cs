@@ -8,7 +8,7 @@ namespace SchoolWebsite.Client.Services
         private readonly HttpClient _httpClient;
         public CollegeService(HttpClient httpClient) : base(httpClient)
         {
-            Route = "College";
+            EndPoint = "College";
             _httpClient = httpClient;
         }
         public async Task<HttpResponseMessage> Create(College createdCollege)

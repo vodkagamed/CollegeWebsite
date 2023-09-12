@@ -8,7 +8,7 @@ namespace SchoolWebsite.Client.Services
         public StudentService(HttpClient httpClient):base(httpClient)
         {
             _httpClient = httpClient;
-            Route = "Student";
+            EndPoint = "Student";
         }
         public async Task<HttpResponseMessage> EnrollCourse(int studentId,int courseId)
         {
