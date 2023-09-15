@@ -65,22 +65,20 @@ public class LogRepo
         {
             string lastFile = dirInfo
             .GetFiles($"{logType}log_*.json")
-            .OrderByDescending(file => file.CreationTime)
-            .First().Name;
+            .Last().Name;
 
             int underscore = lastFile.LastIndexOf('_');
             int dot = lastFile.LastIndexOf('.');
 
-            return int.Parse(lastFile.Substring(underscore + 1, dot));
+            return int.Parse(lastFile[(underscore + 1)..dot]);
         }
         catch
         {
-
             return 1;
         }
     }
 
-    public async Task<List<List<LogContent>>> GetAllLogsAsync(LogType logType)
+    public async Task<List<List<LogContent>>> GetAllLogsAsync(string logType)
     {
         string allocationPath = $"App_Data\\Loggers\\{logType}";
         List<List<LogContent>> logFile = new();

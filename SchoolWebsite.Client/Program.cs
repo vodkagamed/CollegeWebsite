@@ -25,7 +25,7 @@ builder.Services.AddScoped(typeof(StudentService));
 builder.Services.AddScoped(typeof(TeacherService));
 builder.Services.AddScoped<DataProtector>();
 builder.Services.AddScoped<LogService>();
-builder.Services.AddScoped<ValidationMessages>();
+builder.Services.AddTransient(typeof(ValidationMessages));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

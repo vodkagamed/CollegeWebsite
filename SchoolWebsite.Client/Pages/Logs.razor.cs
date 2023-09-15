@@ -5,7 +5,7 @@ namespace SchoolWebsite.Client.Pages
 {
     public partial class Logs
     {
-        private List<List<LogContent>> logFiles = new();
+        private List<List<LogContent>> AllLogFiles = new();
         private List<List<LogContent>> customlogFiles = new();
         private List<DateTime> dates = new();
         private bool loadingLogFiles = false;
@@ -25,25 +25,26 @@ namespace SchoolWebsite.Client.Pages
                 selectedLogType = logType;
 
             loadingLogFiles = true;
-            logFiles = await Log.GetAllLogsAsync(selectedLogType);
-            customlogFiles = logFiles;
+            AllLogFiles = await Log.GetAllLogsAsync(selectedLogType);
+            customlogFiles = AllLogFiles;
             loadingLogFiles = false;
 
             if (selectedLogType == LogType.Error) alertType = "warning";
             else if (selectedLogType == LogType.Critical) alertType = "danger";
             else alertType = "info";
+
             LoadDates();
             await InvokeAsync(StateHasChanged);
         }
         private void GetLogsByDate(ChangeEventArgs e)
         {
             if (e.Value.ToString() == "All")
-                customlogFiles = logFiles;
+                customlogFiles = AllLogFiles;
             else
             {
                 DateTime.TryParse(e.Value.ToString(), out DateTime date);
                 selectedDate = date;
-                customlogFiles = logFiles
+                customlogFiles = AllLogFiles
                     .Select(logFile => logFile
                     .Where(log => log.Date.Date == selectedDate.Date)
                     .ToList())
@@ -56,7 +57,7 @@ namespace SchoolWebsite.Client.Pages
 
         private void NavigateToLog(int newIndex)
         {
-            if (newIndex >= 0 && newIndex < logFiles.Count)
+            if (newIndex >= 0 && newIndex < AllLogFiles.Count)
                 currentIndex = newIndex;
         }
 
@@ -67,9 +68,11 @@ namespace SchoolWebsite.Client.Pages
                 .Distinct()
                 .OrderByDescending(date => date)
                 .ToList();
-            currentIndex = 0;
+
             dates = allDates;
             InvokeAsync(StateHasChanged);
+
+            currentIndex = 0;
         }
 
 

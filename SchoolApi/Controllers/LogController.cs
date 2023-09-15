@@ -9,7 +9,7 @@ namespace SchoolApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class LogController:ControllerBase
+public class LogController : ControllerBase
 {
     public LogRepo logRepo;
 
@@ -18,28 +18,28 @@ public class LogController:ControllerBase
         this.logRepo = logRepo;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<List<LogContent>>>> Get(LogType logType)
+    [HttpGet("{logType}")]
+    public async Task<ActionResult<List<List<LogContent>>>> Get(string logType)
     {
         List<List<LogContent>> AllLogs = await logRepo.GetAllLogsAsync(logType);
         return AllLogs;
     }
    
-    [HttpPost]
-    public async Task<ActionResult<LogContent>> Post([FromRoute] LogType logType, string message)
+    [HttpPost("{logType}")]
+    public async Task<ActionResult<LogContent>> Post( string logType, string message)
     {
         switch (logType)
         {
-            case LogType.Information:
+            case "Information":
                 logRepo.Information(message);
                 break;
-            case LogType.Debug:
+            case "Debug":
                 logRepo.Debug(message);
                 break;
-            case LogType.Error:
+            case "Error":
                 logRepo.Error(message);
                 break;
-            case LogType.Critical:
+            case "Critical":
                 logRepo.Critical(message);
                 break;
             default:
