@@ -11,7 +11,7 @@ public partial class StudentData
     [Inject]
     public ValidationMessages validation { get; set; }
     [Parameter]
-    public string? Id { get; set; }
+    public string Id { get; set; }
     private Student student = new();
     bool valid;
 

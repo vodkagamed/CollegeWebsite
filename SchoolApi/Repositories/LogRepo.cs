@@ -1,11 +1,6 @@
 ﻿using SchoolWebsite.shared;
-using System;
 using System.Collections.Concurrent;
-using System.IO;
-using System.Reflection;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolApi.Repos;
 

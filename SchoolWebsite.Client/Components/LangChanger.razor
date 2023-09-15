@@ -17,7 +17,7 @@
 
         langService.SetLanguage(System.Globalization.CultureInfo.GetCultureInfo(LangName));
         await InvokeAsync(StateHasChanged);
-        LangChanged.InvokeAsync();
+        await LangChanged.InvokeAsync();
 
     }
 }

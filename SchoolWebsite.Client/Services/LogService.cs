@@ -8,15 +8,15 @@ public class LogService
     {
         this._httpClient = httpClient;
     }
-    public async virtual Task<HttpResponseMessage> Information(string message) =>
+    public async Task<HttpResponseMessage> InformationAsync(string message) =>
             await _httpClient.PostAsJsonAsync($"/api/Log/{LogType.Information}", message);
-    public async virtual Task<HttpResponseMessage> Debug(string message) =>
+    public async Task<HttpResponseMessage> DebugAsync(string message) =>
         await _httpClient.PostAsJsonAsync($"/api/Log/{LogType.Debug}", message);
-    public async virtual Task<HttpResponseMessage> Error(string message) =>
+    public async Task<HttpResponseMessage> ErrorAsync(string message) =>
         await _httpClient.PostAsJsonAsync($"/api/Log/{LogType.Error}", message);
-        public async virtual Task<HttpResponseMessage> Critical(string message) =>
+        public async Task<HttpResponseMessage> CriticalAsync(string message) =>
         await _httpClient.PostAsJsonAsync($"/api/Log/{LogType.Critical}", message);
 
-    public async Task<HttpResponseMessage> Get() =>
+    public async Task<HttpResponseMessage> GetAllAsync() =>
         await _httpClient.GetAsync($"/api/Log");
 }

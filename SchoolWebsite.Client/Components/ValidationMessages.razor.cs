@@ -7,14 +7,16 @@ public partial class ValidationMessages
     [Parameter]
     public string message { get; set; } = string.Empty;
     [Parameter]
-    public string alertClass { get; set; } = string.Empty;
+    public string AlertClass { get; set; } = string.Empty;
+    [Inject]
+    public LogService _logService { get; set; }
     public async Task<bool> PerformHttpRequest(HttpMethod httpMethod, HttpResponseMessage response,string Content)
     {
         try
         {
             if (response.IsSuccessStatusCode)
             {
-                alertClass = "alert-success";
+                AlertClass = "alert-success";
                 bool success = true;
                 switch (httpMethod.Method)
                 {
@@ -31,22 +33,22 @@ public partial class ValidationMessages
                         break;
                     default:
                         message = "Unsupported HTTP method.";
-                        alertClass = "alert-danger";
+                        AlertClass = "alert-danger";
                         success = false;
                         break;
                 }
                 if (message == string.Empty)
-                    Log.Information($"{Content} retrieved successfully");
+                   await _logService.InformationAsync($"{Content} retrieved successfully");
                 else
-                    Log.Information(message);
+                    await _logService.InformationAsync(message);
 
                 return success;
             }
             else
             {
                 message = $"Error: {response.StatusCode}";
-                alertClass = "alert-danger";
-                Log.Error(message);
+                AlertClass = "alert-danger";
+                await _logService.ErrorAsync(message);
                 return false;
             }
         }
@@ -54,18 +56,18 @@ public partial class ValidationMessages
         {
             string exeption = $"HTTP request error: {ex.Message}";
             Console.WriteLine(exeption);
-            Log.Debug(exeption);
+            await _logService.DebugAsync(exeption);
             message = "An error occurred.";
-            alertClass = "alert-danger";
+            AlertClass = "alert-danger";
             return false;
         }
         catch (Exception ex)
         {
             string exeption = $"An error occurred: {ex.Message}";
             Console.WriteLine(exeption);
-            Log.Critical(exeption);
+            await _logService.CriticalAsync(exeption);
             message = "An error occurred.";
-            alertClass = "alert-danger";
+            AlertClass = "alert-danger";
             return false;
         }
     }

@@ -5,13 +5,13 @@ namespace SchoolWebsite.Client.Pages.Cources
 {
     public partial class CourseInfo
     {
-        [Inject] private NavigationManager? nav { get; set; }
-        [Inject] public CourseService? courseService { get; set; }
-        public DataProtector protector { get; set; }
+        [Inject] private NavigationManager Nav { get; set; }
+        [Inject] public CourseService CourseService { get; set; }
+        public DataProtector Protector { get; set; }
         [Inject]
-        public ValidationMessages validation { get; set; }
+        public ValidationMessages Validation { get; set; }
         [Parameter]
-        public string? Id { get; set; }
+        public string Id { get; set; }
         public Dictionary<string, string> CourseRecords { get; private set; }
 
         private Course course = new();
@@ -19,8 +19,8 @@ namespace SchoolWebsite.Client.Pages.Cources
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await courseService.GetById(int.Parse(Id));
-            bool areAny = await validation.PerformHttpRequest(HttpMethod.Get, response, "Course Data");
+            var response = await CourseService.GetById(int.Parse(Id));
+            bool areAny = await Validation.PerformHttpRequest(HttpMethod.Get, response, "Course Data");
             if (areAny)
             {
                 course = await response.Content.ReadFromJsonAsync<Course>();
@@ -43,15 +43,15 @@ namespace SchoolWebsite.Client.Pages.Cources
         }
         public async Task DeleteCourse(int courseId)
         {
-            var response = await courseService.Delete(courseId);
+            var response = await CourseService.Delete(courseId);
             Course deletedCourse = await response.Content.ReadFromJsonAsync<Course>();
-            bool isDeleted = await validation.PerformHttpRequest
+            bool isDeleted = await Validation.PerformHttpRequest
                 (HttpMethod.Delete, response, deletedCourse.Name);
             if (isDeleted)
                 await InvokeAsync(StateHasChanged);
         }
         public void EditCourse(int courseID) =>
-            nav.NavigateTo($"/EditCourseInfo/{courseID}", forceLoad: true);
+            Nav.NavigateTo($"/EditCourseInfo/{courseID}", forceLoad: true);
 
 
     }

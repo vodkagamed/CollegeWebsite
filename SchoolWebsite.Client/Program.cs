@@ -11,7 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<StudentService>();
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("D:\\projects\\C#\\InnoTasks\\SchoolWebProject\\SchoolApi"))
     .SetDefaultKeyLifetime(TimeSpan.FromDays(15));
@@ -24,9 +23,9 @@ builder.Services.AddScoped(typeof(CollegeService));
 builder.Services.AddScoped(typeof(CourseService));
 builder.Services.AddScoped(typeof(StudentService));
 builder.Services.AddScoped(typeof(TeacherService));
-
 builder.Services.AddScoped<DataProtector>();
-builder.Services.AddTransient<ValidationMessages>();
+builder.Services.AddScoped<LogService>();
+builder.Services.AddScoped<ValidationMessages>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

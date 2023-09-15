@@ -8,7 +8,7 @@ namespace SchoolWebsite.Client.Pages.Colleges
         [Inject]
         public CollegeService CollService { get; set; }
         [Inject]
-        public ValidationMessages validation { get; set; }
+        public ValidationMessages Validation { get; set; }
         [Parameter]
         public College College { get; set; } = new();
         public HttpResponseMessage response = new();
@@ -18,12 +18,12 @@ namespace SchoolWebsite.Client.Pages.Colleges
             {
                 response = await CollService.Edit(College.Id, College);
 
-                await validation.PerformHttpRequest(HttpMethod.Put, response, College.Name);
+                await Validation.PerformHttpRequest(HttpMethod.Put, response, College.Name);
             }
             else
             {
                 response = await CollService.Create(College);
-                bool isCreated = await validation.PerformHttpRequest(HttpMethod.Post, response, College.Name);
+                bool isCreated = await Validation.PerformHttpRequest(HttpMethod.Post, response, College.Name);
                 if (isCreated)
                     College = new();
             }
