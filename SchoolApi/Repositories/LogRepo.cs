@@ -62,7 +62,7 @@ public class LogRepo
 
     }
 
-    private int GetCurrentCounter(string allocationPath, LogType logType)
+    private static int GetCurrentCounter(string allocationPath, LogType logType)
     {
         DirectoryInfo dirInfo = new(allocationPath);
 
@@ -75,8 +75,9 @@ public class LogRepo
 
             int underscore = lastFile.LastIndexOf('_');
             int dot = lastFile.LastIndexOf('.');
-
-            return int.Parse(lastFile.Substring(underscore + 1, dot));
+            Console.WriteLine(lastFile.Length);
+            string CounterString = lastFile.Substring(underscore + 1, dot - underscore - 1);
+            return int.Parse(CounterString);
         }
         catch
         {
