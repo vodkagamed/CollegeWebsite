@@ -18,9 +18,9 @@
         </div>
 
         <div class="border border-2 border-dark mb-4 p-3 row">
-            <CustomTable Header="Teachers" Items="@(college.Teachers.Cast<Teacher>().ToList())" ItemType="Teacher"></CustomTable>
-            <CustomTable Header="Students" Items="@(college.Students.Cast<Student>().ToList())" ItemType="Student"></CustomTable>
-            <CustomTable Header="Courses" Items="@(college.Courses.Cast<Course>().ToList())" ItemType="Course"></CustomTable>
+            <CustomTable Header="Teachers" Items="@(college.Teachers)" ItemType="Teacher"></CustomTable>
+            <CustomTable Header="Students" Items="@(college.Students)" ItemType="Student"></CustomTable>
+            <CustomTable Header="Courses" Items="@(college.Courses)" ItemType="Course"></CustomTable>
         </div>
     }
     <ValidationMessages alertClass="@validation.alertClass" message="@validation.message"></ValidationMessages>

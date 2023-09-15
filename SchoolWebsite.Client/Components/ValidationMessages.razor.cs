@@ -36,9 +36,9 @@ public partial class ValidationMessages
                         break;
                 }
                 if (message == string.Empty)
-                    await Log.Information($"{Content} retrieved successfully");
+                    Log.Information($"{Content} retrieved successfully");
                 else
-                    await Log.Information(message);
+                    Log.Information(message);
 
                 return success;
             }
@@ -46,7 +46,7 @@ public partial class ValidationMessages
             {
                 message = $"Error: {response.StatusCode}";
                 alertClass = "alert-danger";
-                await Log.Error(message);
+                Log.Error(message);
                 return false;
             }
         }
@@ -54,7 +54,7 @@ public partial class ValidationMessages
         {
             string exeption = $"HTTP request error: {ex.Message}";
             Console.WriteLine(exeption);
-            await Log.Debug(exeption);
+            Log.Debug(exeption);
             message = "An error occurred.";
             alertClass = "alert-danger";
             return false;
@@ -63,7 +63,7 @@ public partial class ValidationMessages
         {
             string exeption = $"An error occurred: {ex.Message}";
             Console.WriteLine(exeption);
-            await Log.Critical(exeption);
+            Log.Critical(exeption);
             message = "An error occurred.";
             alertClass = "alert-danger";
             return false;

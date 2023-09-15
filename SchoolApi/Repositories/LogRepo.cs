@@ -7,22 +7,22 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SchoolWebsite.Shared;
+namespace SchoolApi.Repos;
 
-public static class Log
+public class LogRepo
 {
-    private static readonly ConcurrentQueue<(LogType LogType, string Data)> logQueue = new();
-    private static int CurrentCounter = 1;
-    static Log() => DequeueLog();
+    private readonly ConcurrentQueue<(LogType LogType, string Data)> logQueue = new();
+    private int CurrentCounter = 1;
+    public LogRepo() => DequeueLog();
 
-    public static void Information(string data) => EnqueueLog(LogType.Information, data);
-    public static void Debug(string data) => EnqueueLog(LogType.Debug, data);
-    public static void Error(string data) => EnqueueLog(LogType.Error, data);
-    public static void Critical(string data) => EnqueueLog(LogType.Critical, data);
+    public void Information(string data) => EnqueueLog(LogType.Information, data);
+    public void Debug(string data) => EnqueueLog(LogType.Debug, data);
+    public void Error(string data) => EnqueueLog(LogType.Error, data);
+    public void Critical(string data) => EnqueueLog(LogType.Critical, data);
 
-    private static void EnqueueLog(LogType logType, string data) =>  logQueue.Enqueue((logType, data));
+    private void EnqueueLog(LogType logType, string data) =>  logQueue.Enqueue((logType, data));
 
-    private static async Task DequeueLog()
+    private async Task DequeueLog()
     {
         while (true)
         {
@@ -38,7 +38,7 @@ public static class Log
     }
 
 
-    private static async Task WriteLogToFile(LogType logType, string data)
+    private async Task WriteLogToFile(LogType logType, string data)
     {
         string allocationPath = $"App_Data\\Loggers\\{logType}";
 
@@ -62,7 +62,7 @@ public static class Log
 
     }
 
-    private static int GetCurrentCounter(string allocationPath, LogType logType)
+    private int GetCurrentCounter(string allocationPath, LogType logType)
     {
         DirectoryInfo dirInfo = new(allocationPath);
 
@@ -85,7 +85,7 @@ public static class Log
         }
     }
 
-    public static async Task<List<List<LogContent>>> GetAllLogsAsync(LogType logType)
+    public async Task<List<List<LogContent>>> GetAllLogsAsync(LogType logType)
     {
         string allocationPath = $"App_Data\\Loggers\\{logType}";
         List<List<LogContent>> logFile = new();
