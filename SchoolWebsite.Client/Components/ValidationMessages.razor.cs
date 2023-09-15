@@ -9,7 +9,7 @@ public partial class ValidationMessages
     [Parameter]
     public string AlertClass { get; set; } = string.Empty;
     [Inject]
-    public LogService _logService { get; set; } = default!;
+    public LogService _logService { get; set; } = new();
     public async Task<bool> PerformHttpRequest(HttpMethod httpMethod, HttpResponseMessage response,string Content)
     {
         try

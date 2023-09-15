@@ -4,12 +4,7 @@ namespace SchoolWebsite.Client.Services;
 
 public class LogService
 {
-    private readonly HttpClient _httpClient;
-
-    public LogService(HttpClient httpClient)
-    {
-        _httpClient = httpClient;
-    }
+    private readonly HttpClient _httpClient = new() { BaseAddress = new Uri("https://localhost:7104") };
     public async Task<HttpResponseMessage> InformationAsync(string message) =>
             await _httpClient.PostAsJsonAsync($"/api/Log/Information", message);
     public async Task<HttpResponseMessage> DebugAsync(string message) =>

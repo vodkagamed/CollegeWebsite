@@ -20,7 +20,7 @@ public static class Log
     public static void Error(string data) => EnqueueLog(LogType.Error, data);
     public static void Critical(string data) => EnqueueLog(LogType.Critical, data);
 
-    private static void EnqueueLog(LogType logType, string data) =>  logQueue.Enqueue((logType, data));
+    private static void EnqueueLog(LogType logType, string data) => logQueue.Enqueue((logType, data));
 
     private static async Task DequeueLog()
     {
@@ -54,7 +54,11 @@ public static class Log
         {
             FileInfo fileInfo = new(logPath);
             if (fileInfo.Length > 2 * 1024)
+            {
                 CurrentCounter++;
+                logPath = Path.Combine(allocationPath,
+            $"{logType}log_{CurrentCounter}.json");
+            }
         }
         LogContent content = new() { Data = data, Date = DateTime.Now, Type = logType };
         string jsonContent = JsonSerializer.Serialize(content);
@@ -111,30 +115,30 @@ public static class Log
 
 
 }
-    //private static Dictionary<string, int> counters = new()
-    //{
-    //    {"Infromation",0 },
-    //    {"Debug",0 },
-    //    {"Error",0 },
-    //    {"Critical",0 }
-    //};
+//private static Dictionary<string, int> counters = new()
+//{
+//    {"Infromation",0 },
+//    {"Debug",0 },
+//    {"Error",0 },
+//    {"Critical",0 }
+//};
 
-    //private static string GetFileCounter(LogType type)
-    //{
-    //    string counterFilePath = Path.Combine("App_Data", "Loggers", "counterFile.txt");
+//private static string GetFileCounter(LogType type)
+//{
+//    string counterFilePath = Path.Combine("App_Data", "Loggers", "counterFile.txt");
 
-    //    if (File.Exists(counterFilePath))
-    //        counters = File.ReadAllText(counterFilePath).ToDictionary<string,int>;
-    //    else
-    //        File.WriteAllLines(counterFilePath, Array.ConvertAll(counters, c => c.ToString()));
-    //    return counters[(int)type].ToString();
-    //}
+//    if (File.Exists(counterFilePath))
+//        counters = File.ReadAllText(counterFilePath).ToDictionary<string,int>;
+//    else
+//        File.WriteAllLines(counterFilePath, Array.ConvertAll(counters, c => c.ToString()));
+//    return counters[(int)type].ToString();
+//}
 
-    //private static void UpdateFileCounter(LogType type)
-    //{
-    //    string counterFilePath = Path.Combine("App_Data", "Loggers", "counterFile.txt");
+//private static void UpdateFileCounter(LogType type)
+//{
+//    string counterFilePath = Path.Combine("App_Data", "Loggers", "counterFile.txt");
 
-    //    counters[(int)type]++;
-    //    File.WriteAllLines(counterFilePath, Array.ConvertAll(counters, c => c.ToString()));
-    //}
+//    counters[(int)type]++;
+//    File.WriteAllLines(counterFilePath, Array.ConvertAll(counters, c => c.ToString()));
+//}
 
