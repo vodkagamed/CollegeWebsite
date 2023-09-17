@@ -25,4 +25,8 @@
     <ProjectReference Include="..\StudentWeb.shared\SchoolWebsite.shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+
 </Project>

@@ -26,7 +26,7 @@ public class LogController : ControllerBase
     }
    
     [HttpPost("{logType}")]
-    public async Task<ActionResult<LogContent>> Post( string logType, string message)
+    public async Task<ActionResult<LogContent>> Post([FromRoute] string logType,[FromBody] string message)
     {
         switch (logType)
         {

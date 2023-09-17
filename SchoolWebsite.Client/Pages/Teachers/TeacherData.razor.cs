@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SchoolWebsite.shared.Models;
-using SchoolWebsite.Shared;
 
 namespace SchoolWebsite.Client.Pages.Teachers;
 public partial class TeacherData
 {
-    [Inject] private NavigationManager nav { get; set; }
-    [Inject] public TeacherService teacherService { get; set; }
-    public DataProtector protector { get; set; }
+    [Inject] private NavigationManager? nav { get; set; }
+    [Inject] public TeacherService? teacherService { get; set; }
+    public DataProtector? protector { get; set; }
     [Inject]
-    public ValidationMessages validation { get; set; }
+    public ValidationMessages? validation { get; set; }
     [Parameter]
     public string Id { get; set; }
     private Teacher teacher = new();
@@ -18,7 +17,7 @@ public partial class TeacherData
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await teacherService.GetById(int.Parse(Id));
+        HttpResponseMessage response = await teacherService.GetById(int.Parse(Id));
         bool areAny = await validation.PerformHttpRequest(HttpMethod.Get, response, "Teacher data");
         if (areAny)
         {

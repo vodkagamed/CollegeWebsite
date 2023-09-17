@@ -1,9 +1,5 @@
 using AKSoftware.Localization.MultiLanguages;
 using Microsoft.AspNetCore.DataProtection;
-using SchoolWebsite.Client.Services;
-using SchoolWebsite.shared.Models;
-using SchoolWebsite.Shared;
-using System.Net.Http;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,18 +40,4 @@ app.UseRouting();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
-var tasks = new List<Task>();
-
-Parallel.ForEach(Enumerable.Range(1, 10), i =>
-{
-    string logMessage = $"Log entry from Thread {i}";
-
-    tasks.Add(Task.Run(async () =>
-    {
-        Log.Information(logMessage);
-    }));
-});
-
-await Task.WhenAll(tasks);
 app.Run();

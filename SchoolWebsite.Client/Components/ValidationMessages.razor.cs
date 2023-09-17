@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using SchoolWebsite.Shared;
-
 namespace SchoolWebsite.Client.Components;
 public partial class ValidationMessages
 {
+
     [Parameter]
     public string message { get; set; } = string.Empty;
     [Parameter]
@@ -39,6 +38,7 @@ public partial class ValidationMessages
                 }
                 if (message == string.Empty)
                    await _logService.InformationAsync($"{Content} retrieved successfully");
+                
                 else
                     await _logService.InformationAsync(message);
 
