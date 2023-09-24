@@ -25,9 +25,9 @@ public class LogRepo
         while (true)
         {
             if (logQueue.TryDequeue(out var logData))
-             await WriteLogToFile(logData.LogType, logData.Data);
+                await WriteLogToFile(logData.LogType, logData.Data);
             else
-               await Task.Delay(6000);
+                await Task.Delay(6000);
         }
     }
 
@@ -96,8 +96,16 @@ public class LogRepo
             List<LogContent> LogFile = new();
             foreach (string line in await File.ReadAllLinesAsync(file))
             {
-                LogContent content = JsonSerializer.Deserialize<LogContent>(line);
-                LogFile.Add(content);
+                try
+                {
+                    LogContent content = JsonSerializer.Deserialize<LogContent>(line);
+                    LogFile.Add(content);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
             logFolder.Add(LogFile);
         }

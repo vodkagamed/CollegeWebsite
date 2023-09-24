@@ -9,15 +9,20 @@ public partial class Logs
     private List<DateTime> dates = new();
     private bool loadingLogFiles = false;
     private DateTime selectedDate;
-    private LogType selectedLogType = LogType.Information;
+    private LogType selectedLogType;
     private string alertType = "info";
     [Inject]
-    LogService _logService { get; set; }
+    LogService? _logService { get; set; }
+    [Inject]
+    public ValidationMessages? Validation { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        await GetLogsByType(null);
-        LoadDates();
-        selectedDate = dates[0];
+        await GetLogsByType(new() { Value= LogType.Information });
+        if (customlogFiles.Any())
+        {
+            dates = LoadDates();
+            selectedDate = dates[0];
+        }
     }
 
     private async Task GetLogsByType(ChangeEventArgs e)
@@ -27,8 +32,11 @@ public partial class Logs
 
         loadingLogFiles = true;
         HttpResponseMessage response = await _logService.GetAllAsync(selectedLogType.ToString());
-        if (response.IsSuccessStatusCode)
-            AllLogFiles = await response.Content.ReadFromJsonAsync<List<List<LogContent>>>() ?? new();
+        bool areAny = await Validation.PerformHttpRequest(HttpMethod.Get, response, "Logs");
+        if (areAny)
+            AllLogFiles = await response.Content
+                .ReadFromJsonAsync<List<List<LogContent>>>() ?? new();
+
         customlogFiles = AllLogFiles;
         loadingLogFiles = false;
 
@@ -42,33 +50,21 @@ public partial class Logs
     private void GetLogsByDate(ChangeEventArgs e)
     {
         if (e.Value.ToString() == "All")
-            customlogFiles = AllLogFiles;
+        {
+            customlogFiles = AllLogFiles.OrderByDescending(logFile => logFile).ToList();
+        }
         else
         {
             DateTime.TryParse(e.Value.ToString(), out DateTime date);
             selectedDate = date;
-            customlogFiles = AllLogFiles
-                .Select
-                (
-                    logFile => logFile
-                    .Where(log => log.Date.Date == selectedDate.Date)
-                    .OrderDescending()
-                    .ToList()
-                )
+            customlogFiles = AllLogFiles.Select
+                (logs=>logs.Where(log=>log.Date.Date==selectedDate.Date)
+                .ToList())
                 .ToList();
         }
-        InvokeAsync(StateHasChanged);
     }
-
     private int currentIndex = 0;
-
-    private void NavigateToLog(int newIndex)
-    {
-        if (newIndex >= 0 && newIndex < AllLogFiles.Count)
-            currentIndex = newIndex;
-    }
-
-    private void LoadDates()
+    private List<DateTime> LoadDates()
     {
         var allDates = customlogFiles
             .SelectMany(logFile => logFile.Select(logContent => logContent.Date.Date))
@@ -76,12 +72,12 @@ public partial class Logs
             .OrderByDescending(date => date)
             .ToList();
 
-        dates = allDates;
-        InvokeAsync(StateHasChanged);
-
         currentIndex = 0;
+        return allDates;
     }
-
-
-
+    private void NavigateToLog(int newIndex)
+    {
+        if (newIndex >= 0 && newIndex < AllLogFiles.Count)
+            currentIndex = newIndex;
+    }
 }
