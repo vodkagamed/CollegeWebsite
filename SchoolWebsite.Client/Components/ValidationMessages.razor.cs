@@ -2,6 +2,9 @@
 <<<<<<< HEAD
 =======
 using SchoolWebsite.Shared;
+<<<<<<< HEAD
+>>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
+=======
 >>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
 namespace SchoolWebsite.Client.Components;
 public partial class ValidationMessages
