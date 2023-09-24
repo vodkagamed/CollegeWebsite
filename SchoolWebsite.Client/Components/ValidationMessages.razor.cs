@@ -1,17 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-<<<<<<< HEAD
-=======
-using SchoolWebsite.Shared;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
-=======
->>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
-=======
->>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
-=======
->>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
+
 namespace SchoolWebsite.Client.Components;
 public partial class ValidationMessages
 {
@@ -33,7 +21,7 @@ public partial class ValidationMessages
                 switch (httpMethod.Method)
                 {
                     case "GET":
-                        break; // No need to set the message for GET
+                        break;
                     case "DELETE":
                         Message = $"{Content} deleted successfully.";
                         break;
