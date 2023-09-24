@@ -3,6 +3,9 @@
 =======
 using SchoolWebsite.Shared;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
+=======
 >>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
 =======
 >>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe

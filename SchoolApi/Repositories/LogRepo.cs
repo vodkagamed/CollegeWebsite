@@ -73,8 +73,14 @@ public class LogRepo
 
             int underscore = lastFile.LastIndexOf('_');
             int dot = lastFile.LastIndexOf('.');
+<<<<<<< HEAD
 
             return int.Parse(lastFile[(underscore + 1)..dot]);
+=======
+            Console.WriteLine(lastFile.Length);
+            string CounterString = lastFile.Substring(underscore + 1, dot - underscore - 1);
+            return int.Parse(CounterString);
+>>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
         }
         catch
         {
