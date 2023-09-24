@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using SchoolApi.Repos;
-using SchoolWebsite.shared;
-using System.Collections.Generic;
-using System.Net;
-
-namespace SchoolApi.Controllers;
+﻿namespace SchoolApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class LogController : ControllerBase
 {
-    public LogRepo logRepo;
+    private readonly LogRepo logRepo;
 
     public LogController(LogRepo logRepo)
     {

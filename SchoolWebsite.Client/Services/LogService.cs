@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace SchoolWebsite.Client.Services;
+﻿namespace SchoolWebsite.Client.Services;
 
 public class LogService
 {

@@ -1,13 +1,15 @@
-﻿using SchoolWebsite.shared;
+﻿using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using SchoolWebsite.shared;
 using System.Collections.Concurrent;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace SchoolApi.Repos;
 
 public class LogRepo
 {
     private readonly ConcurrentQueue<(LogType LogType, string Data)> logQueue = new();
-    private int CurrentCounter = 1;
+    private int CurrentFileCounter = 1;
     public LogRepo() => DequeueLog();
 
     public void Information(string data) => EnqueueLog(LogType.Information, data);
@@ -15,44 +17,42 @@ public class LogRepo
     public void Error(string data) => EnqueueLog(LogType.Error, data);
     public void Critical(string data) => EnqueueLog(LogType.Critical, data);
 
-    private void EnqueueLog(LogType logType, string data) => logQueue.Enqueue((logType, data));
+    private void EnqueueLog(LogType logType, string data)
+        => logQueue.Enqueue((logType, data));
 
     private async Task DequeueLog()
     {
         while (true)
         {
             if (logQueue.TryDequeue(out var logData))
-            {
-                await WriteLogToFile(logData.LogType, logData.Data);
-            }
+             await WriteLogToFile(logData.LogType, logData.Data);
             else
-            {
-                await Task.Delay(6000);
-            }
+               await Task.Delay(6000);
         }
     }
 
 
     private async Task WriteLogToFile(LogType logType, string data)
     {
+        data = ValidateData(data);
         string allocationPath = $"App_Data\\Loggers\\{logType}";
 
         if (!Directory.Exists(allocationPath))
             Directory.CreateDirectory(allocationPath);
 
-        CurrentCounter = GetCurrentCounter(allocationPath, logType);
+        CurrentFileCounter = GetCurrentCounter(allocationPath, logType);
 
         string logPath = Path.Combine(allocationPath,
-            $"{logType}log_{CurrentCounter}.json");
+            $"{logType}log_{CurrentFileCounter}.json");
 
         if (File.Exists(logPath))
         {
             FileInfo fileInfo = new(logPath);
             if (fileInfo.Length > 2 * 1024)
             {
-                CurrentCounter++;
+                CurrentFileCounter++;
                 logPath = Path.Combine(allocationPath,
-            $"{logType}log_{CurrentCounter}.json");
+                    $"{logType}log_{CurrentFileCounter}.json");
             }
         }
         LogContent content = new() { Data = data, Date = DateTime.Now, Type = logType };
@@ -85,53 +85,25 @@ public class LogRepo
     public async Task<List<List<LogContent>>> GetAllLogsAsync(string logType)
     {
         string allocationPath = $"App_Data\\Loggers\\{logType}";
-        List<List<LogContent>> logFile = new();
+        List<List<LogContent>> logFolder = new();
 
         if (!Directory.Exists(allocationPath))
-            return logFile;
+            return logFolder;
 
-        string searchPattern = $"{logType}log_*.json";
-        string[] matchingFiles = Directory.GetFiles(allocationPath, searchPattern);
+        string[] matchingFiles = Directory.GetFiles(allocationPath);
         foreach (string file in matchingFiles)
         {
-            List<LogContent> contents = new List<LogContent>();
+            List<LogContent> LogFile = new();
             foreach (string line in await File.ReadAllLinesAsync(file))
             {
                 LogContent content = JsonSerializer.Deserialize<LogContent>(line);
-                contents.Add(content);
+                LogFile.Add(content);
             }
-            logFile.Add(contents);
+            logFolder.Add(LogFile);
         }
 
-        return logFile;
+        return logFolder;
     }
 
-
+    private string ValidateData(string data) => Regex.Replace(data, @"[^a-zA-Z0-9]+", " ");
 }
-//private static Dictionary<string, int> counters = new()
-//{
-//    {"Infromation",0 },
-//    {"Debug",0 },
-//    {"Error",0 },
-//    {"Critical",0 }
-//};
-
-//private static string GetFileCounter(LogType type)
-//{
-//    string counterFilePath = Path.Combine("App_Data", "Loggers", "counterFile.txt");
-
-//    if (File.Exists(counterFilePath))
-//        counters = File.ReadAllText(counterFilePath).ToDictionary<string,int>;
-//    else
-//        File.WriteAllLines(counterFilePath, Array.ConvertAll(counters, c => c.ToString()));
-//    return counters[(int)type].ToString();
-//}
-
-//private static void UpdateFileCounter(LogType type)
-//{
-//    string counterFilePath = Path.Combine("App_Data", "Loggers", "counterFile.txt");
-
-//    counters[(int)type]++;
-//    File.WriteAllLines(counterFilePath, Array.ConvertAll(counters, c => c.ToString()));
-//}
-

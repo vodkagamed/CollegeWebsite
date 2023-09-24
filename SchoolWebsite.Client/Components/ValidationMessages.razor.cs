@@ -4,7 +4,7 @@ public partial class ValidationMessages
 {
 
     [Parameter]
-    public string message { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
     [Parameter]
     public string AlertClass { get; set; } = string.Empty;
     [Inject]
@@ -22,33 +22,33 @@ public partial class ValidationMessages
                     case "GET":
                         break; // No need to set the message for GET
                     case "DELETE":
-                        message = $"{Content} deleted successfully.";
+                        Message = $"{Content} deleted successfully.";
                         break;
                     case "PUT":
-                        message = $"{Content} modified successfully.";
+                        Message = $"{Content} modified successfully.";
                         break;
                     case "POST":
-                        message = $"{Content} created successfully.";
+                        Message = $"{Content} created successfully.";
                         break;
                     default:
-                        message = "Unsupported HTTP method.";
+                        Message = "Unsupported HTTP method.";
                         AlertClass = "alert-danger";
                         success = false;
                         break;
                 }
-                if (message == string.Empty)
+                if (Message == string.Empty)
                    await _logService.InformationAsync($"{Content} retrieved successfully");
                 
                 else
-                    await _logService.InformationAsync(message);
+                    await _logService.InformationAsync(Message);
 
                 return success;
             }
             else
             {
-                message = $"Error: {response.StatusCode}";
+                Message = $"Error: {response.StatusCode}";
                 AlertClass = "alert-danger";
-                await _logService.ErrorAsync(message);
+                await _logService.ErrorAsync(Message);
                 return false;
             }
         }
@@ -57,7 +57,7 @@ public partial class ValidationMessages
             string exeption = $"HTTP request error: {ex.Message}";
             Console.WriteLine(exeption);
             await _logService.DebugAsync(exeption);
-            message = "An error occurred.";
+            Message = "An error occurred.";
             AlertClass = "alert-danger";
             return false;
         }
@@ -66,7 +66,7 @@ public partial class ValidationMessages
             string exeption = $"An error occurred: {ex.Message}";
             Console.WriteLine(exeption);
             await _logService.CriticalAsync(exeption);
-            message = "An error occurred.";
+            Message = "An error occurred.";
             AlertClass = "alert-danger";
             return false;
         }

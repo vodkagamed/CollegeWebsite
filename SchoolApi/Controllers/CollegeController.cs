@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using SchoolApi.Controllers.DTOs.Encoming;
 using SchoolApi.Controllers.DTOs.Outcoming;
-using SchoolApi.Repos;
-using SchoolWebsite.shared;
-using SchoolWebsite.shared.Models;
 
 namespace SchoolApi.Controllers
 {
@@ -40,7 +36,7 @@ namespace SchoolApi.Controllers
                 else
                     return NotFound();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest() ;
             }

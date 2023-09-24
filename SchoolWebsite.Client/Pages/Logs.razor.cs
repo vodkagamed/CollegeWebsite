@@ -48,9 +48,13 @@ public partial class Logs
             DateTime.TryParse(e.Value.ToString(), out DateTime date);
             selectedDate = date;
             customlogFiles = AllLogFiles
-                .Select(logFile => logFile
-                .Where(log => log.Date.Date == selectedDate.Date)
-                .ToList())
+                .Select
+                (
+                    logFile => logFile
+                    .Where(log => log.Date.Date == selectedDate.Date)
+                    .OrderDescending()
+                    .ToList()
+                )
                 .ToList();
         }
         InvokeAsync(StateHasChanged);

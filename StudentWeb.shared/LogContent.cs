@@ -1,8 +1,10 @@
-﻿namespace SchoolWebsite.shared
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SchoolWebsite.shared
 {
     public class LogContent
     {
-        public string Data { get; set; }
+        public string? Data { get; set; }
         public DateTime Date { get; set; }
         public LogType Type { get; set; }
     }
