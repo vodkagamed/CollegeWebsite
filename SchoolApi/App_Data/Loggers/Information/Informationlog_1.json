@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {"Data":"doineo","Date":"2023-09-17T13:29:47.8280132+03:00","Type":0}
 {"Data":"Colleges retrieved successfully","Date":"2023-09-17T13:46:05.4766461+03:00","Type":0}
 {"Data":"Colleges retrieved successfully","Date":"2023-09-17T13:46:09.6809052+03:00","Type":0}
@@ -20,3 +21,9 @@
 {"Data":"Colleges retrieved successfully","Date":"2023-09-17T14:06:41.9808883+03:00","Type":0}
 {"Data":"Student Data retrieved successfully","Date":"2023-09-17T14:06:43.8626471+03:00","Type":0}
 {"Data":"Student Data retrieved successfully","Date":"2023-09-17T14:06:44.1187281+03:00","Type":0}
+=======
+{"Data":"test","Date":"2023-09-13T15:21:14.7706917+03:00","Type":0}
+{"Data":"TestTest","Date":"2023-09-15T10:36:25.4261085+03:00","Type":0}
+{"Data":"TestTest","Date":"2023-09-15T10:37:20.4259661+03:00","Type":0}
+{"Data":"55555555","Date":"2023-09-15T10:48:55.6526249+03:00","Type":0}
+>>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe

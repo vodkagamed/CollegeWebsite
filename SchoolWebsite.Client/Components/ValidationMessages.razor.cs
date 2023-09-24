@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
+<<<<<<< HEAD
+=======
+using SchoolWebsite.Shared;
+>>>>>>> 37fa884f27cdf29ecd9e93280e5635e06b8bb4fe
 namespace SchoolWebsite.Client.Components;
 public partial class ValidationMessages
 {
