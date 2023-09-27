@@ -27,10 +27,10 @@ public class LogRepo
             if (logQueue.TryDequeue(out var logData))
                 await WriteLogToFile(logData.LogType, logData.Data);
             else
-                await Task.Delay(6000);
+               await SleepLog();
         }
     }
-
+    private async Task SleepLog() => await Task.Delay(6000);
 
     private async Task WriteLogToFile(LogType logType, string data)
     {
