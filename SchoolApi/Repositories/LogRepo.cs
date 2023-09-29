@@ -8,34 +8,38 @@ namespace SchoolApi.Repos;
 
 public class LogRepo
 {
-    private readonly ConcurrentQueue<(LogType LogType, string Data)> logQueue = new();
+    private readonly ConcurrentQueue<(string subscriberName, LogType LogType, string Data)> logQueue = new();
     private int CurrentFileCounter = 1;
-    public LogRepo() => DequeueLog();
+    public LogRepo() => DequeueAndWriteLog();
 
-    public void Information(string data) => EnqueueLog(LogType.Information, data);
-    public void Debug(string data) => EnqueueLog(LogType.Debug, data);
-    public void Error(string data) => EnqueueLog(LogType.Error, data);
-    public void Critical(string data) => EnqueueLog(LogType.Critical, data);
+    public void Information(string subscriberName, string data)
+        => EnqueueLog(subscriberName, LogType.Information, data);
+    public void Debug(string subscriberName, string data)
+        => EnqueueLog(subscriberName, LogType.Debug, data);
+    public void Error(string subscriberName, string data)
+        => EnqueueLog(subscriberName, LogType.Error, data);
+    public void Critical(string subscriberName, string data)
+        => EnqueueLog(subscriberName, LogType.Critical, data);
 
-    private void EnqueueLog(LogType logType, string data)
-        => logQueue.Enqueue((logType, data));
+    private void EnqueueLog(string subscriberName, LogType logType, string data)
+        => logQueue.Enqueue((subscriberName, logType, data));
 
-    private async Task DequeueLog()
+    private async Task DequeueAndWriteLog()
     {
         while (true)
         {
             if (logQueue.TryDequeue(out var logData))
-                await WriteLogToFile(logData.LogType, logData.Data);
+                await WriteLogToFile(logData.subscriberName, logData.LogType, logData.Data);
             else
-                await Task.Delay(6000);
+                await SleepLog();
         }
     }
+    private async Task SleepLog() => await Task.Delay(6000);
 
-
-    private async Task WriteLogToFile(LogType logType, string data)
+    private async Task WriteLogToFile(string SubscriberName, LogType logType, string data)
     {
         data = ValidateData(data);
-        string allocationPath = $"App_Data\\Loggers\\{logType}";
+        string allocationPath = $"App_Data\\Loggers\\{SubscriberName}\\{logType}";
 
         if (!Directory.Exists(allocationPath))
             Directory.CreateDirectory(allocationPath);
@@ -82,9 +86,9 @@ public class LogRepo
         }
     }
 
-    public async Task<List<List<LogContent>>> GetAllLogsAsync(string logType)
+    public async Task<List<List<LogContent>>> GetAllLogsAsync(string subscriberName,string logType)
     {
-        string allocationPath = $"App_Data\\Loggers\\{logType}";
+        string allocationPath = $"App_Data\\Loggers\\{subscriberName}\\{logType}";
         List<List<LogContent>> logFolder = new();
 
         if (!Directory.Exists(allocationPath))
@@ -103,7 +107,6 @@ public class LogRepo
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
@@ -113,5 +116,5 @@ public class LogRepo
         return logFolder;
     }
 
-    private string ValidateData(string data) => Regex.Replace(data, @"[^a-zA-Z0-9]+", " ");
+    private string ValidateData(string data) => Regex.Replace(data, @"[^a-zA-Z0-9]+", "");
 }

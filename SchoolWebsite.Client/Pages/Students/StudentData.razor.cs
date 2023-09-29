@@ -10,6 +10,7 @@ public partial class StudentData
     public DataProtector protector { get; set; }
     [Inject]
     public ValidationMessages validation { get; set; }
+    LogService logservice = new();
     [Parameter]
     public string Id { get; set; }
     private Student student = new();
@@ -46,6 +47,8 @@ public partial class StudentData
 
             StudData = new();
         }
+
+        await logservice.InformationAsync("insiate completed..");
         StateHasChanged();
     }
     public async Task DeleteStudent(int studentId)
