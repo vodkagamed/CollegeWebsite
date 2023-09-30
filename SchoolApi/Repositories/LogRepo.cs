@@ -62,7 +62,6 @@ public class LogRepo
         LogContent content = new() { Data = data, Date = DateTime.Now, Type = logType };
         string jsonContent = JsonSerializer.Serialize(content);
         await File.AppendAllTextAsync(logPath, jsonContent + Environment.NewLine);
-
     }
 
     private static int GetCurrentCounter(string allocationPath, LogType logType)
@@ -116,5 +115,5 @@ public class LogRepo
         return logFolder;
     }
 
-    private string ValidateData(string data) => Regex.Replace(data, @"[^a-zA-Z0-9]+", "");
+    private string ValidateData(string data) => Regex.Replace(data, @"[^a-zA-Z0-9]+", " ");
 }
