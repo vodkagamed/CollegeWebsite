@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using SchoolWebsite.shared;
 using System.Collections.Concurrent;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -47,7 +48,7 @@ public class LogRepo
         CurrentFileCounter = GetCurrentCounter(allocationPath, logType);
 
         string logPath = Path.Combine(allocationPath,
-            $"{logType}log_{CurrentFileCounter}.json");
+        $"{logType}log_{CurrentFileCounter}.json");
 
         if (File.Exists(logPath))
         {
@@ -56,13 +57,21 @@ public class LogRepo
             {
                 CurrentFileCounter++;
                 logPath = Path.Combine(allocationPath,
-                    $"{logType}log_{CurrentFileCounter}.json");
+                $"{logType}log_{CurrentFileCounter}.json");
             }
         }
+
         LogContent content = new() { Data = data, Date = DateTime.Now, Type = logType };
         string jsonContent = JsonSerializer.Serialize(content);
-        await File.AppendAllTextAsync(logPath, jsonContent + Environment.NewLine);
+
+        using (StreamWriter streamWriter = new (logPath, true))
+        {
+            await streamWriter.WriteLineAsync(jsonContent);
+        }
     }
+
+
+
 
     private static int GetCurrentCounter(string allocationPath, LogType logType)
     {
@@ -85,7 +94,7 @@ public class LogRepo
         }
     }
 
-    public async Task<List<List<LogContent>>> GetAllLogsAsync(string subscriberName,string logType)
+    public async Task<List<List<LogContent>>> GetAllLogsAsync(string subscriberName, string logType)
     {
         string allocationPath = $"App_Data\\Loggers\\{subscriberName}\\{logType}";
         List<List<LogContent>> logFolder = new();
@@ -97,16 +106,14 @@ public class LogRepo
         foreach (string file in matchingFiles)
         {
             List<LogContent> LogFile = new();
-            foreach (string line in await File.ReadAllLinesAsync(file))
+            using (StreamReader streamReader = new (file))
             {
-                try
+                while (!streamReader.EndOfStream)
                 {
+                    string line = await streamReader.ReadLineAsync();
                     LogContent content = JsonSerializer.Deserialize<LogContent>(line);
                     LogFile.Add(content);
-                }
-                catch (Exception)
-                {
-                    throw;
+
                 }
             }
             logFolder.Add(LogFile);
@@ -114,6 +121,7 @@ public class LogRepo
 
         return logFolder;
     }
+
 
     private string ValidateData(string data) => Regex.Replace(data, @"[^a-zA-Z0-9]+", " ");
 }
