@@ -83,8 +83,10 @@ public partial class StudentData
         Course course = (Course)CourseCallBack;
         var response = await studentService.EnrollCourse(student.Id, course.Id);
         Course EnrolledCourse = await response.Content.ReadFromJsonAsync<Course>();
+        validation.Verb = "Enrolled";
         bool isEnrolled = await validation.PerformHttpRequest
             (HttpMethod.Post, response, EnrolledCourse.Name);
+
         if (isEnrolled)
             AvailableCourses = await GetAvailableCourses();
     }
@@ -93,6 +95,7 @@ public partial class StudentData
         Course course = (Course)obj;
         var response = await studentService.CancelCourse(student.Id, course.Id);
         Course CanceledCourse = await response.Content.ReadFromJsonAsync<Course>();
+        validation.Verb = "Canceled";
         bool isCanceled = await validation.PerformHttpRequest
             (HttpMethod.Delete, response, CanceledCourse.Name);
         if (isCanceled)

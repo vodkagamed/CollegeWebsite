@@ -1,12 +1,4 @@
-﻿using Microsoft.Extensions.FileSystemGlobbing.Internal;
-using SchoolWebsite.shared;
-using System.Collections.Concurrent;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text.RegularExpressions;
-
-namespace SchoolApi.Repos;
-
+﻿namespace SchoolApi.Repos;
 public class LogRepo
 {
     private readonly ConcurrentQueue<(string subscriberName, LogType LogType, string Data)> logQueue = new();
@@ -35,7 +27,7 @@ public class LogRepo
                 await SleepLog();
         }
     }
-    private async Task SleepLog() => await Task.Delay(6000);
+    private static async Task SleepLog() => await Task.Delay(6000);
 
     private async Task WriteLogToFile(string SubscriberName, LogType logType, string data)
     {
@@ -69,9 +61,6 @@ public class LogRepo
             await streamWriter.WriteLineAsync(jsonContent);
         }
     }
-
-
-
 
     private static int GetCurrentCounter(string allocationPath, LogType logType)
     {
@@ -121,7 +110,6 @@ public class LogRepo
 
         return logFolder;
     }
-
 
     private string ValidateData(string data) => Regex.Replace(data, @"[^a-zA-Z0-9]+", " ");
 }

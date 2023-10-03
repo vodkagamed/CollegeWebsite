@@ -7,6 +7,8 @@ public partial class ValidationMessages
     [Parameter]
     public string Message { get; set; } = string.Empty;
     [Parameter]
+    public string Verb { get; set; } = string.Empty;
+    [Parameter]
     public string AlertClass { get; set; } = string.Empty;
     [Inject]
     public LogService _logService { get; set; } = new();
@@ -37,9 +39,14 @@ public partial class ValidationMessages
                         success = false;
                         break;
                 }
+                if (Verb != string.Empty)
+                {
+                    Message = $"{Content} {Verb} successfully.";
+                    Verb = string.Empty;
+                }
+
                 if (Message == string.Empty)
                    await _logService.InformationAsync($"{Content} retrieved successfully");
-                
                 else
                     await _logService.InformationAsync(Message);
 
