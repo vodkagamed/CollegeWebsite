@@ -61,6 +61,7 @@ public class LogRepo
             await streamWriter.WriteLineAsync(jsonContent);
         }
     }
+    private string ValidateData(string data) => Regex.Replace(data, @"[^a-zA-Z0-9]+"," ");
 
     private static int GetCurrentCounter(string allocationPath, LogType logType)
     {
@@ -102,14 +103,11 @@ public class LogRepo
                     string line = await streamReader.ReadLineAsync();
                     LogContent content = JsonSerializer.Deserialize<LogContent>(line);
                     LogFile.Add(content);
-
                 }
             }
             logFolder.Add(LogFile);
         }
-
         return logFolder;
     }
 
-    private string ValidateData(string data) => Regex.Replace(data, @"[^a-zA-Z0-9]+", " ");
 }
