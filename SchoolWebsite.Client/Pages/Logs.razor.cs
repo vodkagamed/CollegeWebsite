@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SchoolWebsite.Client.Components;
+using SchoolWebsite.shared;
 using System.Net.Http.Json;
 
 namespace SchoolWebsite.Client.Pages;

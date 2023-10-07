@@ -19,6 +19,7 @@ public class LogRepo
 
     private async Task DequeueAndWriteLog()
     {
+
         while (true)
         {
             if (logQueue.TryDequeue(out var logData))
