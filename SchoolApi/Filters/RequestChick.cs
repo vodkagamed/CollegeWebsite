@@ -9,7 +9,6 @@ namespace CollegeApi.Filters
         {
             base.OnActionExecuting(context);
 
-            context.
         }
         public override void OnActionExecuted(ActionExecutedContext context)
         {
