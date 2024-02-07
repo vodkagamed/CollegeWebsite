@@ -19,7 +19,7 @@ public class StudentController : ControllerBase
     {
         try
         {
-            List<Student> Enstudents = (await studentsRepo.GetStudents()).ToList();
+            List<Student> Enstudents = (await studentsRepo.GetAllAsync()).ToList();
             if (Enstudents.Any())
             {
                 //var DecryptedStudents = _protector.Decrypt(Enstudents).ToList();
@@ -34,10 +34,10 @@ public class StudentController : ControllerBase
         }
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<Student>> Get(Guid id)
     {
-        Student enStudent = await studentsRepo.GetStudent(id);
+        Student enStudent = await studentsRepo.GetByIdAsync(id);
         if (enStudent == null)
             return NotFound();
 
@@ -45,44 +45,44 @@ public class StudentController : ControllerBase
         return Ok(enStudent);
     }
 
-    [HttpPost("{collegeId:int}")]
-    public async Task<ActionResult<Student>> Post(Guid collegeId,[FromBody] Student student)
+    [HttpPost]
+    public async Task<ActionResult<Student>> Post([FromBody] Student student)
     {
         if (student == null)
             return BadRequest();
 
         //Student encryptedStudent =(Student) _protector.Encrypt(student);
-        await studentsRepo.AddStudent(collegeId, student);
+        await studentsRepo.AddAsync(student);
 
         return CreatedAtAction(nameof(Get), student.Id, student);
     }
 
-    [HttpPost]
-    [Route("{studentId}/Course/Enroll")]
-    public async Task<ActionResult<Course>> Enroll(int studentId, [FromBody] int courseId)
-    {
-        Course EnrolledStudent = await studentsRepo.EnrollCourse(studentId, courseId);
-        if (EnrolledStudent is not null)
-            return Ok(EnrolledStudent);
-        return BadRequest();
-    }
-    [HttpPost]
-    [Route("{studentId}/Course/Cancel")]
-    public async Task<ActionResult<Course>> CancelCourse(Guid studentId,[FromBody] Guid courseId)
-    {
+    //[HttpPost]
+    //[Route("{studentId}/Course/Enroll")]
+    //public async Task<ActionResult<Course>> Enroll(int studentId, [FromBody] int courseId)
+    //{
+    //    Course EnrolledStudent = await studentsRepo.EnrollCourse(studentId, courseId);
+    //    if (EnrolledStudent is not null)
+    //        return Ok(EnrolledStudent);
+    //    return BadRequest();
+    //}
+    //[HttpPost]
+    //[Route("{studentId}/Course/Cancel")]
+    //public async Task<ActionResult<Course>> CancelCourse(Guid studentId,[FromBody] Guid courseId)
+    //{
 
-        Course CanceledStudent = await studentsRepo.CancelCourse(studentId, courseId);
-        if (CanceledStudent is not null)
-            return Ok(CanceledStudent);
-        return BadRequest();
-    }
+    //    Course CanceledStudent = await studentsRepo.CancelCourse(studentId, courseId);
+    //    if (CanceledStudent is not null)
+    //        return Ok(CanceledStudent);
+    //    return BadRequest();
+    //}
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(Guid id, [FromBody] Student student)
+    public async Task<ActionResult> Put([FromBody] Student student)
     {
         //var encryptExistStudent =(Student) _protector.Encrypt(student);
 
-        var updatedStudent = await studentsRepo.UpdateStudent(student, id);
+        var updatedStudent = await studentsRepo.UpdateAsync(student);
         if (updatedStudent != null)
             return Ok(updatedStudent);
         return NotFound();
@@ -92,7 +92,7 @@ public class StudentController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        Student endeletedStudent = await studentsRepo.DeleteStudent(id);
+        Student endeletedStudent = await studentsRepo.DeleteAsync(id);
 
         if (endeletedStudent != null)
             return Ok(endeletedStudent);

@@ -3,6 +3,8 @@ using SchoolApi.Repos;
 using SchoolApi.Data;
 using SchoolWebsite.shared;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +14,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<AppDbContext>();
+builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<CollegesRepo>();
 builder.Services.AddScoped<TeachersRepo>();
 builder.Services.AddScoped<CoursesRepo>();

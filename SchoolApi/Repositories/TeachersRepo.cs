@@ -4,64 +4,9 @@ using SchoolWebsite.shared.Models;
 
 namespace SchoolApi.Repos
 {
-    public class TeachersRepo
+    public class TeachersRepo:Repository<Teacher>
     {
-        private readonly AppDbContext context;
-
-        public TeachersRepo(AppDbContext context)
-        {
-            this.context = context;
-        }
-        public async Task<IEnumerable<Teacher>> GetTeachers()
-            => await context.Teachers
-                .Include(t => t.Course)
-                .Include(t => t.College)
-                .ToListAsync();
-        public async Task<Teacher> GetTeacher(Guid id)
-        {
-            var Teacher = await context.Teachers
-                .Include(T=>T.College)
-                .Include(T=>T.Course)
-                .SingleOrDefaultAsync(t => t.Id == id);
-            return Teacher;
-        }
-        public async Task<Teacher> AddTeacher(Guid collegeId, Teacher teacher)
-        {
-            College availableCollege = await context.Colleges.FindAsync(collegeId);
-            if (availableCollege is not null)
-            {
-                var addedTeacher = (await context.AddAsync(teacher)).Entity;
-                addedTeacher.College = availableCollege;
-                addedTeacher.CollegeId = collegeId;
-                await context.SaveChangesAsync();
-                return addedTeacher;
-            }
-            return null;
-        }
-        public async Task<Teacher> UpdateTeacher(Teacher editedTeacher, Guid id)
-        {
-            var existingTeacher = await context.Teachers.SingleOrDefaultAsync(t => t.Id == id);
-            if (existingTeacher == null)
-                return null;
-
-           context.Entry(existingTeacher).CurrentValues.SetValues(editedTeacher);
-            context.SaveChanges();
-            return existingTeacher;
-        }
-
-        public async Task<Teacher> DeleteTeacher(Guid teacherId)
-        {
-            var teacherToDelete = await GetTeacher(teacherId);
-
-            if (teacherToDelete != null)
-            {
-                context.Teachers.Remove(teacherToDelete);
-                await context.SaveChangesAsync();
-                return teacherToDelete;
-            }
-
-            return null;
-        }
+        public TeachersRepo(AppDbContext context) : base(context) { }
     }
 }
 

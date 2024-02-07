@@ -18,7 +18,7 @@ public class CourseController : ControllerBase
     {
         try
         {
-            IEnumerable<Course> Ensubjects = await CourRepo.GetCourses();
+            IEnumerable<Course> Ensubjects = await CourRepo.GetAllAsync();
             if (Ensubjects.Any())
             {
                 //var DecryptedSubjects = _protector.Decrypt(Ensubjects);
@@ -34,10 +34,10 @@ public class CourseController : ControllerBase
     }
 
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<Course>> GetCourseById(Guid id)
     {
-        Course enSubject = await CourRepo.GetCourse(id);
+        Course enSubject = await CourRepo.GetByIdAsync(id);
         if (enSubject == null)
             return NotFound();
 
@@ -47,25 +47,25 @@ public class CourseController : ControllerBase
 
     // GET: api/Course/College/5
     // POST: api/Subject
-    [HttpPost("{collegeId:int}")]
-    public async Task<ActionResult<Course>> Post(Guid collegeId,[FromBody] Course course)
+    [HttpPost]
+    public async Task<ActionResult<Course>> Post([FromBody] Course course)
     {
         if (course == null)
             return BadRequest();
 
         //byte[] encryptedSubject = _protector.Encrypt(subject);
-        await CourRepo.AddCourse(collegeId, course);
+        await CourRepo.AddAsync(course);
 
         return CreatedAtAction(nameof(Post),new {id= course.Id } , course);
     }
 
     // PUT: api/Subject/5
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(Guid id, [FromBody] Course subject)
+    public async Task<ActionResult> Put([FromBody] Course subject)
     {
         //var encryptExistSubject = (Course)_protector.Encrypt(subject);
 
-        var updatedSubject = await CourRepo.UpdateCourse(subject, id);
+        var updatedSubject = await CourRepo.UpdateAsync(subject);
         if (updatedSubject != null)
             return Ok(updatedSubject);
         return NotFound();
@@ -75,7 +75,7 @@ public class CourseController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        Course endeletedSubject = await CourRepo.DeleteCourse(id);
+        Course endeletedSubject = await CourRepo.DeleteAsync(id);
 
         if (endeletedSubject != null)
             return Ok(endeletedSubject);

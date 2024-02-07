@@ -1,60 +1,13 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 using SchoolApi.Data;
 using SchoolWebsite.shared;
 using SchoolWebsite.shared.Models;
 
 namespace SchoolApi.Repos;
 
-public class CollegesRepo
+public class CollegesRepo:Repository<College>
 {
-    private readonly AppDbContext context;
-    //private readonly DataProtector protector;   
-    public CollegesRepo(AppDbContext context, DataProtector protector)
-    {
-        this.context = context;
-        //this.protector = protector;
-    }
-    public async Task<IEnumerable<College>> GetColleges()
-        => await context.Colleges
-        .Include(c=>c.Teachers)
-        .Include(c=>c.Courses)
-        .Include(c=>c.Students)
-        .ToListAsync();
-    public async Task<College> GetCollege(Guid id)
-    {
-        var college = await context.Colleges.SingleOrDefaultAsync(c => c.Id == id);
-        return college;
-    }
-    public async Task<College> AddCollege(College college)
-    {
-        var addedCollege = await context.Colleges.AddAsync(college);
-        await context.SaveChangesAsync();
-        return addedCollege.Entity;
-    }
-    public async Task<College> UpdateCollege(College editedCollege, Guid id)
-    {
-        var existingCollege = await context.Colleges.SingleOrDefaultAsync(s => s.Id == id);
-        if (existingCollege == null)
-            return null;
-
-        context.Entry(existingCollege).CurrentValues.SetValues(editedCollege);
-        await context.SaveChangesAsync();
-        return existingCollege;
-    }
-
-    public async Task<College> DeleteCollege(Guid collegeId)
-    {
-        var collegeToDelete = await GetCollege(collegeId);
-
-        if (collegeToDelete != null)
-        {
-            context.Colleges.Remove(collegeToDelete);
-            await context.SaveChangesAsync();
-            return collegeToDelete;
-        }
-
-        return null;
-    }
+    public CollegesRepo(AppDbContext context) : base(context) { }
 }
-

@@ -9,39 +9,35 @@ namespace SchoolApi.Controllers
         //private readonly DataProtector _protector;
         private readonly CollegesRepo collegesRepo;
 
+        private List<string> customEncludes = new();
+
         public CollegeController
             (DataProtector protector, CollegesRepo collegesRepo, IMapper mapper)
         {
-            //_protector = protector;
             this.collegesRepo = collegesRepo;
+        
+            customEncludes.Append("Teachers");
+            customEncludes.Append("Students");
+            customEncludes.Append("Cources");
         }
 
         // GET: api/College
         [HttpGet]
         public async Task<ActionResult<IEnumerable<College>>> Get()
         {
-            try
-            {
-                List<College> Encolleges = (await collegesRepo.GetColleges()).ToList();
-                if (Encolleges.Any())
-                    return Ok(Encolleges);
-
-                else
-                    return NotFound();
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+                List<College> colleges =
+                    (
+                    (await collegesRepo.GetAllWithIncludesAsync(customEncludes))
+                    .ToList()
+                    );
+            return colleges;
         }
 
         // GET: api/College/5
-        [HttpGet("{id:int}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<College>> Get(Guid id)
         {
-            College college = await collegesRepo.GetCollege(id);
-            if (college == null)
-                return NotFound();
+            College college = await collegesRepo.GetByIdWithIncludesAsync(id,customEncludes);
 
             return Ok(college);
         }
@@ -53,18 +49,18 @@ namespace SchoolApi.Controllers
             if (college == null)
                 return BadRequest();
             //College encryptedCollege = (College)_protector.Encrypt(college);
-            await collegesRepo.AddCollege(college);
+            await collegesRepo.AddAsync(college);
 
             return CreatedAtAction(nameof(Get), college.Id, college);
         }
 
         // PUT: api/College/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] College college)
+        public async Task<ActionResult> Put([FromBody] College college)
         {
             //var encryptExistCollege = (College)_protector.Encrypt(college);
 
-            var updatedCollege = await collegesRepo.UpdateCollege(college, id);
+            var updatedCollege = await collegesRepo.UpdateAsync(college);
             if (updatedCollege != null)
                 return Ok(updatedCollege);
             return NotFound();
@@ -74,7 +70,7 @@ namespace SchoolApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            College endeletedCollege = (College)await collegesRepo.DeleteCollege(id);
+            College endeletedCollege = (College)await collegesRepo.DeleteAsync(id);
 
             if (endeletedCollege != null)
                 return Ok(endeletedCollege);

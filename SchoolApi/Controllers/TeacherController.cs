@@ -19,7 +19,7 @@ public class TeacherController : ControllerBase
     {
         try
         {
-            List<Teacher> Enteachers = (await teachersRepo.GetTeachers()).ToList();
+            List<Teacher> Enteachers = (await teachersRepo.GetAllAsync()).ToList();
             if (Enteachers.Any())
             {
                 //IEnumerable<Teacher> DecryptedTeachers = (IEnumerable<Teacher>)_protector.Decrypt(Enteachers);
@@ -35,10 +35,10 @@ public class TeacherController : ControllerBase
     }
 
     // GET: api/Teacher/5
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<Teacher>> Get(Guid id)
     {
-        Teacher enTeacher = await teachersRepo.GetTeacher(id);
+        Teacher enTeacher = await teachersRepo.GetByIdAsync(id);
         if (enTeacher == null)
             return NotFound();
 
@@ -47,25 +47,25 @@ public class TeacherController : ControllerBase
     }
 
     // POST: api/Teacher
-    [HttpPost("{collegeId:int}")]
-    public async Task<ActionResult<Teacher>> Post(Guid collegeId,[FromBody] Teacher teacher)
+    [HttpPost]
+    public async Task<ActionResult<Teacher>> Post([FromBody] Teacher teacher)
     {
         if (teacher == null)
             return BadRequest("please add valid data");
 
         //Teacher encryptedTeacher = (Teacher)_protector.Encrypt(teacher);
-        await teachersRepo.AddTeacher(collegeId,teacher);
+        await teachersRepo.AddAsync(teacher);
 
         return CreatedAtAction(nameof(Get), teacher.Id, teacher);
     }
 
     // PUT: api/Teacher/5
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(Guid id, [FromBody] Teacher teacher)
+    public async Task<ActionResult> Put([FromBody] Teacher teacher)
     {
         //var encryptExistTeacher = (Teacher)_protector.Encrypt(teacher);
 
-        var updatedTeacher = await teachersRepo.UpdateTeacher(teacher, id);
+        var updatedTeacher = await teachersRepo.UpdateAsync(teacher);
         if (updatedTeacher != null)
             return Ok(updatedTeacher);
             //return Ok(_protector.Decrypt(updatedTeacher));
@@ -76,7 +76,7 @@ public class TeacherController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        Teacher endeletedTeacher = (Teacher)await teachersRepo.DeleteTeacher(id);
+        Teacher endeletedTeacher = (Teacher)await teachersRepo.DeleteAsync(id);
 
         if (endeletedTeacher != null)
             return Ok(endeletedTeacher);
