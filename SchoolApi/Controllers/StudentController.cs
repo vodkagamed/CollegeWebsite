@@ -35,7 +35,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Student>> Get(int id)
+    public async Task<ActionResult<Student>> Get(Guid id)
     {
         Student enStudent = await studentsRepo.GetStudent(id);
         if (enStudent == null)
@@ -46,7 +46,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost("{collegeId:int}")]
-    public async Task<ActionResult<Student>> Post(int collegeId,[FromBody] Student student)
+    public async Task<ActionResult<Student>> Post(Guid collegeId,[FromBody] Student student)
     {
         if (student == null)
             return BadRequest();
@@ -68,7 +68,7 @@ public class StudentController : ControllerBase
     }
     [HttpPost]
     [Route("{studentId}/Course/Cancel")]
-    public async Task<ActionResult<Course>> CancelCourse(int studentId,[FromBody] int courseId)
+    public async Task<ActionResult<Course>> CancelCourse(Guid studentId,[FromBody] Guid courseId)
     {
 
         Course CanceledStudent = await studentsRepo.CancelCourse(studentId, courseId);
@@ -78,7 +78,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(int id, [FromBody] Student student)
+    public async Task<ActionResult> Put(Guid id, [FromBody] Student student)
     {
         //var encryptExistStudent =(Student) _protector.Encrypt(student);
 
@@ -90,7 +90,7 @@ public class StudentController : ControllerBase
 
     // DELETE: api/Student/5
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> Delete(Guid id)
     {
         Student endeletedStudent = await studentsRepo.DeleteStudent(id);
 

@@ -34,9 +34,9 @@
     [Parameter]
     public Dictionary<string, string> Records { get; set; }
     [Parameter]
-    public EventCallback<int> onEdit { get; set; }
+    public EventCallback<Guid> onEdit { get; set; }
     [Parameter]
-    public EventCallback<int> onDelete { get; set; }
-    private int ItemId;
-    protected override void OnInitialized() => ItemId = int.Parse(Records["Id"]);
+    public EventCallback<Guid> onDelete { get; set; }
+    private Guid ItemId;
+    protected override void OnInitialized() => ItemId = Guid.Parse(Records["Id"]);
 }

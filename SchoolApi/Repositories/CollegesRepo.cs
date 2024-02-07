@@ -21,7 +21,7 @@ public class CollegesRepo
         .Include(c=>c.Courses)
         .Include(c=>c.Students)
         .ToListAsync();
-    public async Task<College> GetCollege(int id)
+    public async Task<College> GetCollege(Guid id)
     {
         var college = await context.Colleges.SingleOrDefaultAsync(c => c.Id == id);
         return college;
@@ -32,7 +32,7 @@ public class CollegesRepo
         await context.SaveChangesAsync();
         return addedCollege.Entity;
     }
-    public async Task<College> UpdateCollege(College editedCollege, int id)
+    public async Task<College> UpdateCollege(College editedCollege, Guid id)
     {
         var existingCollege = await context.Colleges.SingleOrDefaultAsync(s => s.Id == id);
         if (existingCollege == null)
@@ -43,7 +43,7 @@ public class CollegesRepo
         return existingCollege;
     }
 
-    public async Task<College> DeleteCollege(int collegeId)
+    public async Task<College> DeleteCollege(Guid collegeId)
     {
         var collegeToDelete = await GetCollege(collegeId);
 

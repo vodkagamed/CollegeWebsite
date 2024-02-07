@@ -36,7 +36,7 @@ public class TeacherController : ControllerBase
 
     // GET: api/Teacher/5
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Teacher>> Get(int id)
+    public async Task<ActionResult<Teacher>> Get(Guid id)
     {
         Teacher enTeacher = await teachersRepo.GetTeacher(id);
         if (enTeacher == null)
@@ -48,9 +48,9 @@ public class TeacherController : ControllerBase
 
     // POST: api/Teacher
     [HttpPost("{collegeId:int}")]
-    public async Task<ActionResult<Teacher>> Post(int collegeId,[FromBody] Teacher teacher)
+    public async Task<ActionResult<Teacher>> Post(Guid collegeId,[FromBody] Teacher teacher)
     {
-        if (teacher == null||collegeId<=0)
+        if (teacher == null)
             return BadRequest("please add valid data");
 
         //Teacher encryptedTeacher = (Teacher)_protector.Encrypt(teacher);
@@ -61,7 +61,7 @@ public class TeacherController : ControllerBase
 
     // PUT: api/Teacher/5
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(int id, [FromBody] Teacher teacher)
+    public async Task<ActionResult> Put(Guid id, [FromBody] Teacher teacher)
     {
         //var encryptExistTeacher = (Teacher)_protector.Encrypt(teacher);
 
@@ -74,7 +74,7 @@ public class TeacherController : ControllerBase
 
     // DELETE: api/Teacher/5
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> Delete(Guid id)
     {
         Teacher endeletedTeacher = (Teacher)await teachersRepo.DeleteTeacher(id);
 

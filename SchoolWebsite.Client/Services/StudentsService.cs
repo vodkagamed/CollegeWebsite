@@ -10,11 +10,11 @@ namespace SchoolWebsite.Client.Services
             _httpClient = httpClient;
             EndPoint = "Student";
         }
-        public async Task<HttpResponseMessage> EnrollCourse(int studentId,int courseId)
+        public async Task<HttpResponseMessage> EnrollCourse(Guid studentId,Guid courseId)
         {
             return await _httpClient.PostAsJsonAsync($"/api/Student/{studentId}/Course/Enroll",courseId);
         }
-        public async Task<HttpResponseMessage> CancelCourse(int studentId, int courseId)
+        public async Task<HttpResponseMessage> CancelCourse(Guid studentId, Guid courseId)
         {
             return await _httpClient.PostAsJsonAsync($"/api/Student/{studentId}/Course/Cancel", courseId);
         }

@@ -22,7 +22,7 @@ public partial class StudentData
     private Dictionary<string, string> StudData = new();
     protected override async Task OnInitializedAsync()
     {
-        var Studresponse = await studentService.GetById(int.Parse(Id));
+        var Studresponse = await studentService.GetById(Guid.Parse(Id));
         bool areAnySt = await validation.PerformHttpRequest(HttpMethod.Get, Studresponse, "Student Data");
         if (areAnySt)
         {
@@ -53,7 +53,7 @@ public partial class StudentData
         await logservice.InformationAsync("insiate completed..");
         StateHasChanged();
     }
-    public async Task DeleteStudent(int studentId)
+    public async Task DeleteStudent(Guid studentId)
     {
         Student deletedStudent = new();
         var response = await studentService.Delete(studentId);
@@ -63,7 +63,7 @@ public partial class StudentData
         await validation.PerformHttpRequest
              (HttpMethod.Delete, response, deletedStudent.Name);
     }
-    public void EditStudent(int studentID) =>
+    public void EditStudent(Guid studentID) =>
         nav.NavigateTo($"/EditStudentInfo/{studentID}", forceLoad: true);
 
     public async Task<List<Course>> GetAvailableCourses()

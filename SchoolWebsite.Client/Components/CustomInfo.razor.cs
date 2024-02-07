@@ -19,7 +19,7 @@ namespace SchoolWebsite.Client.Components
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await CourseService.GetById(int.Parse(Id));
+            var response = await CourseService.GetById(Guid.Parse(Id));
             bool areAny = await Validation.PerformHttpRequest(HttpMethod.Get, response, "Course Data");
             if (areAny)
             {
@@ -40,7 +40,7 @@ namespace SchoolWebsite.Client.Components
                 }
             }
         }
-        public async Task DeleteCourse(int courseId)
+        public async Task DeleteCourse(Guid courseId)
         {
             var response = await CourseService.Delete(courseId);
             Course deletedCourse = await response.Content.ReadFromJsonAsync<Course>();

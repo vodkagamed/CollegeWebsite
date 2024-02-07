@@ -15,7 +15,7 @@ namespace SchoolWebsite.Client.Pages.Cources
         public Course Course { get; set; } = new();
         private HttpResponseMessage response = new();
         private List<College> Colleges = new();
-        private int selectedCollegeId;
+        private Guid selectedCollegeId;
 
         protected override async Task OnInitializedAsync()
         {
@@ -34,7 +34,7 @@ namespace SchoolWebsite.Client.Pages.Cources
         }
         public virtual async Task OnFormValidAsync()
         {
-            if (Course.Id > 0)
+            if (Course.Id !=Guid.Empty)
             {
                 Course.CollegeId = selectedCollegeId; // Set the selected college ID
                 response = await courseService.Edit(Course.Id, Course);

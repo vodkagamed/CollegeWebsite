@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using SchoolApi.Controllers.DTOs.Encoming;
-using SchoolApi.Controllers.DTOs.Outcoming;
 
 namespace SchoolApi.Controllers
 {
@@ -10,14 +8,12 @@ namespace SchoolApi.Controllers
     {
         //private readonly DataProtector _protector;
         private readonly CollegesRepo collegesRepo;
-        private readonly IMapper mapper;
 
         public CollegeController
-            (DataProtector protector, CollegesRepo collegesRepo,IMapper mapper)
+            (DataProtector protector, CollegesRepo collegesRepo, IMapper mapper)
         {
             //_protector = protector;
             this.collegesRepo = collegesRepo;
-            this.mapper = mapper;
         }
 
         // GET: api/College
@@ -28,39 +24,34 @@ namespace SchoolApi.Controllers
             {
                 List<College> Encolleges = (await collegesRepo.GetColleges()).ToList();
                 if (Encolleges.Any())
-                {
-                    //var DecryptedColleges = _protector.Decrypt(Encolleges);
-                    var collegesRs = Encolleges.Select(c => mapper.Map<CollegeResponse>(c));
                     return Ok(Encolleges);
-                }
+
                 else
                     return NotFound();
             }
             catch (Exception)
             {
-                return BadRequest() ;
+                return BadRequest();
             }
         }
 
         // GET: api/College/5
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<College>> Get(int id)
+        public async Task<ActionResult<College>> Get(Guid id)
         {
             College college = await collegesRepo.GetCollege(id);
             if (college == null)
                 return NotFound();
-            var collegeRs = mapper.Map<CollegeResponse>(college);
-            //College DeColleges = (College)_protector.Decrypt(enCollege);
-            return Ok(collegeRs);
+
+            return Ok(college);
         }
 
         // POST: api/College
         [HttpPost]
-        public async Task<ActionResult<College>> Post([FromBody] CollegeCreateDTO collegeDTO)
+        public async Task<ActionResult<College>> Post([FromBody] College college)
         {
-            if (collegeDTO == null)
+            if (college == null)
                 return BadRequest();
-            var college = mapper.Map<College>(collegeDTO);
             //College encryptedCollege = (College)_protector.Encrypt(college);
             await collegesRepo.AddCollege(college);
 
@@ -69,7 +60,7 @@ namespace SchoolApi.Controllers
 
         // PUT: api/College/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] College college)
+        public async Task<ActionResult> Put(Guid id, [FromBody] College college)
         {
             //var encryptExistCollege = (College)_protector.Encrypt(college);
 
@@ -81,7 +72,7 @@ namespace SchoolApi.Controllers
 
         // DELETE: api/College/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             College endeletedCollege = (College)await collegesRepo.DeleteCollege(id);
 

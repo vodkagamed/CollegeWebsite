@@ -17,7 +17,7 @@ namespace SchoolApi.Repos
             => await context.Students
             .Include(S => S.Courses)
             .Include(S => S.College).ToListAsync();
-        public async Task<Student> GetStudent(int id)
+        public async Task<Student> GetStudent(Guid id)
         {
             var student = await context.Students
                 .Include(S => S.Courses)
@@ -25,7 +25,7 @@ namespace SchoolApi.Repos
                 .SingleOrDefaultAsync(s => s.Id == id);
             return student;
         }
-        public async Task<Student> AddStudent(int collegeId, Student student)
+        public async Task<Student> AddStudent(Guid collegeId, Student student)
         {
 
             College availableCollege = await context.Colleges.FindAsync(collegeId);
@@ -39,7 +39,7 @@ namespace SchoolApi.Repos
             }
             return null;
         }
-        public async Task<Student> UpdateStudent(Student editedStudent, int id)
+        public async Task<Student> UpdateStudent(Student editedStudent, Guid id)
         {
             var existingStudent = await context.Students.SingleOrDefaultAsync(s => s.Id == id);
             if (existingStudent == null)
@@ -50,7 +50,7 @@ namespace SchoolApi.Repos
             return existingStudent;
         }
 
-        public async Task<Student> DeleteStudent(int studentId)
+        public async Task<Student> DeleteStudent(Guid studentId)
         {
             var studentToDelete = await GetStudent(studentId);
 
@@ -76,7 +76,7 @@ namespace SchoolApi.Repos
             }
             return null;
         }
-        public async Task<Course> CancelCourse(int studentId, int courseId)
+        public async Task<Course> CancelCourse(Guid studentId, Guid courseId)
         {
             var student = await context.Students
                 .Include(s => s.Courses)

@@ -19,7 +19,7 @@ public class CoursesRepo
             .Include(c=>c.Students)
             .ToListAsync();
     }
-    public async Task<Course> GetCourse (int courseId)
+    public async Task<Course> GetCourse (Guid courseId)
     {
         var course = await context.Courses
             .Include(c => c.College)
@@ -28,7 +28,7 @@ public class CoursesRepo
             .SingleOrDefaultAsync(s => s.Id == courseId);
         return course;
     }
-    public async Task<Course> AddCourse (int collegeId,Course course)
+    public async Task<Course> AddCourse (Guid collegeId,Course course)
     {
         var college = context.Colleges.Find(collegeId);
         if (college is not null)
@@ -41,7 +41,7 @@ public class CoursesRepo
         }
         return null;
     }
-    public async Task<Course> UpdateCourse(Course editedCourse, int id)
+    public async Task<Course> UpdateCourse(Course editedCourse, Guid id)
     {
         var existingSubject = await context.Courses.SingleOrDefaultAsync(s => s.Id == id);
         if (existingSubject == null)
@@ -52,7 +52,7 @@ public class CoursesRepo
         return existingSubject;
     }
 
-    public async Task<Course> DeleteCourse(int subjectId)
+    public async Task<Course> DeleteCourse(Guid subjectId)
     {
         var movieToDelete = await GetCourse(subjectId);
 

@@ -17,7 +17,7 @@ namespace SchoolWebsite.Client.Pages.Students
         private Student StudentToEdit = new();
         protected async override Task OnInitializedAsync()
         {
-            var response = await studentService.GetById(int.Parse(Id));
+            var response = await studentService.GetById(Guid.Parse(Id));
             StudentToEdit = await response.Content.ReadFromJsonAsync<Student>();
 
             await validation.PerformHttpRequest(HttpMethod.Get, response, StudentToEdit.Name);

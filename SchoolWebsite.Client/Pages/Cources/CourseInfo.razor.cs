@@ -19,7 +19,7 @@ namespace SchoolWebsite.Client.Pages.Cources
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await CourseService.GetById(int.Parse(Id));
+            var response = await CourseService.GetById(Guid.Parse(Id));
             bool areAny = await Validation.PerformHttpRequest(HttpMethod.Get, response, "Course Data");
             if (areAny)
             {
@@ -41,7 +41,7 @@ namespace SchoolWebsite.Client.Pages.Cources
                 }
             }
         }
-        public async Task DeleteCourse(int courseId)
+        public async Task DeleteCourse(Guid courseId)
         {
             var response = await CourseService.Delete(courseId);
             Course deletedCourse = await response.Content.ReadFromJsonAsync<Course>();
@@ -50,7 +50,7 @@ namespace SchoolWebsite.Client.Pages.Cources
             if (isDeleted)
                 await InvokeAsync(StateHasChanged);
         }
-        public void EditCourse(int courseID) =>
+        public void EditCourse(Guid courseID) =>
             Nav.NavigateTo($"/EditCourseInfo/{courseID}", forceLoad: true);
 
 

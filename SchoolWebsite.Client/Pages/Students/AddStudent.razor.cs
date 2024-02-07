@@ -14,7 +14,7 @@ public partial class AddStudent
     protected override async Task OnInitializedAsync() => await GetAllColleges();
     public virtual async Task OnFormValidAsync(object createdStudent)
     {
-        if (Student.Id > 0)
+        if (Student.Id != Guid.Empty)
         {
             response = await studentService.Edit(Student.Id, Student);
 

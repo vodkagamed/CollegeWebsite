@@ -17,7 +17,7 @@ public partial class TeacherData
 
     protected override async Task OnInitializedAsync()
     {
-        HttpResponseMessage response = await teacherService.GetById(int.Parse(Id));
+        HttpResponseMessage response = await teacherService.GetById(Guid.Parse(Id));
         bool areAny = await validation.PerformHttpRequest(HttpMethod.Get, response, "Teacher data");
         if (areAny)
         {
@@ -40,14 +40,14 @@ public partial class TeacherData
             TeacherRecords = new();
         }
     }
-    public async Task DeleteTeacher(int teacherId)
+    public async Task DeleteTeacher(Guid teacherId)
     {
         var response = await teacherService.Delete(teacherId);
         Teacher deletedTeacher = await response.Content.ReadFromJsonAsync<Teacher>() ?? new();
         bool isDeleted = await validation.PerformHttpRequest
             (HttpMethod.Delete, response, deletedTeacher.Name);
     }
-    public void EditTeacher(int teacherID) =>
+    public void EditTeacher(Guid teacherID) =>
         nav.NavigateTo($"/EditTeacherInfo/{teacherID}", forceLoad: true);
 }
 

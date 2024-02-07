@@ -35,7 +35,7 @@ public class CourseController : ControllerBase
 
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Course>> GetCourseById(int id)
+    public async Task<ActionResult<Course>> GetCourseById(Guid id)
     {
         Course enSubject = await CourRepo.GetCourse(id);
         if (enSubject == null)
@@ -48,7 +48,7 @@ public class CourseController : ControllerBase
     // GET: api/Course/College/5
     // POST: api/Subject
     [HttpPost("{collegeId:int}")]
-    public async Task<ActionResult<Course>> Post(int collegeId,[FromBody] Course course)
+    public async Task<ActionResult<Course>> Post(Guid collegeId,[FromBody] Course course)
     {
         if (course == null)
             return BadRequest();
@@ -61,7 +61,7 @@ public class CourseController : ControllerBase
 
     // PUT: api/Subject/5
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(int id, [FromBody] Course subject)
+    public async Task<ActionResult> Put(Guid id, [FromBody] Course subject)
     {
         //var encryptExistSubject = (Course)_protector.Encrypt(subject);
 
@@ -73,7 +73,7 @@ public class CourseController : ControllerBase
 
     // DELETE: api/Subject/5
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> Delete(Guid id)
     {
         Course endeletedSubject = await CourRepo.DeleteCourse(id);
 

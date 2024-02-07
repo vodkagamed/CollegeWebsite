@@ -14,7 +14,7 @@ namespace SchoolWebsite.Client.Pages.Colleges
         public HttpResponseMessage response = new();
         public virtual async Task OnFormValidAsync()
         {
-            if (College.Id > 0)
+            if (College.Id!=Guid.Empty)
             {
                 response = await CollService.Edit(College.Id, College);
 

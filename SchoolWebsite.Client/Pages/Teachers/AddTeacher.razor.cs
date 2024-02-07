@@ -20,7 +20,7 @@ namespace SchoolWebsite.Client.Pages.Teachers
         protected override async Task OnInitializedAsync() => await GetAllColleges();
         public virtual async Task OnFormValidAsync()
         {
-            if (Teacher.Id > 0)
+            if (Teacher.Id != Guid.Empty)
             {
                 response = await teacherService.Edit(Teacher.Id, Teacher);
 
@@ -51,7 +51,7 @@ namespace SchoolWebsite.Client.Pages.Teachers
 
         private async Task CatchCollegeId(ChangeEventArgs e)
         {
-            if (int.TryParse(e.Value.ToString(), out int collegeId))
+            if (Guid.TryParse(e.Value.ToString(), out Guid collegeId))
             {
                 Teacher.CollegeId = collegeId;
                 await GetCollegeCourses();
