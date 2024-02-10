@@ -7,29 +7,23 @@ namespace SchoolApi.Controllers
     public class CollegeController : ControllerBase
     {
         //private readonly DataProtector _protector;
-        private readonly CollegesRepo collegesRepo;
+        private readonly CollegeRepo collegesRepo;
 
-        private List<string> customEncludes = new();
+        private List<string> Includes = new();
 
         public CollegeController
-            (DataProtector protector, CollegesRepo collegesRepo, IMapper mapper)
+            (DataProtector protector, CollegeRepo collegesRepo)
         {
             this.collegesRepo = collegesRepo;
-        
-            customEncludes.Append("Teachers");
-            customEncludes.Append("Students");
-            customEncludes.Append("Cources");
+            Includes.Add($"{nameof(College.Courses)}");
         }
 
         // GET: api/College
         [HttpGet]
         public async Task<ActionResult<IEnumerable<College>>> Get()
         {
-                List<College> colleges =
-                    (
-                    (await collegesRepo.GetAllWithIncludesAsync(customEncludes))
-                    .ToList()
-                    );
+            List<College> colleges =
+                (await collegesRepo.GetAllWithIncludesAsync(Includes.ToArray())).ToList();
             return colleges;
         }
 
@@ -37,7 +31,7 @@ namespace SchoolApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<College>> Get(Guid id)
         {
-            College college = await collegesRepo.GetByIdWithIncludesAsync(id,customEncludes);
+            College college = await collegesRepo.GetByIdWithIncludesAsync(id,Includes.ToArray());
 
             return Ok(college);
         }

@@ -7,7 +7,7 @@ using SchoolWebsite.shared.Models;
 
 namespace SchoolApi.Repos;
 
-public class CollegesRepo:Repository<College>
+public class CollegeRepo:Repository<College>
 {
-    public CollegesRepo(AppDbContext context) : base(context) { }
+    public CollegeRepo(AppDbContext context) : base(context) { }
 }

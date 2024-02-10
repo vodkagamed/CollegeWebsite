@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>();
-builder.Services.AddScoped<CollegesRepo>();
+builder.Services.AddScoped<CollegeRepo>();
 builder.Services.AddScoped<TeachersRepo>();
 builder.Services.AddScoped<CoursesRepo>();
 builder.Services.AddScoped<StudentsRepo>();

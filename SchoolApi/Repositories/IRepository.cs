@@ -4,10 +4,10 @@ namespace SchoolApi.Repos;
 
 public interface IRepository<TEntity> where TEntity : class
 {
-    Task<IEnumerable<TEntity>> GetAllAsync();
-    Task<IEnumerable<TEntity>> GetAllWithIncludesAsync(IEnumerable<string> includes);
+    Task<IQueryable<TEntity>> GetAllAsync();
+    Task<IQueryable<TEntity>> GetAllWithIncludesAsync(params string[] includes);
     Task<TEntity> GetByIdAsync(object id);
-    Task<TEntity> GetByIdWithIncludesAsync(object id, IEnumerable<string> includes);
+    Task<TEntity> GetByIdWithIncludesAsync(object id, params string [] includes);
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
     Task<TEntity> AddAsync(TEntity entity);
     Task<TEntity> UpdateAsync(TEntity entity);
