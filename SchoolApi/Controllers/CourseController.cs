@@ -1,4 +1,6 @@
-﻿namespace SchoolApi.Controllers;
+﻿using CollegeApi.ActionFilters;
+
+namespace SchoolApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -35,6 +37,7 @@ public class CourseController : ControllerBase
 
 
     [HttpGet("{id}")]
+    [ServiceFilter(typeof(RequestCheck<Course>))]
     public async Task<ActionResult<Course>> GetCourseById(Guid id)
     {
         Course enSubject = await CourRepo.GetByIdAsync(id);

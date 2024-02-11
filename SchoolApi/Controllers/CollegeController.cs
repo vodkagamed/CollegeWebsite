@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CollegeApi.ActionFilters;
 
 namespace SchoolApi.Controllers
 {
@@ -6,7 +7,6 @@ namespace SchoolApi.Controllers
     [Route("api/[controller]")]
     public class CollegeController : ControllerBase
     {
-        //private readonly DataProtector _protector;
         private readonly CollegeRepo collegesRepo;
 
         private List<string> Includes = new();
@@ -29,6 +29,7 @@ namespace SchoolApi.Controllers
 
         // GET: api/College/5
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(RequestCheck<College>))]
         public async Task<ActionResult<College>> Get(Guid id)
         {
             College college = await collegesRepo.GetByIdWithIncludesAsync(id,Includes.ToArray());
@@ -36,31 +37,25 @@ namespace SchoolApi.Controllers
             return Ok(college);
         }
 
-        // POST: api/College
         [HttpPost]
         public async Task<ActionResult<College>> Post([FromBody] College college)
         {
             if (college == null)
                 return BadRequest();
-            //College encryptedCollege = (College)_protector.Encrypt(college);
             await collegesRepo.AddAsync(college);
 
             return CreatedAtAction(nameof(Get), college.Id, college);
         }
 
-        // PUT: api/College/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put([FromBody] College college)
         {
-            //var encryptExistCollege = (College)_protector.Encrypt(college);
-
             var updatedCollege = await collegesRepo.UpdateAsync(college);
             if (updatedCollege != null)
                 return Ok(updatedCollege);
             return NotFound();
         }
 
-        // DELETE: api/College/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {

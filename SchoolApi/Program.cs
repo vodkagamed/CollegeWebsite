@@ -5,6 +5,8 @@ using SchoolWebsite.shared;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using CollegeApi.ActionFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,16 +16,23 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<AppDbContext>();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(RequestCheck<>));
+
 builder.Services.AddScoped<CollegeRepo>();
 builder.Services.AddScoped<TeachersRepo>();
 builder.Services.AddScoped<CoursesRepo>();
 builder.Services.AddScoped<StudentsRepo>();
 builder.Services.AddScoped<LogRepo>();
+
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("D:\\projects\\C#\\InnoTasks\\SchoolWebProject\\SchoolApi"))
     .SetDefaultKeyLifetime(TimeSpan.FromDays(15));
+
 builder.Services.AddSingleton<DataProtector>();
 builder.Services.AddCors(x => x.AddPolicy("MyPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyMethod()));
 
